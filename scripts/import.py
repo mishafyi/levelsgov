@@ -18,6 +18,7 @@ import sys
 import time
 
 import psycopg2
+import requests
 
 VALID_DATASETS = {"employment", "accessions", "separations"}
 
@@ -110,6 +111,29 @@ class _PreprocessedStream(io.RawIOBase):
     def close(self):
         self._file.close()
         super().close()
+
+
+def revalidate_cache() -> None:
+    """Notify the Next.js app to revalidate cached data after import.
+
+    Makes an HTTP POST to the revalidation endpoint so that cached filter
+    options and stats are refreshed.  If the server is not running or the
+    request fails for any reason, a warning is printed but the import is
+    still considered successful.
+    """
+    url = os.environ.get("REVALIDATE_URL", "http://localhost:3000/api/revalidate")
+    token = os.environ.get("REVALIDATE_TOKEN", "fedwork-dev-token-2024")
+
+    try:
+        resp = requests.post(url, json={"token": token}, timeout=5)
+        if resp.status_code == 200:
+            print("Cache revalidated successfully.")
+        else:
+            print(f"Warning: cache revalidation returned status {resp.status_code}: {resp.text}")
+    except requests.ConnectionError:
+        print("Warning: could not connect to Next.js server for cache revalidation (server may not be running).")
+    except Exception as exc:
+        print(f"Warning: cache revalidation failed: {exc}")
 
 
 def run_import(dataset_type: str, filepath: str) -> None:
@@ -225,6 +249,9 @@ def run_import(dataset_type: str, filepath: str) -> None:
     print(f"  Table {table} now has {db_count:,} total rows")
 
     conn.close()
+
+    # ---- revalidate Next.js cache ----------------------------------------
+    revalidate_cache()
 
 
 def main():
