@@ -11,6 +11,8 @@ export async function GET(request: NextRequest) {
       agency_code: params.get("agency_code") ?? undefined,
       duty_station_state_abbreviation:
         params.get("duty_station_state_abbreviation") ?? undefined,
+      occupational_group_code:
+        params.get("occupational_group_code") ?? undefined,
       occupational_series_code:
         params.get("occupational_series_code") ?? undefined,
       grade: params.get("grade") ?? undefined,

@@ -1,6 +1,7 @@
 export interface FilterParams {
   agency_code?: string;
   duty_station_state_abbreviation?: string;
+  occupational_group_code?: string;
   occupational_series_code?: string;
   grade?: string;
   pay_plan_code?: string;
@@ -44,6 +45,7 @@ type Dataset = "employment" | "accessions" | "separations";
 const FILTER_COLUMN_MAP: Record<string, string> = {
   agency_code: "agency_code",
   duty_station_state_abbreviation: "duty_station_state_abbreviation",
+  occupational_group_code: "occupational_group_code",
   occupational_series_code: "occupational_series_code",
   grade: "grade",
   pay_plan_code: "pay_plan_code",
