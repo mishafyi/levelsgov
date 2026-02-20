@@ -37,7 +37,7 @@ CREATE TABLE employment (
     grade VARCHAR(10),
     length_of_service_years NUMERIC(5,1),
     occupational_group VARCHAR(200),
-    occupational_group_code VARCHAR(10),
+    occupational_group_code VARCHAR(20),
     occupational_series VARCHAR(200),
     occupational_series_code VARCHAR(10),
     pay_plan VARCHAR(200),
@@ -47,7 +47,7 @@ CREATE TABLE employment (
     stem_occupation_type VARCHAR(100),
     supervisory_status VARCHAR(100),
     supervisory_status_code VARCHAR(10),
-    work_schedule VARCHAR(50),
+    work_schedule VARCHAR(200),
     work_schedule_code VARCHAR(10)
 );
 
@@ -74,7 +74,7 @@ CREATE TABLE accessions (
     grade VARCHAR(10),
     length_of_service_years NUMERIC(5,1),
     occupational_group VARCHAR(200),
-    occupational_group_code VARCHAR(10),
+    occupational_group_code VARCHAR(20),
     occupational_series VARCHAR(200),
     occupational_series_code VARCHAR(10),
     pay_plan VARCHAR(200),
@@ -84,7 +84,7 @@ CREATE TABLE accessions (
     stem_occupation_type VARCHAR(100),
     supervisory_status VARCHAR(100),
     supervisory_status_code VARCHAR(10),
-    work_schedule VARCHAR(50),
+    work_schedule VARCHAR(200),
     work_schedule_code VARCHAR(10)
 );
 
@@ -109,7 +109,7 @@ CREATE TABLE separations (
     grade VARCHAR(10),
     length_of_service_years NUMERIC(5,1),
     occupational_group VARCHAR(200),
-    occupational_group_code VARCHAR(10),
+    occupational_group_code VARCHAR(20),
     occupational_series VARCHAR(200),
     occupational_series_code VARCHAR(10),
     pay_plan VARCHAR(200),
@@ -121,7 +121,7 @@ CREATE TABLE separations (
     stem_occupation_type VARCHAR(100),
     supervisory_status VARCHAR(100),
     supervisory_status_code VARCHAR(10),
-    work_schedule VARCHAR(50),
+    work_schedule VARCHAR(200),
     work_schedule_code VARCHAR(10)
 );
 
