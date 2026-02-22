@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -25,6 +26,18 @@ const payFormatter = (v: number) =>
 const compactFormatter = (v: number) =>
   v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v);
 
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 // Horizontal bar chart for ranked data (states, agencies, occupations, etc.)
 export function HorizontalBarChart({
   data,
@@ -39,23 +52,27 @@ export function HorizontalBarChart({
   config: ChartConfig;
   className?: string;
 }) {
+  const isMobile = useIsMobile();
+  const labelWidth = isMobile ? 90 : 140;
+  const maxLabelLen = isMobile ? 12 : 20;
+
   return (
     <ChartContainer config={config} className={className ?? "h-[400px] w-full"}>
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ left: 0, right: 16, top: 0, bottom: 0 }}
+        margin={{ left: 0, right: isMobile ? 8 : 16, top: 0, bottom: 0 }}
       >
         <CartesianGrid horizontal={false} strokeDasharray="3 3" />
         <YAxis
           dataKey={labelKey}
           type="category"
-          width={140}
+          width={labelWidth}
           tickLine={false}
           axisLine={false}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
           tickFormatter={(v: string) =>
-            v.length > 20 ? v.slice(0, 18) + "..." : v
+            v.length > maxLabelLen ? v.slice(0, maxLabelLen - 2) + ".." : v
           }
         />
         <XAxis
@@ -63,6 +80,7 @@ export function HorizontalBarChart({
           tickLine={false}
           axisLine={false}
           tickFormatter={(v: number) => `$${compactFormatter(v)}`}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
         />
         <ChartTooltip
           content={

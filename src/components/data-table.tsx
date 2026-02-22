@@ -158,13 +158,19 @@ const ALL_COLUMNS: ColumnDef<Row>[] = [
   },
 ];
 
-const DEFAULT_VISIBLE = [
+const DEFAULT_VISIBLE_DESKTOP = [
   "agency",
   "duty_station_state",
   "occupational_series",
   "grade",
   "annualized_adjusted_basic_pay",
   "education_level",
+];
+
+const DEFAULT_VISIBLE_MOBILE = [
+  "agency",
+  "grade",
+  "annualized_adjusted_basic_pay",
 ];
 
 function ExpandedRowContent({ row }: { row: Row }) {
@@ -271,7 +277,12 @@ export function DataTable({
   const [data, setData] = useState<Row[]>(initialData);
   const [total, setTotal] = useState(initialTotal);
   const [loading, setLoading] = useState(false);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(DEFAULT_VISIBLE);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 640) {
+      return DEFAULT_VISIBLE_MOBILE;
+    }
+    return DEFAULT_VISIBLE_DESKTOP;
+  });
 
   // Track whether we've made a client-side navigation
   const isInitialRender = useRef(true);

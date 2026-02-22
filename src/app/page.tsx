@@ -110,36 +110,36 @@ export default async function HomePage() {
   const eduConfig = { value: { label: "Avg Pay", color: "var(--chart-5)" } };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-10">
       {/* Hero */}
-      <div className="mb-10 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+      <div className="mb-6 text-center sm:mb-10">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
           LevelsGov
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-lg text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:mt-3 sm:text-lg">
           Federal workforce compensation data, transparent and searchable.
           Powered by OPM FedScope ({snapshotLabel}).
         </p>
       </div>
 
       {/* Key Stats */}
-      <div className="mb-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mb-6 grid grid-cols-2 gap-2 sm:mb-10 sm:gap-3 lg:grid-cols-5">
         {[
           { icon: Users, label: "Total Employees", value: formatNumber(stats.total_employment), iconClass: "text-primary", bgClass: "bg-primary/10" },
           { icon: DollarSign, label: "Median Pay", value: formatPay(stats.median_pay), iconClass: "text-emerald-600", bgClass: "bg-emerald-500/10" },
           { icon: Building2, label: "Agencies", value: formatNumber(stats.agencies_count), iconClass: "text-blue-600", bgClass: "bg-blue-500/10" },
           { icon: UserPlus, label: "New Hires", value: formatNumber(stats.total_accessions), iconClass: "text-green-600", bgClass: "bg-green-500/10" },
           { icon: TrendingDown, label: "Net Change", value: `${netChange >= 0 ? "+" : ""}${formatNumber(netChange)}`, iconClass: "text-red-600", bgClass: "bg-red-500/10", valueClass: netChange >= 0 ? "text-green-600" : "text-red-600" },
-        ].map((stat) => (
-          <Card key={stat.label} className="py-4">
+        ].map((stat, i) => (
+          <Card key={stat.label} className={`py-3 sm:py-4 ${i === 4 ? "col-span-2 lg:col-span-1" : ""}`}>
             <CardContent className="pb-0">
-              <div className="flex items-center gap-2.5">
-                <div className={`rounded-md p-1.5 ${stat.bgClass}`}>
-                  <stat.icon className={`h-4 w-4 ${stat.iconClass}`} />
+              <div className="flex items-center gap-2">
+                <div className={`rounded-md p-1 sm:p-1.5 ${stat.bgClass}`}>
+                  <stat.icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${stat.iconClass}`} />
                 </div>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <p className="text-[11px] text-muted-foreground sm:text-xs">{stat.label}</p>
               </div>
-              <p className={`mt-2 text-2xl font-bold ${stat.valueClass ?? ""}`}>
+              <p className={`mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl ${stat.valueClass ?? ""}`}>
                 {stat.value}
               </p>
             </CardContent>
@@ -148,67 +148,67 @@ export default async function HomePage() {
       </div>
 
       {/* Pay by State */}
-      <Card className="mb-10">
-        <CardHeader>
-          <CardTitle>Highest Paying States</CardTitle>
-          <CardDescription>
+      <Card className="mb-6 sm:mb-10">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="text-base sm:text-lg">Highest Paying States</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
             Average federal employee compensation by duty station state
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-2 sm:px-6">
           <HorizontalBarChart
             data={stateData}
             config={stateConfig}
-            className="h-[520px] w-full"
+            className="h-[420px] w-full sm:h-[520px]"
           />
         </CardContent>
       </Card>
 
       {/* Two-column: Agencies + Occupations */}
-      <div className="mb-10 grid gap-6 lg:grid-cols-2">
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>Top Paying Agencies</CardTitle>
-            <CardDescription>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Top Paying Agencies</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Agencies with 1,000+ employees
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-2 sm:px-6">
             <HorizontalBarChart
               data={agencyData}
               config={agencyConfig}
-              className="h-[380px] w-full"
+              className="h-[320px] w-full sm:h-[380px]"
             />
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Top Paying Occupations</CardTitle>
-            <CardDescription>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Top Paying Occupations</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Occupations with 500+ employees
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-2 sm:px-6">
             <HorizontalBarChart
               data={occData}
               config={occConfig}
-              className="h-[380px] w-full"
+              className="h-[320px] w-full sm:h-[380px]"
             />
           </CardContent>
         </Card>
       </div>
 
       {/* Two-column: Tenure + Education */}
-      <div className="mb-10 grid gap-6 lg:grid-cols-2">
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>Pay by Tenure</CardTitle>
-            <CardDescription>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Pay by Tenure</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Average pay by years of federal service
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-2 sm:px-6">
             <VerticalBarChart
               data={tenureData}
               config={tenureConfig}
@@ -234,13 +234,13 @@ export default async function HomePage() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Pay by Education</CardTitle>
-            <CardDescription>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Pay by Education</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Average pay by highest education attained
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-2 sm:px-6">
             <VerticalBarChart
               data={eduData}
               config={eduConfig}
@@ -250,10 +250,10 @@ export default async function HomePage() {
       </div>
 
       {/* Insight Cards: STEM + Supervisory */}
-      <div className="mb-10 grid gap-6 sm:grid-cols-2">
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 sm:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>STEM Premium</CardTitle>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">STEM Premium</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {insights.stemPay.map((s) => (
@@ -292,8 +292,8 @@ export default async function HomePage() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Supervisory Pay Gap</CardTitle>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Supervisory Pay Gap</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {insights.supervisorPay.map((s) => (
@@ -331,45 +331,45 @@ export default async function HomePage() {
       </div>
 
       {/* Net Change Callout */}
-      <Card className="mb-10">
+      <Card className="mb-6 sm:mb-10">
         <CardContent>
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="mx-auto mb-2 w-fit rounded-md bg-green-500/10 p-2">
-                <UserPlus className="h-5 w-5 text-green-600" />
+              <div className="mx-auto mb-1.5 w-fit rounded-md bg-green-500/10 p-1.5 sm:mb-2 sm:p-2">
+                <UserPlus className="h-4 w-4 text-green-600 sm:h-5 sm:w-5" />
               </div>
-              <p className="text-2xl font-bold">
+              <p className="text-lg font-bold sm:text-2xl">
                 {formatNumber(stats.total_accessions)}
               </p>
-              <p className="text-sm text-muted-foreground">New Hires</p>
+              <p className="text-xs text-muted-foreground sm:text-sm">New Hires</p>
             </div>
             <div className="text-center">
-              <div className="mx-auto mb-2 w-fit rounded-md bg-orange-500/10 p-2">
-                <UserMinus className="h-5 w-5 text-orange-600" />
+              <div className="mx-auto mb-1.5 w-fit rounded-md bg-orange-500/10 p-1.5 sm:mb-2 sm:p-2">
+                <UserMinus className="h-4 w-4 text-orange-600 sm:h-5 sm:w-5" />
               </div>
-              <p className="text-2xl font-bold">
+              <p className="text-lg font-bold sm:text-2xl">
                 {formatNumber(stats.total_separations)}
               </p>
-              <p className="text-sm text-muted-foreground">Separations</p>
+              <p className="text-xs text-muted-foreground sm:text-sm">Separations</p>
             </div>
             <div className="text-center">
-              <div className="mx-auto mb-2 w-fit rounded-md bg-red-500/10 p-2">
-                <TrendingDown className="h-5 w-5 text-red-600" />
+              <div className="mx-auto mb-1.5 w-fit rounded-md bg-red-500/10 p-1.5 sm:mb-2 sm:p-2">
+                <TrendingDown className="h-4 w-4 text-red-600 sm:h-5 sm:w-5" />
               </div>
               <p
-                className={`text-2xl font-bold ${netChange >= 0 ? "text-green-600" : "text-red-600"}`}
+                className={`text-lg font-bold sm:text-2xl ${netChange >= 0 ? "text-green-600" : "text-red-600"}`}
               >
                 {netChange >= 0 ? "+" : ""}
                 {formatNumber(netChange)}
               </p>
-              <p className="text-sm text-muted-foreground">Net Change</p>
+              <p className="text-xs text-muted-foreground sm:text-sm">Net Change</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* CTA Buttons */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-2 sm:gap-4 sm:grid-cols-3">
         <Button asChild size="lg" className="w-full gap-2">
           <Link href="/employment">
             <Briefcase className="h-4 w-4" />
