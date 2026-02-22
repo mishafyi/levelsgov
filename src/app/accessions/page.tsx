@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react";
 import { query } from "@/lib/db";
 import { buildQuery, type FilterParams } from "@/lib/queries";
