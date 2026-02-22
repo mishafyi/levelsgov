@@ -29,7 +29,7 @@ export function Nav() {
           href="/"
           className="text-lg font-bold tracking-tight text-foreground"
         >
-          FedWork
+          LevelsGov
         </Link>
 
         {/* Desktop nav */}
@@ -71,7 +71,7 @@ export function Nav() {
                   onClick={() => setMobileOpen(false)}
                   className="text-lg font-bold tracking-tight"
                 >
-                  FedWork
+                  LevelsGov
                 </Link>
               </SheetTitle>
             </SheetHeader>

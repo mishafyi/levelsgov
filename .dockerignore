@@ -1,0 +1,7 @@
+node_modules
+.next
+.git
+*.txt
+scripts/__pycache__
+.env
+.env.local

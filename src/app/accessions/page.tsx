@@ -42,6 +42,8 @@ async function AccessionsContent({
     education_level_code: getParam(searchParams, "education_level_code"),
     age_bracket: getParam(searchParams, "age_bracket"),
     work_schedule_code: getParam(searchParams, "work_schedule_code"),
+    pay_bracket: getParam(searchParams, "pay_bracket"),
+    sensitive_occupation: getParam(searchParams, "sensitive_occupation"),
     accession_category_code: getParam(
       searchParams,
       "accession_category_code"

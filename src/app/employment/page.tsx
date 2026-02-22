@@ -42,6 +42,8 @@ async function EmploymentContent({
     education_level_code: getParam(searchParams, "education_level_code"),
     age_bracket: getParam(searchParams, "age_bracket"),
     work_schedule_code: getParam(searchParams, "work_schedule_code"),
+    pay_bracket: getParam(searchParams, "pay_bracket"),
+    sensitive_occupation: getParam(searchParams, "sensitive_occupation"),
     sort: getParam(searchParams, "sort"),
     sortDir: getParam(searchParams, "sortDir") as "asc" | "desc" | undefined,
     page: getParam(searchParams, "page")

@@ -39,6 +39,8 @@ const FILTER_CONFIG: Record<
   occupational_series_code: { label: "Occupational Series", type: "combobox" },
   duty_station_state_abbreviation: { label: "State", type: "select" },
   grade: { label: "Grade", type: "select" },
+  pay_bracket: { label: "Pay Range", type: "select" },
+  sensitive_occupation: { label: "Sensitive Occupation", type: "combobox" },
   pay_plan_code: { label: "Pay Plan", type: "select" },
   education_level_code: { label: "Education Level", type: "select" },
   age_bracket: { label: "Age Bracket", type: "select" },
@@ -57,46 +59,111 @@ const FILTER_CONFIG: Record<
 
 const FILTER_KEYS = Object.keys(FILTER_CONFIG);
 
+function nonEmpty(items: ComboboxOption[]): ComboboxOption[] {
+  return items.filter((i) => i.value !== "" && i.label !== "");
+}
+
 function buildFilterOptions(
   options: FilterSidebarProps["options"]
 ): Record<string, ComboboxOption[]> {
   const opts = options as Record<string, unknown[]>;
   return {
-    agency_code: (
-      (opts.agencies as { code: string; name: string }[]) || []
-    ).map((a) => ({ value: a.code, label: a.name })),
-    occupational_group_code: (
-      (opts.occGroups as { code: string; name: string }[]) || []
-    ).map((o) => ({ value: o.code, label: o.name })),
-    occupational_series_code: (
-      (opts.occupations as { code: string; name: string }[]) || []
-    ).map((o) => ({ value: o.code, label: o.name })),
-    duty_station_state_abbreviation: (
-      (opts.states as { abbreviation: string; name: string }[]) || []
-    ).map((s) => ({ value: s.abbreviation, label: s.name })),
-    grade: ((opts.grades as { grade: string }[]) || []).map((g) => ({
-      value: g.grade,
-      label: g.grade,
-    })),
-    pay_plan_code: (
-      (opts.payPlans as { code: string; name: string }[]) || []
-    ).map((p) => ({ value: p.code, label: p.name })),
-    education_level_code: (
-      (opts.educations as { code: string; name: string }[]) || []
-    ).map((e) => ({ value: e.code, label: e.name })),
-    age_bracket: ((opts.ages as { age_bracket: string }[]) || []).map((a) => ({
-      value: a.age_bracket,
-      label: a.age_bracket,
-    })),
-    work_schedule_code: (
-      (opts.workSchedules as { code: string; name: string }[]) || []
-    ).map((w) => ({ value: w.code, label: w.name })),
-    accession_category_code: (
-      (opts.accessionCategories as { code: string; name: string }[]) || []
-    ).map((c) => ({ value: c.code, label: c.name })),
-    separation_category_code: (
-      (opts.separationCategories as { code: string; name: string }[]) || []
-    ).map((c) => ({ value: c.code, label: c.name })),
+    agency_code: nonEmpty(
+      ((opts.agencies as { code: string; name: string }[]) || []).map((a) => ({
+        value: a.code,
+        label: a.name,
+      }))
+    ),
+    occupational_group_code: nonEmpty(
+      ((opts.occGroups as { code: string; name: string }[]) || []).map((o) => ({
+        value: o.code,
+        label: o.name,
+      }))
+    ),
+    occupational_series_code: nonEmpty(
+      ((opts.occupations as { code: string; name: string }[]) || []).map(
+        (o) => ({ value: o.code, label: o.name })
+      )
+    ),
+    duty_station_state_abbreviation: nonEmpty(
+      ((opts.states as { abbreviation: string; name: string }[]) || []).map(
+        (s) => ({ value: s.abbreviation, label: s.name })
+      )
+    ),
+    grade: nonEmpty(
+      ((opts.grades as { grade: string }[]) || []).map((g) => ({
+        value: g.grade,
+        label: g.grade,
+      }))
+    ),
+    pay_plan_code: nonEmpty(
+      ((opts.payPlans as { code: string; name: string }[]) || []).map((p) => ({
+        value: p.code,
+        label: p.name,
+      }))
+    ),
+    education_level_code: nonEmpty(
+      ((opts.educations as { code: string; name: string }[]) || []).map(
+        (e) => ({ value: e.code, label: e.name })
+      )
+    ),
+    age_bracket: nonEmpty(
+      ((opts.ages as { age_bracket: string }[]) || []).map((a) => ({
+        value: a.age_bracket,
+        label: a.age_bracket,
+      }))
+    ),
+    work_schedule_code: nonEmpty(
+      ((opts.workSchedules as { code: string; name: string }[]) || []).map(
+        (w) => ({ value: w.code, label: w.name })
+      )
+    ),
+    pay_bracket: [
+      { value: "under_50k", label: "Under $50,000" },
+      { value: "50k_75k", label: "$50,000 – $75,000" },
+      { value: "75k_100k", label: "$75,000 – $100,000" },
+      { value: "100k_150k", label: "$100,000 – $150,000" },
+      { value: "150k_200k", label: "$150,000 – $200,000" },
+      { value: "200k_plus", label: "$200,000+" },
+    ],
+    sensitive_occupation: [
+      { value: "all_sensitive", label: "All Sensitive Occupations" },
+      { value: "non_sensitive", label: "Non-Sensitive Only" },
+      { value: "0007", label: "0007 – Correctional Officer" },
+      { value: "0082", label: "0082 – United States Marshal" },
+      { value: "0083", label: "0083 – Police" },
+      { value: "0084", label: "0084 – Nuclear Materials Courier" },
+      { value: "0132", label: "0132 – Intelligence" },
+      { value: "0134", label: "0134 – Intelligence Clerk/Aide" },
+      { value: "0401", label: "0401 – General Natural Resources & Bio Science (DHS)" },
+      { value: "0436", label: "0436 – Plant Protection & Quarantine" },
+      { value: "0512", label: "0512 – Internal Revenue Agent" },
+      { value: "0840", label: "0840 – Nuclear Engineering" },
+      { value: "0930", label: "0930 – Hearings and Appeals" },
+      { value: "1169", label: "1169 – Internal Revenue Officer" },
+      { value: "1171", label: "1171 – Appraising (IRS)" },
+      { value: "1801", label: "1801 – General Inspection/Investigation/Enforcement" },
+      { value: "1802", label: "1802 – Compliance Inspection/Investigating" },
+      { value: "1811", label: "1811 – Criminal Investigating" },
+      { value: "1812", label: "1812 – Game Law Enforcement" },
+      { value: "1816", label: "1816 – Immigration Inspection" },
+      { value: "1854", label: "1854 – Alcohol, Tobacco & Firearms Inspection" },
+      { value: "1881", label: "1881 – Customs & Border Protection Interdiction" },
+      { value: "1884", label: "1884 – Customs Patrol Officer" },
+      { value: "1890", label: "1890 – Customs Inspection" },
+      { value: "1895", label: "1895 – Customs and Border Protection" },
+      { value: "1896", label: "1896 – Border Patrol Enforcement" },
+    ],
+    accession_category_code: nonEmpty(
+      (
+        (opts.accessionCategories as { code: string; name: string }[]) || []
+      ).map((c) => ({ value: c.code, label: c.name }))
+    ),
+    separation_category_code: nonEmpty(
+      (
+        (opts.separationCategories as { code: string; name: string }[]) || []
+      ).map((c) => ({ value: c.code, label: c.name }))
+    ),
   };
 }
 

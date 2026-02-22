@@ -20,6 +20,8 @@ export async function GET(request: NextRequest) {
       education_level_code: params.get("education_level_code") ?? undefined,
       age_bracket: params.get("age_bracket") ?? undefined,
       work_schedule_code: params.get("work_schedule_code") ?? undefined,
+      pay_bracket: params.get("pay_bracket") ?? undefined,
+      sensitive_occupation: params.get("sensitive_occupation") ?? undefined,
       separation_category_code:
         params.get("separation_category_code") ?? undefined,
       sort: params.get("sort") ?? undefined,

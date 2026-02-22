@@ -160,7 +160,7 @@ const ColumnVisibilityDropdown = <T,>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.96 }}
             transition={{ duration: 0.15 }}
-            className="absolute top-full right-0 z-20 mt-2 min-w-[180px] rounded-lg border border-table-border bg-card p-1 shadow-lg"
+            className="absolute top-full left-0 z-20 mt-2 min-w-[180px] rounded-lg border border-table-border bg-card p-1 shadow-lg"
           >
             {hideableColumns.map((column) => (
               <button
@@ -334,7 +334,7 @@ const AnimatedTableRoot = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "relative w-full overflow-hidden rounded-lg border border-table-border bg-card",
+      "relative w-full rounded-lg border border-table-border bg-card",
       className,
     )}
     {...props}

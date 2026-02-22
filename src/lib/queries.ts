@@ -10,12 +10,29 @@ export interface FilterParams {
   work_schedule_code?: string;
   accession_category_code?: string;
   separation_category_code?: string;
+  pay_bracket?: string;
+  sensitive_occupation?: string;
   sort?: string;
   sortDir?: "asc" | "desc";
   cursor?: string;
   pageSize?: number;
   page?: number;
 }
+
+const SENSITIVE_SERIES_CODES = [
+  "0007", "0082", "0083", "0084", "0132", "0134", "0401", "0436",
+  "0512", "0840", "0930", "1169", "1171", "1801", "1802", "1811",
+  "1812", "1816", "1854", "1881", "1884", "1890", "1895", "1896",
+];
+
+const PAY_BRACKETS: Record<string, [number | null, number | null]> = {
+  "under_50k": [null, 50000],
+  "50k_75k": [50000, 75000],
+  "75k_100k": [75000, 100000],
+  "100k_150k": [100000, 150000],
+  "150k_200k": [150000, 200000],
+  "200k_plus": [200000, null],
+};
 
 export interface BuildQueryResult {
   sql: string;
@@ -75,6 +92,47 @@ export function buildQuery(
       params.push(value);
       paramIndex++;
     }
+  }
+
+  // Pay bracket filter
+  if (filters.pay_bracket && PAY_BRACKETS[filters.pay_bracket]) {
+    const [min, max] = PAY_BRACKETS[filters.pay_bracket];
+    if (min !== null) {
+      conditions.push(`annualized_adjusted_basic_pay >= $${paramIndex}`);
+      params.push(min);
+      paramIndex++;
+    }
+    if (max !== null) {
+      conditions.push(`annualized_adjusted_basic_pay < $${paramIndex}`);
+      params.push(max);
+      paramIndex++;
+    }
+  }
+
+  // Sensitive occupation filter
+  if (filters.sensitive_occupation === "all_sensitive") {
+    const placeholders = SENSITIVE_SERIES_CODES.map(
+      (_, i) => `$${paramIndex + i}`
+    ).join(", ");
+    conditions.push(`occupational_series_code IN (${placeholders})`);
+    params.push(...SENSITIVE_SERIES_CODES);
+    paramIndex += SENSITIVE_SERIES_CODES.length;
+  } else if (filters.sensitive_occupation === "non_sensitive") {
+    const placeholders = SENSITIVE_SERIES_CODES.map(
+      (_, i) => `$${paramIndex + i}`
+    ).join(", ");
+    conditions.push(
+      `(occupational_series_code IS NULL OR occupational_series_code NOT IN (${placeholders}))`
+    );
+    params.push(...SENSITIVE_SERIES_CODES);
+    paramIndex += SENSITIVE_SERIES_CODES.length;
+  } else if (
+    filters.sensitive_occupation &&
+    SENSITIVE_SERIES_CODES.includes(filters.sensitive_occupation)
+  ) {
+    conditions.push(`occupational_series_code = $${paramIndex}`);
+    params.push(filters.sensitive_occupation);
+    paramIndex++;
   }
 
   const whereClause =
