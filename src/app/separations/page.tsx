@@ -89,7 +89,7 @@ async function SeparationsContent({
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
-              Federal Separations
+              Federal Departures
             </h1>
             <p className="text-sm text-muted-foreground">
               Browse departures from federal service including retirements,

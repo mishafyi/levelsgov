@@ -350,7 +350,7 @@ export default async function HomePage() {
               <p className="text-lg font-bold sm:text-2xl">
                 {formatNumber(stats.total_separations)}
               </p>
-              <p className="text-xs text-muted-foreground sm:text-sm">Separations</p>
+              <p className="text-xs text-muted-foreground sm:text-sm">Departures</p>
             </div>
             <div className="text-center">
               <div className="mx-auto mb-1.5 w-fit rounded-md bg-red-500/10 p-1.5 sm:mb-2 sm:p-2">
@@ -380,14 +380,14 @@ export default async function HomePage() {
         <Button asChild variant="outline" size="lg" className="w-full gap-2">
           <Link href="/accessions">
             <UserPlus className="h-4 w-4" />
-            Browse Accessions
+            Browse New Hires
             <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
         <Button asChild variant="outline" size="lg" className="w-full gap-2">
           <Link href="/separations">
             <UserMinus className="h-4 w-4" />
-            Browse Separations
+            Browse Departures
             <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>

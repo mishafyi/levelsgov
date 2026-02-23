@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "LevelsGov — Federal Workforce Pay & Data",
   description:
-    "Browse and explore U.S. federal workforce data including employment, accessions, and separations from the Office of Personnel Management.",
+    "Browse and explore U.S. federal workforce data including employment, new hires, and departures from the Office of Personnel Management.",
 };
 
 export default function RootLayout({

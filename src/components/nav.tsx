@@ -14,8 +14,8 @@ import {
 
 const links = [
   { href: "/employment", label: "Employment" },
-  { href: "/accessions", label: "Accessions" },
-  { href: "/separations", label: "Separations" },
+  { href: "/accessions", label: "New Hires" },
+  { href: "/separations", label: "Departures" },
 ];
 
 export function Nav() {

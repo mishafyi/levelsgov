@@ -89,7 +89,7 @@ async function AccessionsContent({
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
-              Federal Accessions
+              Federal New Hires
             </h1>
             <p className="text-sm text-muted-foreground">
               Browse new hires and transfers into federal service
