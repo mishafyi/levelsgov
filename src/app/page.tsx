@@ -253,7 +253,7 @@ export default async function HomePage() {
       <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 sm:grid-cols-2">
         <Card>
           <CardHeader className="px-4 sm:px-6">
-            <CardTitle className="text-base sm:text-lg">STEM Premium</CardTitle>
+            <CardTitle className="text-base sm:text-lg">Pay by Field</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {insights.stemPay.map((s) => (
@@ -275,7 +275,7 @@ export default async function HomePage() {
           {insights.stemPay.length >= 2 && (
             <CardFooter>
               <p className="mx-auto text-sm text-muted-foreground">
-                STEM employees earn{" "}
+                Health &amp; STEM roles earn{" "}
                 <span className="font-semibold text-emerald-600">
                   {Math.round(
                     ((insights.stemPay[0].avgPay -
@@ -285,7 +285,7 @@ export default async function HomePage() {
                   )}
                   % more
                 </span>{" "}
-                than non-STEM
+                than other fields
               </p>
             </CardFooter>
           )}
