@@ -54,7 +54,6 @@ const SORT_ALLOWLIST = new Set([
 
 const MAX_PAGE_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 50;
-const MAX_OFFSET = 10000; // 200 pages * 50 per page
 
 type Dataset = "employment" | "accessions" | "separations";
 
@@ -175,9 +174,6 @@ export function buildQuery(
     // Offset-based pagination (with or without sort)
     const offset = (page - 1) * pageSize;
 
-    // Cap offset to prevent performance issues
-    const cappedOffset = Math.min(offset, MAX_OFFSET);
-
     if (sortColumn) {
       orderClause = `ORDER BY ${sortColumn} ${sortDirection}, id ASC`;
     } else {
@@ -186,7 +182,7 @@ export function buildQuery(
 
     limitClause = `LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(pageSize);
-    params.push(cappedOffset);
+    params.push(offset);
     paramIndex += 2;
   }
 
