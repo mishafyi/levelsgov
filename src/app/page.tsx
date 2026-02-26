@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 import { getStats, getHomepageInsights } from "@/lib/filters";
 import { HorizontalBarChart, VerticalBarChart, NetChangeBarChart, TreemapChart, AreaLineChart, RadarPayChart, ScatterPayChart, DonutChart } from "@/components/home-charts";
-import { USPayMap, USStateImpactMap } from "@/components/us-pay-map";
+import { USPayMapLazy, USStateImpactMapLazy } from "@/components/us-pay-map-lazy";
 import { AnimatedNumber } from "@/components/animated-number";
 
 function formatSnapshotDate(yyyymm: string): string {
@@ -345,7 +345,7 @@ export default async function HomePage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
-          <USPayMap data={stateData} />
+          <USPayMapLazy data={stateData} />
         </CardContent>
       </Card>
 
@@ -661,7 +661,7 @@ export default async function HomePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
-            <USStateImpactMap data={stateImpactData} />
+            <USStateImpactMapLazy data={stateImpactData} />
           </CardContent>
           <CardFooter>
             <p className="mx-auto text-sm text-muted-foreground">

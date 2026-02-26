@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "@vnedyalk0v/react19-simple-maps";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
@@ -97,50 +97,48 @@ export function USPayMap({ data }: { data: StateData[] }) {
 
   return (
     <div className="relative">
-      <Suspense fallback={<div className="flex h-[300px] items-center justify-center text-sm text-muted-foreground">Loading map...</div>}>
-        <ComposableMap
-          projection="geoAlbersUsa"
-          projectionConfig={{ scale: isMobile ? 700 : 900 }}
-          width={800}
-          height={500}
-          style={{ width: "100%", height: "auto" }}
-        >
-          <Geographies geography={GEO_URL}>
-            {({ geographies }) =>
-              geographies.map((geo, i) => {
-                const name = (geo.properties?.name ?? "") as string;
-                const abbr = STATE_ABBR[name];
-                const sd = abbr ? lookup.get(abbr) : undefined;
+      <ComposableMap
+        projection="geoAlbersUsa"
+        projectionConfig={{ scale: isMobile ? 700 : 900 }}
+        width={800}
+        height={500}
+        style={{ width: "100%", height: "auto" }}
+      >
+        <Geographies geography={GEO_URL}>
+          {({ geographies }) =>
+            geographies.map((geo, i) => {
+              const name = (geo.properties?.name ?? "") as string;
+              const abbr = STATE_ABBR[name];
+              const sd = abbr ? lookup.get(abbr) : undefined;
 
-                return (
-                  <Geography
-                    key={name || String(i)}
-                    geography={geo}
-                    fill={getColor(abbr)}
-                    stroke="hsl(var(--background))"
-                    strokeWidth={0.75}
-                    style={{
-                      default: { outline: "none" },
-                      hover: { outline: "none", opacity: 0.8 },
-                      pressed: { outline: "none" },
-                    }}
-                    onMouseEnter={(e) => {
-                      setTooltip({
-                        x: (e as unknown as React.MouseEvent).clientX,
-                        y: (e as unknown as React.MouseEvent).clientY,
-                        name,
-                        pay: sd?.avgPay,
-                        headcount: sd?.headcount,
-                      });
-                    }}
-                    onMouseLeave={() => setTooltip(null)}
-                  />
-                );
-              })
-            }
-          </Geographies>
-        </ComposableMap>
-      </Suspense>
+              return (
+                <Geography
+                  key={name || String(i)}
+                  geography={geo}
+                  fill={getColor(abbr)}
+                  stroke="hsl(var(--background))"
+                  strokeWidth={0.75}
+                  style={{
+                    default: { outline: "none" },
+                    hover: { outline: "none", opacity: 0.8 },
+                    pressed: { outline: "none" },
+                  }}
+                  onMouseEnter={(e) => {
+                    setTooltip({
+                      x: (e as unknown as React.MouseEvent).clientX,
+                      y: (e as unknown as React.MouseEvent).clientY,
+                      name,
+                      pay: sd?.avgPay,
+                      headcount: sd?.headcount,
+                    });
+                  }}
+                  onMouseLeave={() => setTooltip(null)}
+                />
+              );
+            })
+          }
+        </Geographies>
+      </ComposableMap>
 
       {tooltip && (
         <div
@@ -215,51 +213,49 @@ export function USStateImpactMap({ data }: { data: StateImpactData[] }) {
 
   return (
     <div className="relative">
-      <Suspense fallback={<div className="flex h-[300px] items-center justify-center text-sm text-muted-foreground">Loading map...</div>}>
-        <ComposableMap
-          projection="geoAlbersUsa"
-          projectionConfig={{ scale: isMobile ? 700 : 900 }}
-          width={800}
-          height={500}
-          style={{ width: "100%", height: "auto" }}
-        >
-          <Geographies geography={GEO_URL}>
-            {({ geographies }) =>
-              geographies.map((geo, i) => {
-                const name = (geo.properties?.name ?? "") as string;
-                const abbr = STATE_ABBR[name];
+      <ComposableMap
+        projection="geoAlbersUsa"
+        projectionConfig={{ scale: isMobile ? 700 : 900 }}
+        width={800}
+        height={500}
+        style={{ width: "100%", height: "auto" }}
+      >
+        <Geographies geography={GEO_URL}>
+          {({ geographies }) =>
+            geographies.map((geo, i) => {
+              const name = (geo.properties?.name ?? "") as string;
+              const abbr = STATE_ABBR[name];
 
-                return (
-                  <Geography
-                    key={name || String(i)}
-                    geography={geo}
-                    fill={getColor(abbr)}
-                    stroke="hsl(var(--background))"
-                    strokeWidth={0.75}
-                    style={{
-                      default: { outline: "none" },
-                      hover: { outline: "none", opacity: 0.8 },
-                      pressed: { outline: "none" },
-                    }}
-                    onMouseEnter={(e) => {
-                      const sd = abbr ? lookup.get(abbr) : undefined;
-                      setTooltip({
-                        x: (e as unknown as React.MouseEvent).clientX,
-                        y: (e as unknown as React.MouseEvent).clientY,
-                        name,
-                        replacementPct: sd?.replacementPct,
-                        departures: sd?.departures,
-                        hires: sd?.hires,
-                      });
-                    }}
-                    onMouseLeave={() => setTooltip(null)}
-                  />
-                );
-              })
-            }
-          </Geographies>
-        </ComposableMap>
-      </Suspense>
+              return (
+                <Geography
+                  key={name || String(i)}
+                  geography={geo}
+                  fill={getColor(abbr)}
+                  stroke="hsl(var(--background))"
+                  strokeWidth={0.75}
+                  style={{
+                    default: { outline: "none" },
+                    hover: { outline: "none", opacity: 0.8 },
+                    pressed: { outline: "none" },
+                  }}
+                  onMouseEnter={(e) => {
+                    const sd = abbr ? lookup.get(abbr) : undefined;
+                    setTooltip({
+                      x: (e as unknown as React.MouseEvent).clientX,
+                      y: (e as unknown as React.MouseEvent).clientY,
+                      name,
+                      replacementPct: sd?.replacementPct,
+                      departures: sd?.departures,
+                      hires: sd?.hires,
+                    });
+                  }}
+                  onMouseLeave={() => setTooltip(null)}
+                />
+              );
+            })
+          }
+        </Geographies>
+      </ComposableMap>
 
       {tooltip && (
         <div
