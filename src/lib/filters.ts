@@ -112,19 +112,19 @@ export const getStats = unstable_cache(
 
 export const getHomepageInsights = unstable_cache(
   async () => {
-    const [payByState, topAgencies, topOccupations, payByEducation, stemPay, supervisorPay, payByTenure] =
+    const [payByState, topAgencies, topOccupations, payByEducation, stemPay, supervisorPay, payByTenure, separationReasons, agencyNetChanges, stemBrainDrain, stateReplacementRates, stemPositionLosses, stemAgencyLosses] =
       await Promise.all([
         query<{ state: string; abbreviation: string; headcount: string; avg_pay: string }>(
-          "SELECT duty_station_state as state, duty_station_state_abbreviation as abbreviation, COUNT(*) as headcount, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE duty_station_state IS NOT NULL AND duty_station_state <> '' AND duty_station_state NOT IN ('INVALID', 'NO DATA REPORTED') AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY duty_station_state, duty_station_state_abbreviation HAVING COUNT(*) > 500 ORDER BY avg_pay DESC LIMIT 15"
+          "SELECT duty_station_state as state, duty_station_state_abbreviation as abbreviation, COUNT(*) as headcount, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE duty_station_state IS NOT NULL AND duty_station_state <> '' AND duty_station_state NOT IN ('INVALID', 'NO DATA REPORTED') AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY duty_station_state, duty_station_state_abbreviation HAVING COUNT(*) > 100 ORDER BY avg_pay DESC"
         ),
         query<{ agency: string; headcount: string; avg_pay: string }>(
-          "SELECT agency, COUNT(*) as headcount, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE annualized_adjusted_basic_pay IS NOT NULL GROUP BY agency HAVING COUNT(*) > 1000 ORDER BY avg_pay DESC LIMIT 10"
+          "SELECT agency, COUNT(*) as headcount, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE annualized_adjusted_basic_pay IS NOT NULL GROUP BY agency ORDER BY avg_pay DESC LIMIT 10"
         ),
         query<{ occupational_series: string; count: string; avg_pay: string }>(
-          "SELECT occupational_series, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE annualized_adjusted_basic_pay IS NOT NULL AND occupational_series IS NOT NULL GROUP BY occupational_series HAVING COUNT(*) > 500 ORDER BY avg_pay DESC LIMIT 10"
+          "SELECT occupational_series, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE annualized_adjusted_basic_pay IS NOT NULL AND occupational_series IS NOT NULL GROUP BY occupational_series ORDER BY avg_pay DESC LIMIT 10"
         ),
         query<{ education_level: string; count: string; avg_pay: string }>(
-          "SELECT education_level, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE education_level IS NOT NULL AND education_level <> '' AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY education_level ORDER BY avg_pay DESC LIMIT 8"
+          "SELECT education_level, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE education_level IS NOT NULL AND education_level <> '' AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY education_level ORDER BY avg_pay DESC"
         ),
         query<{ stem_occupation: string; count: string; avg_pay: string }>(
           "SELECT stem_occupation, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE stem_occupation IS NOT NULL AND annualized_adjusted_basic_pay IS NOT NULL AND stem_occupation <> 'UNSPECIFIED' GROUP BY stem_occupation ORDER BY avg_pay DESC"
@@ -135,6 +135,24 @@ export const getHomepageInsights = unstable_cache(
         query<{ tenure: string; count: string; avg_pay: string }>(
           "SELECT CASE WHEN length_of_service_years < 5 THEN '0-4 years' WHEN length_of_service_years < 10 THEN '5-9 years' WHEN length_of_service_years < 15 THEN '10-14 years' WHEN length_of_service_years < 20 THEN '15-19 years' WHEN length_of_service_years < 25 THEN '20-24 years' WHEN length_of_service_years < 30 THEN '25-29 years' ELSE '30+ years' END as tenure, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE length_of_service_years IS NOT NULL AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY tenure ORDER BY MIN(length_of_service_years)"
         ),
+        query<{ separation_category: string; count: string }>(
+          "SELECT separation_category, COUNT(*) as count FROM separations WHERE separation_category IS NOT NULL AND separation_category <> '' GROUP BY separation_category ORDER BY count DESC"
+        ),
+        query<{ agency: string; hires: string; departures: string; net_change: string }>(
+          "SELECT COALESCE(s.agency, a.agency) as agency, COALESCE(a.hires, 0) as hires, COALESCE(s.departures, 0) as departures, COALESCE(a.hires, 0) - COALESCE(s.departures, 0) as net_change FROM (SELECT agency, COUNT(*) as departures FROM separations GROUP BY agency) s FULL OUTER JOIN (SELECT agency, COUNT(*) as hires FROM accessions GROUP BY agency) a ON s.agency = a.agency ORDER BY net_change ASC LIMIT 10"
+        ),
+        query<{ category: string; departures: string; hires: string; net_loss: string; replacement_pct: string; avg_departing_pay: string }>(
+          "SELECT stem_occupation_type as category, SUM(CASE WHEN src='s' THEN 1 ELSE 0 END) as departures, SUM(CASE WHEN src='a' THEN 1 ELSE 0 END) as hires, SUM(CASE WHEN src='s' THEN 1 ELSE 0 END) - SUM(CASE WHEN src='a' THEN 1 ELSE 0 END) as net_loss, ROUND(SUM(CASE WHEN src='a' THEN 1 ELSE 0 END)::numeric / NULLIF(SUM(CASE WHEN src='s' THEN 1 ELSE 0 END), 0) * 100, 1) as replacement_pct, ROUND(AVG(CASE WHEN src='s' THEN pay END)) as avg_departing_pay FROM (SELECT stem_occupation_type, 's' as src, annualized_adjusted_basic_pay as pay FROM separations WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IS NOT NULL AND stem_occupation_type <> '' AND stem_occupation_type <> 'UNSPECIFIED' UNION ALL SELECT stem_occupation_type, 'a' as src, annualized_adjusted_basic_pay as pay FROM accessions WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IS NOT NULL AND stem_occupation_type <> '' AND stem_occupation_type <> 'UNSPECIFIED') t GROUP BY 1 ORDER BY replacement_pct ASC"
+        ),
+        query<{ state: string; abbreviation: string; departures: string; hires: string; net_loss: string; replacement_pct: string }>(
+          "SELECT duty_station_state as state, duty_station_state_abbreviation as abbreviation, SUM(CASE WHEN src='s' THEN 1 ELSE 0 END) as departures, SUM(CASE WHEN src='a' THEN 1 ELSE 0 END) as hires, SUM(CASE WHEN src='s' THEN 1 ELSE 0 END) - SUM(CASE WHEN src='a' THEN 1 ELSE 0 END) as net_loss, ROUND(SUM(CASE WHEN src='a' THEN 1 ELSE 0 END)::numeric / NULLIF(SUM(CASE WHEN src='s' THEN 1 ELSE 0 END), 0) * 100, 1) as replacement_pct FROM (SELECT duty_station_state, duty_station_state_abbreviation, 's' as src FROM separations WHERE personnel_action_effective_date_yyyymm >= '202501' AND duty_station_state IS NOT NULL AND duty_station_state <> '' AND duty_station_state NOT IN ('INVALID', 'NO DATA REPORTED') UNION ALL SELECT duty_station_state, duty_station_state_abbreviation, 'a' as src FROM accessions WHERE personnel_action_effective_date_yyyymm >= '202501' AND duty_station_state IS NOT NULL AND duty_station_state <> '' AND duty_station_state NOT IN ('INVALID', 'NO DATA REPORTED')) t GROUP BY 1, 2 HAVING SUM(CASE WHEN src='s' THEN 1 ELSE 0 END) > 50 ORDER BY replacement_pct ASC"
+        ),
+        query<{ position: string; stem_type: string; departures: string; hires: string; net_loss: string; replacement_pct: string; avg_pay: string }>(
+          "SELECT s.occupational_series as position, s.stem_type, s.dep as departures, COALESCE(a.hir, 0) as hires, s.dep - COALESCE(a.hir, 0) as net_loss, ROUND(COALESCE(a.hir, 0)::numeric / NULLIF(s.dep, 0) * 100, 1) as replacement_pct, s.avg_pay FROM (SELECT occupational_series, stem_occupation_type as stem_type, COUNT(*) as dep, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM separations WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IN ('MATHEMATICS OCCUPATIONS','TECHNOLOGY OCCUPATIONS','ENGINEERING OCCUPATIONS','SCIENCE OCCUPATIONS') AND occupational_series IS NOT NULL AND occupational_series <> '' GROUP BY 1, 2) s LEFT JOIN (SELECT occupational_series, COUNT(*) as hir FROM accessions WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IN ('MATHEMATICS OCCUPATIONS','TECHNOLOGY OCCUPATIONS','ENGINEERING OCCUPATIONS','SCIENCE OCCUPATIONS') AND occupational_series IS NOT NULL AND occupational_series <> '' GROUP BY 1) a ON s.occupational_series = a.occupational_series ORDER BY net_loss DESC LIMIT 15"
+        ),
+        query<{ agency: string; sector: string; departures: string; hires: string; net_loss: string; replacement_pct: string }>(
+          "SELECT s.agency, CASE WHEN s.agency IN ('DEPARTMENT OF THE NAVY','DEPARTMENT OF THE ARMY','DEPARTMENT OF THE AIR FORCE','DEPARTMENT OF DEFENSE','DEPARTMENT OF HOMELAND SECURITY','DEPARTMENT OF STATE','DEPARTMENT OF JUSTICE','NATIONAL SECURITY AGENCY/CENTRAL SECURITY SERVICE','CENTRAL INTELLIGENCE AGENCY','DEFENSE INTELLIGENCE AGENCY','NATIONAL GEOSPATIAL-INTELLIGENCE AGENCY','NATIONAL RECONNAISSANCE OFFICE','DEPARTMENT OF VETERANS AFFAIRS') THEN 'defense' ELSE 'civilian' END as sector, s.dep as departures, COALESCE(a.hir, 0) as hires, s.dep - COALESCE(a.hir, 0) as net_loss, ROUND(COALESCE(a.hir, 0)::numeric / NULLIF(s.dep, 0) * 100, 1) as replacement_pct FROM (SELECT agency, COUNT(*) as dep FROM separations WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IN ('MATHEMATICS OCCUPATIONS','TECHNOLOGY OCCUPATIONS','ENGINEERING OCCUPATIONS','SCIENCE OCCUPATIONS') GROUP BY 1) s LEFT JOIN (SELECT agency, COUNT(*) as hir FROM accessions WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IN ('MATHEMATICS OCCUPATIONS','TECHNOLOGY OCCUPATIONS','ENGINEERING OCCUPATIONS','SCIENCE OCCUPATIONS') GROUP BY 1) a ON s.agency = a.agency WHERE s.dep > 200 ORDER BY net_loss DESC"
+        ),
       ]);
     return {
       payByState: payByState.map((r) => ({ state: r.state, abbreviation: r.abbreviation, headcount: Number(r.headcount), avgPay: Number(r.avg_pay) })),
@@ -144,6 +162,12 @@ export const getHomepageInsights = unstable_cache(
       stemPay: stemPay.map((r) => ({ category: r.stem_occupation, count: Number(r.count), avgPay: Number(r.avg_pay) })),
       supervisorPay: supervisorPay.map((r) => ({ category: r.supervisory_status, count: Number(r.count), avgPay: Number(r.avg_pay) })),
       payByTenure: payByTenure.map((r) => ({ tenure: r.tenure, count: Number(r.count), avgPay: Number(r.avg_pay) })),
+      separationReasons: separationReasons.map((r) => ({ category: r.separation_category, count: Number(r.count) })),
+      agencyNetChanges: agencyNetChanges.map((r) => ({ agency: r.agency, hires: Number(r.hires), departures: Number(r.departures), netChange: Number(r.net_change) })),
+      stemBrainDrain: stemBrainDrain.map((r) => ({ category: r.category, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct), avgDepartingPay: Number(r.avg_departing_pay) })),
+      stateReplacementRates: stateReplacementRates.map((r) => ({ state: r.state, abbreviation: r.abbreviation, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct) })),
+      stemPositionLosses: stemPositionLosses.map((r) => ({ position: r.position, stemType: r.stem_type, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct), avgPay: Number(r.avg_pay) })),
+      stemAgencyLosses: stemAgencyLosses.map((r) => ({ agency: r.agency, sector: r.sector, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct) })),
     };
   },
   ["homepage-insights"],

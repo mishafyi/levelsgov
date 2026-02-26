@@ -21,7 +21,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getStats, getHomepageInsights } from "@/lib/filters";
-import { HorizontalBarChart, VerticalBarChart } from "@/components/home-charts";
+import { HorizontalBarChart, NetChangeBarChart, TreemapChart, AreaLineChart } from "@/components/home-charts";
+import { USPayMap, USStateImpactMap } from "@/components/us-pay-map";
 
 function formatSnapshotDate(yyyymm: string): string {
   const year = yyyymm.slice(0, 4);
@@ -50,33 +51,53 @@ export default async function HomePage() {
   const snapshotLabel = formatSnapshotDate(stats.latest_snapshot);
   const netChange = stats.total_accessions - stats.total_separations;
 
-  const stateData = insights.payByState.map((s) => ({
-    label: s.state
-      .replace(/^DISTRICT OF COLUMBIA$/, "Washington D.C.")
-      .replace(/^([A-Z])([A-Z]+)$/g, (_, f, r) => f + r.toLowerCase())
-      .replace(/\b([A-Z])([A-Z]+)\b/g, (_, f: string, r: string) => f + r.toLowerCase()),
-    value: s.avgPay,
-    headcount: s.headcount,
-  }));
+  const stateData = insights.payByState;
+
+  const agencyLabelMap: Record<string, string> = {
+    "NATIONAL CREDIT UNION ADMINISTRATION": "NCUA",
+    "FARM CREDIT ADMINISTRATION": "Farm Credit Admin.",
+    "FARM CREDIT SYSTEM INSURANCE CORPORATION": "Farm Credit Ins.",
+    "COMMODITY FUTURES TRADING COMMISSION": "CFTC",
+    "SECURITIES AND EXCHANGE COMMISSION": "SEC",
+    "FEDERAL HOUSING FINANCE AGENCY": "FHFA",
+    "FEDERAL RESERVE SYSTEM": "Federal Reserve",
+    "ARCTIC RESEARCH COMMISSION": "Arctic Research",
+    "DEFENSE NUCLEAR FACILITIES SAFETY BOARD": "DNFSB",
+    "FEDERAL DEPOSIT INSURANCE CORPORATION": "FDIC",
+    "FEDERAL COMMUNICATIONS COMMISSION": "FCC",
+    "NATIONAL SCIENCE FOUNDATION": "NSF",
+    "NUCLEAR REGULATORY COMMISSION": "NRC",
+    "NATIONAL LABOR RELATIONS BOARD": "NLRB",
+    "NAT AERONAUTICS AND SPACE ADMINISTRATION": "NASA",
+    "GENERAL SERVICES ADMINISTRATION": "GSA",
+    "ENVIRONMENTAL PROTECTION AGENCY": "EPA",
+    "OFFICE OF PERSONNEL MANAGEMENT": "OPM",
+    "SOCIAL SECURITY ADMINISTRATION": "SSA",
+    "SMALL BUSINESS ADMINISTRATION": "SBA",
+    "AGENCY FOR INTERNATIONAL DEVELOPMENT": "USAID",
+    "CONSUMER FINANCIAL PROTECTION BUREAU": "CFPB",
+  };
 
   const agencyData = insights.topAgencies.map((a) => ({
-    label: a.agency
-      .replace(/^DEPARTMENT OF /, "Dept. ")
-      .replace(/^SECURITIES AND EXCHANGE COMMISSION$/, "SEC")
-      .replace(/^FEDERAL RESERVE SYSTEM$/, "Federal Reserve")
-      .replace(/^FEDERAL DEPOSIT INSURANCE CORPORATION$/, "FDIC")
-      .replace(/^FEDERAL COMMUNICATIONS COMMISSION$/, "FCC")
-      .replace(/^NATIONAL SCIENCE FOUNDATION$/, "NSF")
-      .replace(/^NUCLEAR REGULATORY COMMISSION$/, "NRC")
-      .replace(/^NATIONAL LABOR RELATIONS BOARD$/, "NLRB")
-      .replace(/^NAT AERONAUTICS AND SPACE ADMINISTRATION$/, "NASA"),
+    label: agencyLabelMap[a.agency]
+      ?? a.agency.replace(/^DEPARTMENT OF (THE )?/, "Dept. "),
     value: a.avgPay,
   }));
 
+  const occLabelMap: Record<string, string> = {
+    "SECURITIES COMPLIANCE EXAMINING": "Securities Compliance",
+    "GENERAL MATHEMATICS AND STATISTICS": "Math & Statistics",
+    "ADMINISTRATIVE LAW JUDGE": "Admin. Law Judge",
+    "TECHNICAL SYSTEMS PROGRAM MANAGER": "Tech. Systems PM",
+    "PATENT ADMINISTRATION": "Patent Admin.",
+    "PATENT CLASSIFYING": "Patent Classifying",
+  };
+
   const occData = insights.topOccupations.map((o) => ({
-    label: o.occupation
-      .replace(/^([A-Z])([A-Z]+)/g, (_, f, r) => f + r.toLowerCase())
-      .replace(/\b([A-Z])([A-Z]+)\b/g, (_, f: string, r: string) => f + r.toLowerCase()),
+    label: occLabelMap[o.occupation]
+      ?? o.occupation
+        .replace(/^([A-Z])([A-Z]+)/g, (_, f, r) => f + r.toLowerCase())
+        .replace(/\b([A-Z])([A-Z]+)\b/g, (_, f: string, r: string) => f + r.toLowerCase()),
     value: o.avgPay,
   }));
 
@@ -86,24 +107,174 @@ export default async function HomePage() {
     count: t.count,
   }));
 
+  const eduLabelMap: Record<string, string> = {
+    "NO FORMAL EDUCATION OR SOME ELEMENTARY SCHOOL - DID NOT COMPLETE": "No Formal Ed.",
+    "ELEMENTARY SCHOOL COMPLETED - NO HIGH SCHOOL": "Elementary",
+    "SOME HIGH SCHOOL - DID NOT COMPLETE": "Some High School",
+    "HIGH SCHOOL GRADUATE OR CERTIFICATE OF EQUIVALENCY": "High School",
+    "TERMINAL OCCUPATIONAL PROGRAM - DID NOT COMPLETE": "Vocational (Partial)",
+    "TERMINAL OCCUPATIONAL PROGRAM - CERTIFICATE OF COMPLETION, DIPLOMA OR EQUIVALENT": "Vocational",
+    "SOME COLLEGE - LESS THAN ONE YEAR": "Some College (<1yr)",
+    "ONE YEAR COLLEGE": "1 Year College",
+    "TWO YEARS COLLEGE": "2 Years College",
+    "THREE YEARS COLLEGE": "3 Years College",
+    "FOUR YEARS COLLEGE": "4 Years College",
+    "ASSOCIATE DEGREE": "Associate's",
+    "BACHELOR'S DEGREE": "Bachelor's",
+    "POST-BACHELOR'S": "Post-Bachelor's",
+    "MASTER'S DEGREE": "Master's",
+    "POST-MASTER'S": "Post-Master's",
+    "SIXTH-YEAR DEGREE": "6th-Year Degree",
+    "POST-SIXTH YEAR": "Post-6th Year",
+    "FIRST PROFESSIONAL": "Professional (JD/MD)",
+    "POST-FIRST PROFESSIONAL": "Post-Professional",
+    "DOCTORATE DEGREE": "Doctorate",
+    "POST-DOCTORATE": "Post-Doctorate",
+    "NO DATA REPORTED": "Not Reported",
+  };
+
   const eduData = insights.payByEducation
-    .filter((e) => e.education !== "INVALID")
-    .slice(0, 6)
+    .filter((e) => e.education !== "INVALID" && e.education !== "NO DATA REPORTED")
     .map((e) => ({
-      label: e.education
-        .split(" - ")[0]
-        .replace(/TERMINAL OCCUPATIONAL PROGRAM/, "Vocational")
-        .replace(/^FIRST PROFESSIONAL$/, "1st Professional")
-        .replace(/^POST-DOCTORATE$/, "Post-Doc")
-        .replace(/^POST-FIRST PROFESSIONAL$/, "Post-1st Prof")
-        .replace(/^DOCTORATE DEGREE$/, "Doctorate")
-        .replace(/^SIXTH-YEAR DEGREE$/, "6th Year")
-        .replace(/^POST-SIXTH YEAR$/, "Post-6th Year")
-        .replace(/^POST-MASTER'S$/, "Post-Master's"),
+      label: eduLabelMap[e.education] ?? e.education,
       value: e.avgPay,
     }));
 
-  const stateConfig = { value: { label: "Avg Pay", color: "var(--chart-1)" } };
+  const separationLabelMap: Record<string, string> = {
+    "RETIREMENT - VOLUNTARY": "Voluntary Retirement",
+    "QUIT": "Quit",
+    "RETIREMENT - EARLY OUT": "Early Retirement",
+    "TERMINATION (EXPIRED APPT/OTHER)": "Termination",
+    "OTHER SEPARATION": "Other",
+    "TRANSFER OUT - INDIVIDUAL TRANSFER": "Transfer Out",
+    "TRANSFER OUT - MASS TRANSFER": "Mass Transfer Out",
+    "RETIREMENT - OTHER": "Other Retirement",
+    "REDUCTION IN FORCE (RIF)": "RIF",
+    "RETIREMENT - DISABILITY": "Disability Retirement",
+    "RETIREMENT - INVOLUNTARY": "Involuntary Retirement",
+    "DEATH": "Death",
+  };
+
+  const separationData = insights.separationReasons.map((r) => ({
+    label: separationLabelMap[r.category] ?? r.category
+      .replace(/^([A-Z])([A-Z]+)/g, (_, f, rest) => f + rest.toLowerCase())
+      .replace(/\b([A-Z])([A-Z]+)\b/g, (_, f: string, rest: string) => f + rest.toLowerCase()),
+    value: r.count,
+  }));
+
+  const agencyChangeData = insights.agencyNetChanges.map((a) => ({
+    label: a.agency
+      .replace(/^DEPARTMENT OF /, "Dept. ")
+      .replace(/^SECURITIES AND EXCHANGE COMMISSION$/, "SEC")
+      .replace(/^FEDERAL RESERVE SYSTEM$/, "Federal Reserve")
+      .replace(/^FEDERAL DEPOSIT INSURANCE CORPORATION$/, "FDIC")
+      .replace(/^FEDERAL COMMUNICATIONS COMMISSION$/, "FCC")
+      .replace(/^NATIONAL SCIENCE FOUNDATION$/, "NSF")
+      .replace(/^NUCLEAR REGULATORY COMMISSION$/, "NRC")
+      .replace(/^NATIONAL LABOR RELATIONS BOARD$/, "NLRB")
+      .replace(/^NAT AERONAUTICS AND SPACE ADMINISTRATION$/, "NASA")
+      .replace(/^GENERAL SERVICES ADMINISTRATION$/, "GSA")
+      .replace(/^OFFICE OF PERSONNEL MANAGEMENT$/, "OPM")
+      .replace(/^SOCIAL SECURITY ADMINISTRATION$/, "SSA")
+      .replace(/^SMALL BUSINESS ADMINISTRATION$/, "SBA")
+      .replace(/^ENVIRONMENTAL PROTECTION AGENCY$/, "EPA")
+      .replace(/^AGENCY FOR INTERNATIONAL DEVELOPMENT$/, "USAID")
+      .replace(/^CONSUMER FINANCIAL PROTECTION BUREAU$/, "CFPB"),
+    value: a.netChange,
+    hires: a.hires,
+    departures: a.departures,
+  }));
+
+  const stemDrainData = insights.stemBrainDrain.map((s) => ({
+    category: s.category
+      .replace(/^MATHEMATICS OCCUPATIONS$/, "Mathematics")
+      .replace(/^TECHNOLOGY OCCUPATIONS$/, "Technology")
+      .replace(/^ENGINEERING OCCUPATIONS$/, "Engineering")
+      .replace(/^SCIENCE OCCUPATIONS$/, "Science")
+      .replace(/^HEALTH OCCUPATIONS$/, "Health")
+      .replace(/^ALL OTHER OCCUPATIONS$/, "All Other"),
+    departures: s.departures,
+    hires: s.hires,
+    netLoss: s.netLoss,
+    replacementPct: s.replacementPct,
+    avgDepartingPay: s.avgDepartingPay,
+  }));
+
+  const stateImpactData = insights.stateReplacementRates.map((s) => ({
+    label: s.state
+      .replace(/^DISTRICT OF COLUMBIA$/, "Washington D.C.")
+      .replace(/^([A-Z])([A-Z]+)$/g, (_, f, r) => f + r.toLowerCase())
+      .replace(/\b([A-Z])([A-Z]+)\b/g, (_, f: string, r: string) => f + r.toLowerCase()),
+    abbreviation: s.abbreviation,
+    departures: s.departures,
+    hires: s.hires,
+    netLoss: s.netLoss,
+    replacementPct: s.replacementPct,
+    value: s.netLoss,
+  }));
+
+  const stemPositionData = insights.stemPositionLosses.map((p) => {
+    const typeLabel = p.stemType
+      .replace(/ OCCUPATIONS$/, "")
+      .replace(/^MATHEMATICS$/, "Math")
+      .replace(/^TECHNOLOGY$/, "Tech")
+      .replace(/^ENGINEERING$/, "Eng.")
+      .replace(/^SCIENCE$/, "Sci.");
+    return {
+      label: p.position
+        .replace(/^INFORMATION TECHNOLOGY MANAGEMENT$/, "IT Management")
+        .replace(/^GENERAL ENGINEERING$/, "General Engineering")
+        .replace(/^GENERAL NATURAL RESOURCES MANAGEMENT AND BIOLOGICAL SCIENCES$/, "Natural Resources & Bio")
+        .replace(/^SOCIAL SCIENCE$/, "Social Science")
+        .replace(/^CIVIL ENGINEERING$/, "Civil Engineering")
+        .replace(/^ELECTRONICS ENGINEERING$/, "Electronics Eng.")
+        .replace(/^GENERAL PHYSICAL SCIENCE$/, "Physical Science")
+        .replace(/^COMPUTER SCIENCE$/, "Computer Science")
+        .replace(/^MECHANICAL ENGINEERING$/, "Mechanical Eng.")
+        .replace(/^INTELLIGENCE$/, "Intelligence")
+        .replace(/^FOREIGN AFFAIRS$/, "Foreign Affairs")
+        .replace(/^ENVIRONMENTAL PROTECTION SPECIALIST$/, "Environmental Protection")
+        .replace(/^ECONOMIST$/, "Economist")
+        .replace(/^AEROSPACE ENGINEERING$/, "Aerospace Eng.")
+        .replace(/^STATISTICS$/, "Statistics"),
+      value: p.netLoss,
+      replacementPct: p.replacementPct,
+      typeLabel,
+    };
+  });
+
+  const stemAgencyAll = insights.stemAgencyLosses.map((a) => ({
+    label: agencyLabelMap[a.agency]
+      ?? a.agency.replace(/^DEPARTMENT OF (THE )?/, "Dept. "),
+    value: a.netLoss,
+    sector: a.sector,
+    replacementPct: a.replacementPct,
+    departures: a.departures,
+    hires: a.hires,
+  }));
+
+  const defenseTotals = stemAgencyAll.filter((a) => a.sector === "defense");
+  const civilianTotals = stemAgencyAll.filter((a) => a.sector === "civilian");
+  const stemSectorData = [
+    {
+      label: "Defense & Intel",
+      value: defenseTotals.reduce((s, a) => s + a.value, 0),
+      departures: defenseTotals.reduce((s, a) => s + a.departures, 0),
+      hires: defenseTotals.reduce((s, a) => s + a.hires, 0),
+    },
+    {
+      label: "Civilian Agencies",
+      value: civilianTotals.reduce((s, a) => s + a.value, 0),
+      departures: civilianTotals.reduce((s, a) => s + a.departures, 0),
+      hires: civilianTotals.reduce((s, a) => s + a.hires, 0),
+    },
+  ];
+
+  const stemPositionConfig = { value: { label: "Net Loss", color: "var(--chart-3)" } };
+  const stemSectorConfig = { value: { label: "Net STEM Loss", color: "var(--chart-1)" } };
+
+  const netChangeConfig = { value: { label: "Net Change", color: "var(--chart-2)" } };
+
   const agencyConfig = { value: { label: "Avg Pay", color: "var(--chart-2)" } };
   const occConfig = { value: { label: "Avg Pay", color: "var(--chart-3)" } };
   const tenureConfig = { value: { label: "Avg Pay", color: "var(--chart-4)" } };
@@ -150,17 +321,13 @@ export default async function HomePage() {
       {/* Pay by State */}
       <Card className="mb-6 sm:mb-10">
         <CardHeader className="px-4 sm:px-6">
-          <CardTitle className="text-base sm:text-lg">Highest Paying States</CardTitle>
+          <CardTitle className="text-base sm:text-lg">Federal Pay by State</CardTitle>
           <CardDescription className="text-xs sm:text-sm">
             Average federal employee compensation by duty station state
           </CardDescription>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
-          <HorizontalBarChart
-            data={stateData}
-            config={stateConfig}
-            className="h-[420px] w-full sm:h-[520px]"
-          />
+          <USPayMap data={stateData} />
         </CardContent>
       </Card>
 
@@ -170,7 +337,7 @@ export default async function HomePage() {
           <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-base sm:text-lg">Top Paying Agencies</CardTitle>
             <CardDescription className="text-xs sm:text-sm">
-              Agencies with 1,000+ employees
+              Top 10 agencies by average compensation
             </CardDescription>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
@@ -186,7 +353,7 @@ export default async function HomePage() {
           <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-base sm:text-lg">Top Paying Occupations</CardTitle>
             <CardDescription className="text-xs sm:text-sm">
-              Occupations with 500+ employees
+              Top 10 occupations by average compensation
             </CardDescription>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
@@ -200,7 +367,7 @@ export default async function HomePage() {
       </div>
 
       {/* Two-column: Tenure + Education */}
-      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
+      <div className="mb-6 grid items-start gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-base sm:text-lg">Pay by Tenure</CardTitle>
@@ -209,7 +376,7 @@ export default async function HomePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
-            <VerticalBarChart
+            <AreaLineChart
               data={tenureData}
               config={tenureConfig}
             />
@@ -241,9 +408,10 @@ export default async function HomePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
-            <VerticalBarChart
+            <HorizontalBarChart
               data={eduData}
               config={eduConfig}
+              className="h-[560px] w-full sm:h-[640px]"
             />
           </CardContent>
         </Card>
@@ -327,6 +495,161 @@ export default async function HomePage() {
               </p>
             </CardFooter>
           )}
+        </Card>
+      </div>
+
+      {/* Workforce Trends */}
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Why People Leave</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Separation reasons across the federal workforce
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <TreemapChart data={separationData} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Biggest Agency Changes</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Agencies with the largest net workforce decline
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <NetChangeBarChart
+              data={agencyChangeData}
+              config={netChangeConfig}
+              className="h-[320px] w-full sm:h-[380px]"
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* STEM Brain Drain + State Impact */}
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
+        {/* STEM Brain Drain */}
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">STEM Brain Drain</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              2025 replacement rates by field — how many hires per departure
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5 px-4 sm:px-6">
+            {stemDrainData.map((s) => (
+              <div key={s.category}>
+                <div className="mb-1.5 flex items-center justify-between">
+                  <p className="text-sm font-medium">{s.category}</p>
+                  <p className="text-sm font-bold tabular-nums">
+                    {s.replacementPct}% replaced
+                  </p>
+                </div>
+                <div className="mb-1.5 h-3 w-full overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${Math.min(s.replacementPct, 100)}%`,
+                      backgroundColor: s.replacementPct < 20 ? "var(--chart-1)" : s.replacementPct < 40 ? "var(--chart-4)" : "var(--chart-2)",
+                    }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>{formatNumber(s.departures)} departed</span>
+                  <span>{formatNumber(s.hires)} hired</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter>
+            <p className="mx-auto text-sm text-muted-foreground">
+              Math &amp; Tech replaced at{" "}
+              <span className="font-semibold text-red-600">
+                ~{Math.round(((stemDrainData.find((s) => s.category === "Mathematics")?.replacementPct ?? 0) + (stemDrainData.find((s) => s.category === "Technology")?.replacementPct ?? 0)) / 2)}%
+              </span>
+              {" "}— while Health is at{" "}
+              <span className="font-semibold text-emerald-600">
+                {stemDrainData.find((s) => s.category === "Health")?.replacementPct ?? 0}%
+              </span>
+            </p>
+          </CardFooter>
+        </Card>
+
+        {/* State Impact */}
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Hardest Hit States</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Lowest replacement rates — departures vs. new hires in 2025
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <USStateImpactMap data={stateImpactData} />
+          </CardContent>
+          <CardFooter>
+            <p className="mx-auto text-sm text-muted-foreground">
+              Maryland:{" "}
+              <span className="font-semibold text-red-600">
+                {stateImpactData.find((s) => s.abbreviation === "MD")?.replacementPct ?? 0}% replacement
+              </span>
+              {" "}— {formatNumber(stateImpactData.find((s) => s.abbreviation === "MD")?.departures ?? 0)} departed, only {formatNumber(stateImpactData.find((s) => s.abbreviation === "MD")?.hires ?? 0)} hired
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+
+      {/* STEM Deep Dive: Positions + Agencies */}
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">STEM Positions Lost</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Top STEM roles by net workforce loss in 2025
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <HorizontalBarChart
+              data={stemPositionData}
+              config={stemPositionConfig}
+              valueFormat="number"
+              className="h-[420px] w-full sm:h-[520px]"
+            />
+          </CardContent>
+          <CardFooter>
+            <p className="mx-auto text-sm text-muted-foreground">
+              IT Management alone lost{" "}
+              <span className="font-semibold text-red-600">
+                {formatNumber(stemPositionData[0]?.value ?? 0)} net
+              </span>
+              {" "}— Economists at just {stemPositionData.find((s) => s.label === "Economist")?.replacementPct ?? 0}% replacement
+            </p>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">STEM Loss: Defense vs Civilian</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Net STEM worker loss by sector in 2025
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <HorizontalBarChart
+              data={stemSectorData}
+              config={stemSectorConfig}
+              valueFormat="number"
+              className="h-[120px] w-full sm:h-[140px]"
+            />
+          </CardContent>
+          <CardFooter>
+            <p className="mx-auto text-sm text-muted-foreground">
+              Defense: {formatNumber(stemSectorData[0].departures)} departed, {formatNumber(stemSectorData[0].hires)} hired ·
+              Civilian: {formatNumber(stemSectorData[1].departures)} departed, {formatNumber(stemSectorData[1].hires)} hired
+            </p>
+          </CardFooter>
         </Card>
       </div>
 
