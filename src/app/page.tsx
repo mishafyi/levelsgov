@@ -107,38 +107,10 @@ export default async function HomePage() {
     count: t.count,
   }));
 
-  const eduLabelMap: Record<string, string> = {
-    "NO FORMAL EDUCATION OR SOME ELEMENTARY SCHOOL - DID NOT COMPLETE": "No Formal Ed.",
-    "ELEMENTARY SCHOOL COMPLETED - NO HIGH SCHOOL": "Elementary",
-    "SOME HIGH SCHOOL - DID NOT COMPLETE": "Some High School",
-    "HIGH SCHOOL GRADUATE OR CERTIFICATE OF EQUIVALENCY": "High School",
-    "TERMINAL OCCUPATIONAL PROGRAM - DID NOT COMPLETE": "Vocational (Partial)",
-    "TERMINAL OCCUPATIONAL PROGRAM - CERTIFICATE OF COMPLETION, DIPLOMA OR EQUIVALENT": "Vocational",
-    "SOME COLLEGE - LESS THAN ONE YEAR": "Some College (<1yr)",
-    "ONE YEAR COLLEGE": "1 Year College",
-    "TWO YEARS COLLEGE": "2 Years College",
-    "THREE YEARS COLLEGE": "3 Years College",
-    "FOUR YEARS COLLEGE": "4 Years College",
-    "ASSOCIATE DEGREE": "Associate's",
-    "BACHELOR'S DEGREE": "Bachelor's",
-    "POST-BACHELOR'S": "Post-Bachelor's",
-    "MASTER'S DEGREE": "Master's",
-    "POST-MASTER'S": "Post-Master's",
-    "SIXTH-YEAR DEGREE": "6th-Year Degree",
-    "POST-SIXTH YEAR": "Post-6th Year",
-    "FIRST PROFESSIONAL": "Professional (JD/MD)",
-    "POST-FIRST PROFESSIONAL": "Post-Professional",
-    "DOCTORATE DEGREE": "Doctorate",
-    "POST-DOCTORATE": "Post-Doctorate",
-    "NO DATA REPORTED": "Not Reported",
-  };
-
-  const eduData = insights.payByEducation
-    .filter((e) => e.education !== "INVALID" && e.education !== "NO DATA REPORTED")
-    .map((e) => ({
-      label: eduLabelMap[e.education] ?? e.education,
-      value: e.avgPay,
-    }));
+  const eduData = insights.payByEducation.map((e) => ({
+    label: e.education,
+    value: e.avgPay,
+  }));
 
   const separationLabelMap: Record<string, string> = {
     "RETIREMENT - VOLUNTARY": "Voluntary Retirement",
@@ -411,7 +383,7 @@ export default async function HomePage() {
             <HorizontalBarChart
               data={eduData}
               config={eduConfig}
-              className="h-[560px] w-full sm:h-[640px]"
+              className="h-[360px] w-full sm:h-[420px]"
             />
           </CardContent>
         </Card>
