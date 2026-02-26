@@ -112,7 +112,7 @@ export const getStats = unstable_cache(
 
 export const getHomepageInsights = unstable_cache(
   async () => {
-    const [payByState, topAgencies, topOccupations, payByEducation, stemPay, supervisorPay, payByTenure, separationReasons, agencyNetChanges, stemBrainDrain, stateReplacementRates, stemPositionLosses, stemAgencyLosses] =
+    const [payByState, topAgencies, topOccupations, payByEducation, stemPay, supervisorPay, payByTenure, separationReasons, agencyNetChanges, stemBrainDrain, stateReplacementRates, stemPositionLosses, stemAgencyLosses, payByAge, gradeDistribution, workSchedule, tenureBySTEM] =
       await Promise.all([
         query<{ state: string; abbreviation: string; headcount: string; avg_pay: string }>(
           "SELECT duty_station_state as state, duty_station_state_abbreviation as abbreviation, COUNT(*) as headcount, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE duty_station_state IS NOT NULL AND duty_station_state <> '' AND duty_station_state NOT IN ('INVALID', 'NO DATA REPORTED') AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY duty_station_state, duty_station_state_abbreviation HAVING COUNT(*) > 100 ORDER BY avg_pay DESC"
@@ -153,6 +153,18 @@ export const getHomepageInsights = unstable_cache(
         query<{ agency: string; sector: string; departures: string; hires: string; net_loss: string; replacement_pct: string }>(
           "SELECT s.agency, CASE WHEN s.agency IN ('DEPARTMENT OF THE NAVY','DEPARTMENT OF THE ARMY','DEPARTMENT OF THE AIR FORCE','DEPARTMENT OF DEFENSE','DEPARTMENT OF HOMELAND SECURITY','DEPARTMENT OF STATE','DEPARTMENT OF JUSTICE','NATIONAL SECURITY AGENCY/CENTRAL SECURITY SERVICE','CENTRAL INTELLIGENCE AGENCY','DEFENSE INTELLIGENCE AGENCY','NATIONAL GEOSPATIAL-INTELLIGENCE AGENCY','NATIONAL RECONNAISSANCE OFFICE','DEPARTMENT OF VETERANS AFFAIRS') THEN 'defense' ELSE 'civilian' END as sector, s.dep as departures, COALESCE(a.hir, 0) as hires, s.dep - COALESCE(a.hir, 0) as net_loss, ROUND(COALESCE(a.hir, 0)::numeric / NULLIF(s.dep, 0) * 100, 1) as replacement_pct FROM (SELECT agency, COUNT(*) as dep FROM separations WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IN ('MATHEMATICS OCCUPATIONS','TECHNOLOGY OCCUPATIONS','ENGINEERING OCCUPATIONS','SCIENCE OCCUPATIONS') GROUP BY 1) s LEFT JOIN (SELECT agency, COUNT(*) as hir FROM accessions WHERE personnel_action_effective_date_yyyymm >= '202501' AND stem_occupation_type IN ('MATHEMATICS OCCUPATIONS','TECHNOLOGY OCCUPATIONS','ENGINEERING OCCUPATIONS','SCIENCE OCCUPATIONS') GROUP BY 1) a ON s.agency = a.agency WHERE s.dep > 200 ORDER BY net_loss DESC"
         ),
+        query<{ age_bracket: string; count: string; avg_pay: string }>(
+          "SELECT age_bracket, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE age_bracket IS NOT NULL AND age_bracket NOT IN ('INVALID','NO DATA REPORTED') AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY age_bracket ORDER BY MIN(CASE WHEN age_bracket = 'LESS THAN 20' THEN 1 WHEN age_bracket = '20-24' THEN 2 WHEN age_bracket = '25-29' THEN 3 WHEN age_bracket = '30-34' THEN 4 WHEN age_bracket = '35-39' THEN 5 WHEN age_bracket = '40-44' THEN 6 WHEN age_bracket = '45-49' THEN 7 WHEN age_bracket = '50-54' THEN 8 WHEN age_bracket = '55-59' THEN 9 WHEN age_bracket = '60-64' THEN 10 WHEN age_bracket = '65 OR MORE' THEN 11 END)"
+        ),
+        query<{ grade: string; count: string; avg_pay: string }>(
+          "SELECT 'GS-' || grade::int as grade, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE grade ~ '^[0-9]{2}$' AND grade::int BETWEEN 1 AND 15 AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY grade ORDER BY grade::int"
+        ),
+        query<{ work_schedule: string; count: string }>(
+          "SELECT CASE WHEN work_schedule LIKE 'FULL-TIME%' THEN 'Full-Time' WHEN work_schedule LIKE 'PART-TIME%' THEN 'Part-Time' WHEN work_schedule LIKE 'INTERMITTENT%' THEN 'Intermittent' ELSE 'Other' END as work_schedule, COUNT(*) as count FROM employment WHERE work_schedule IS NOT NULL AND work_schedule NOT IN ('INVALID','NO DATA REPORTED') GROUP BY 1 ORDER BY count DESC"
+        ),
+        query<{ tenure: string; category: string; count: string; avg_pay: string }>(
+          "SELECT CASE WHEN length_of_service_years < 5 THEN '0-4 yr' WHEN length_of_service_years < 10 THEN '5-9 yr' WHEN length_of_service_years < 15 THEN '10-14 yr' WHEN length_of_service_years < 20 THEN '15-19 yr' WHEN length_of_service_years < 25 THEN '20-24 yr' WHEN length_of_service_years < 30 THEN '25-29 yr' ELSE '30+ yr' END as tenure, CASE WHEN stem_occupation_type IS NOT NULL AND stem_occupation_type <> '' AND stem_occupation_type <> 'UNSPECIFIED' THEN 'STEM' ELSE 'Non-STEM' END as category, COUNT(*) as count, ROUND(AVG(annualized_adjusted_basic_pay)) as avg_pay FROM employment WHERE length_of_service_years IS NOT NULL AND annualized_adjusted_basic_pay IS NOT NULL GROUP BY 1, 2 ORDER BY MIN(length_of_service_years), category"
+        ),
       ]);
     return {
       payByState: payByState.map((r) => ({ state: r.state, abbreviation: r.abbreviation, headcount: Number(r.headcount), avgPay: Number(r.avg_pay) })),
@@ -168,6 +180,10 @@ export const getHomepageInsights = unstable_cache(
       stateReplacementRates: stateReplacementRates.map((r) => ({ state: r.state, abbreviation: r.abbreviation, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct) })),
       stemPositionLosses: stemPositionLosses.map((r) => ({ position: r.position, stemType: r.stem_type, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct), avgPay: Number(r.avg_pay) })),
       stemAgencyLosses: stemAgencyLosses.map((r) => ({ agency: r.agency, sector: r.sector, departures: Number(r.departures), hires: Number(r.hires), netLoss: Number(r.net_loss), replacementPct: Number(r.replacement_pct) })),
+      payByAge: payByAge.map((r) => ({ ageBracket: r.age_bracket, count: Number(r.count), avgPay: Number(r.avg_pay) })),
+      gradeDistribution: gradeDistribution.map((r) => ({ grade: r.grade, count: Number(r.count), avgPay: Number(r.avg_pay) })),
+      workSchedule: workSchedule.map((r) => ({ schedule: r.work_schedule, count: Number(r.count) })),
+      tenureBySTEM: tenureBySTEM.map((r) => ({ tenure: r.tenure, category: r.category, count: Number(r.count), avgPay: Number(r.avg_pay) })),
     };
   },
   ["homepage-insights"],

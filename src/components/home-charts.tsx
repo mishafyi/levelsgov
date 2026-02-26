@@ -12,6 +12,18 @@ import {
   Treemap,
   XAxis,
   YAxis,
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Scatter,
+  ScatterChart,
+  ZAxis,
+  Legend,
+  PieChart,
+  Pie,
+  Label,
 } from "recharts";
 import {
   ChartContainer,
@@ -401,6 +413,179 @@ export function AreaLineChart({
           activeDot={{ r: 6 }}
         />
       </AreaChart>
+    </ChartContainer>
+  );
+}
+
+export function RadarPayChart({
+  data,
+  dataKey = "value",
+  labelKey = "label",
+  config,
+  className,
+}: {
+  data: Record<string, unknown>[];
+  dataKey?: string;
+  labelKey?: string;
+  config: ChartConfig;
+  className?: string;
+}) {
+  const isMobile = useIsMobile();
+
+  return (
+    <ChartContainer config={config} className={className ?? "h-[300px] w-full"}>
+      <RadarChart data={data} cx="50%" cy="50%" outerRadius={isMobile ? "65%" : "75%"}>
+        <PolarGrid stroke="hsl(var(--border))" />
+        <PolarAngleAxis
+          dataKey={labelKey}
+          tick={{ fontSize: isMobile ? 9 : 11 }}
+        />
+        <PolarRadiusAxis
+          angle={90}
+          tick={false}
+          axisLine={false}
+        />
+        <ChartTooltip
+          content={
+            <ChartTooltipContent
+              formatter={(value) => payFormatter(value as number)}
+            />
+          }
+        />
+        <Radar
+          dataKey={dataKey}
+          stroke={`var(--color-${dataKey})`}
+          fill={`var(--color-${dataKey})`}
+          fillOpacity={0.3}
+          strokeWidth={2}
+          dot={{ r: 3, fill: `var(--color-${dataKey})` }}
+        />
+      </RadarChart>
+    </ChartContainer>
+  );
+}
+
+export function ScatterPayChart({
+  stemData,
+  nonStemData,
+  className,
+}: {
+  stemData: { x: number; y: number; z: number; label: string }[];
+  nonStemData: { x: number; y: number; z: number; label: string }[];
+  className?: string;
+}) {
+  const isMobile = useIsMobile();
+  const config: ChartConfig = {
+    stem: { label: "STEM", color: "var(--chart-1)" },
+    nonStem: { label: "Non-STEM", color: "var(--chart-4)" },
+  };
+
+  return (
+    <ChartContainer config={config} className={className ?? "h-[300px] w-full"}>
+      <ScatterChart margin={{ left: -10, right: 10, top: 10, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey="x"
+          type="number"
+          name="Tenure"
+          tickLine={false}
+          axisLine={false}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
+          tickFormatter={(v: number) => `${v}yr`}
+        />
+        <YAxis
+          dataKey="y"
+          type="number"
+          name="Pay"
+          tickLine={false}
+          axisLine={false}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
+          tickFormatter={(v: number) => `$${compactFormatter(v)}`}
+        />
+        <ZAxis dataKey="z" range={[40, 400]} name="Count" />
+        <ChartTooltip
+          content={({ active, payload }) => {
+            if (!active || !payload?.length) return null;
+            const d = payload[0].payload as { x: number; y: number; z: number; label: string };
+            return (
+              <div className="rounded-lg border bg-background px-3 py-2 shadow-xl">
+                <p className="text-sm font-medium">{d.label}</p>
+                <p className="text-xs text-muted-foreground">
+                  {payFormatter(d.y)} avg · {new Intl.NumberFormat("en-US").format(d.z)} employees
+                </p>
+              </div>
+            );
+          }}
+        />
+        <Legend />
+        <Scatter name="STEM" data={stemData} fill="var(--color-stem)" />
+        <Scatter name="Non-STEM" data={nonStemData} fill="var(--color-nonStem)" />
+      </ScatterChart>
+    </ChartContainer>
+  );
+}
+
+export function DonutChart({
+  data,
+  className,
+}: {
+  data: { label: string; value: number }[];
+  className?: string;
+}) {
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  const pieData = data.map((d) => ({ name: d.label, value: d.value }));
+  const config: ChartConfig = { value: { label: "Count" } };
+
+  return (
+    <ChartContainer config={config} className={className ?? "h-[250px] w-full"}>
+      <PieChart>
+        <Pie
+          data={pieData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          innerRadius="55%"
+          outerRadius="80%"
+          strokeWidth={2}
+          stroke="hsl(var(--background))"
+        >
+          {pieData.map((_, i) => (
+            <Cell key={i} fill={TREEMAP_COLORS[i % TREEMAP_COLORS.length]} />
+          ))}
+          <Label
+            content={({ viewBox }) => {
+              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                return (
+                  <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+                    <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-2xl font-bold">
+                      {compactFormatter(total)}
+                    </tspan>
+                    <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 20} className="fill-muted-foreground text-xs">
+                      employees
+                    </tspan>
+                  </text>
+                );
+              }
+            }}
+          />
+        </Pie>
+        <ChartTooltip
+          content={({ active, payload }) => {
+            if (!active || !payload?.length) return null;
+            const item = payload[0].payload as { name: string; value: number };
+            const pct = ((item.value / total) * 100).toFixed(1);
+            return (
+              <div className="rounded-lg border bg-background px-3 py-2 shadow-xl">
+                <p className="text-sm font-medium">{item.name}</p>
+                <p className="text-xs text-muted-foreground">
+                  {new Intl.NumberFormat("en-US").format(item.value)} ({pct}%)
+                </p>
+              </div>
+            );
+          }}
+        />
+      </PieChart>
     </ChartContainer>
   );
 }
