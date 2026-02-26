@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ComposableMap, Geographies, Geography } from "@vnedyalk0v/react19-simple-maps";
+import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
-const GEO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const GEO_URL = "/states-10m.json";
 
 interface StateData {
   state: string;
@@ -45,7 +45,6 @@ function lerp(a: number, b: number, t: number) {
 }
 
 function payColor(t: number): string {
-  // Light sky blue → deep blue
   const r = Math.round(lerp(219, 30, t));
   const g = Math.round(lerp(234, 64, t));
   const b = Math.round(lerp(254, 175, t));
@@ -53,8 +52,6 @@ function payColor(t: number): string {
 }
 
 function impactColor(t: number): string {
-  // Red (low replacement) → Yellow (mid) → Green (high replacement)
-  // t: 0 = worst (red), 1 = best (green)
   const r = Math.round(lerp(220, 34, t));
   const g = Math.round(lerp(38, 197, t));
   const b = Math.round(lerp(38, 94, t));
@@ -106,14 +103,14 @@ export function USPayMap({ data }: { data: StateData[] }) {
       >
         <Geographies geography={GEO_URL}>
           {({ geographies }) =>
-            geographies.map((geo, i) => {
-              const name = (geo.properties?.name ?? "") as string;
+            geographies.map((geo) => {
+              const name: string = geo.properties.name;
               const abbr = STATE_ABBR[name];
               const sd = abbr ? lookup.get(abbr) : undefined;
 
               return (
                 <Geography
-                  key={name || String(i)}
+                  key={geo.rsmKey}
                   geography={geo}
                   fill={getColor(abbr)}
                   stroke="hsl(var(--background))"
@@ -123,10 +120,10 @@ export function USPayMap({ data }: { data: StateData[] }) {
                     hover: { outline: "none", opacity: 0.8 },
                     pressed: { outline: "none" },
                   }}
-                  onMouseEnter={(e) => {
+                  onMouseMove={(e) => {
                     setTooltip({
-                      x: (e as unknown as React.MouseEvent).clientX,
-                      y: (e as unknown as React.MouseEvent).clientY,
+                      x: e.clientX,
+                      y: e.clientY,
                       name,
                       pay: sd?.avgPay,
                       headcount: sd?.headcount,
@@ -207,7 +204,6 @@ export function USStateImpactMap({ data }: { data: StateImpactData[] }) {
     if (!abbr) return "hsl(var(--muted))";
     const d = lookup.get(abbr);
     if (!d) return "hsl(var(--muted))";
-    // Higher replacement % = greener (better), lower = redder (worse)
     return impactColor((d.replacementPct - minPct) / range);
   };
 
@@ -222,13 +218,13 @@ export function USStateImpactMap({ data }: { data: StateImpactData[] }) {
       >
         <Geographies geography={GEO_URL}>
           {({ geographies }) =>
-            geographies.map((geo, i) => {
-              const name = (geo.properties?.name ?? "") as string;
+            geographies.map((geo) => {
+              const name: string = geo.properties.name;
               const abbr = STATE_ABBR[name];
 
               return (
                 <Geography
-                  key={name || String(i)}
+                  key={geo.rsmKey}
                   geography={geo}
                   fill={getColor(abbr)}
                   stroke="hsl(var(--background))"
@@ -238,11 +234,11 @@ export function USStateImpactMap({ data }: { data: StateImpactData[] }) {
                     hover: { outline: "none", opacity: 0.8 },
                     pressed: { outline: "none" },
                   }}
-                  onMouseEnter={(e) => {
+                  onMouseMove={(e) => {
                     const sd = abbr ? lookup.get(abbr) : undefined;
                     setTooltip({
-                      x: (e as unknown as React.MouseEvent).clientX,
-                      y: (e as unknown as React.MouseEvent).clientY,
+                      x: e.clientX,
+                      y: e.clientY,
                       name,
                       replacementPct: sd?.replacementPct,
                       departures: sd?.departures,
