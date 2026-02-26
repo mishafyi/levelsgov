@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import React from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -21,8 +22,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getStats, getHomepageInsights } from "@/lib/filters";
-import { HorizontalBarChart, NetChangeBarChart, TreemapChart, AreaLineChart } from "@/components/home-charts";
+import { HorizontalBarChart, VerticalBarChart, NetChangeBarChart, TreemapChart, AreaLineChart, RadarPayChart, ScatterPayChart, DonutChart } from "@/components/home-charts";
 import { USPayMap, USStateImpactMap } from "@/components/us-pay-map";
+import { AnimatedNumber } from "@/components/animated-number";
 
 function formatSnapshotDate(yyyymm: string): string {
   const year = yyyymm.slice(0, 4);
@@ -242,6 +244,50 @@ export default async function HomePage() {
     },
   ];
 
+  // Pay by Age — radar
+  const ageData = insights.payByAge.map((a) => ({
+    label: a.ageBracket.replace("LESS THAN 20", "<20").replace("65 OR MORE", "65+"),
+    value: a.avgPay,
+    count: a.count,
+  }));
+  const ageConfig = { value: { label: "Avg Pay", color: "var(--chart-1)" } };
+
+  // GS Grade Distribution
+  const gradeData = insights.gradeDistribution.map((g) => ({
+    label: g.grade,
+    value: g.count,
+    avgPay: g.avgPay,
+  }));
+  const gradeConfig = { value: { label: "Employees", color: "var(--chart-2)" } };
+  const gradeColors = insights.gradeDistribution.map((_, i, arr) => {
+    const t = i / (arr.length - 1);
+    return `hsl(210, ${50 + t * 30}%, ${65 - t * 25}%)`;
+  });
+
+  // Work Schedule donut
+  const scheduleData = insights.workSchedule.map((w) => ({
+    label: w.schedule,
+    value: w.count,
+  }));
+
+  // Tenure × STEM scatter
+  const stemScatter = insights.tenureBySTEM
+    .filter((t) => t.category === "STEM")
+    .map((t) => ({
+      x: parseInt(t.tenure),
+      y: t.avgPay,
+      z: t.count,
+      label: `STEM · ${t.tenure}`,
+    }));
+  const nonStemScatter = insights.tenureBySTEM
+    .filter((t) => t.category === "Non-STEM")
+    .map((t) => ({
+      x: parseInt(t.tenure),
+      y: t.avgPay,
+      z: t.count,
+      label: `Non-STEM · ${t.tenure}`,
+    }));
+
   const stemPositionConfig = { value: { label: "Net Loss", color: "var(--chart-3)" } };
   const stemSectorConfig = { value: { label: "Net STEM Loss", color: "var(--chart-1)" } };
 
@@ -267,13 +313,13 @@ export default async function HomePage() {
 
       {/* Key Stats */}
       <div className="mb-6 grid grid-cols-2 gap-2 sm:mb-10 sm:gap-3 lg:grid-cols-5">
-        {[
-          { icon: Users, label: "Total Employees", value: formatNumber(stats.total_employment), iconClass: "text-primary", bgClass: "bg-primary/10" },
-          { icon: DollarSign, label: "Median Pay", value: formatPay(stats.median_pay), iconClass: "text-emerald-600", bgClass: "bg-emerald-500/10" },
-          { icon: Building2, label: "Agencies", value: formatNumber(stats.agencies_count), iconClass: "text-blue-600", bgClass: "bg-blue-500/10" },
-          { icon: UserPlus, label: "New Hires", value: formatNumber(stats.total_accessions), iconClass: "text-green-600", bgClass: "bg-green-500/10" },
-          { icon: TrendingDown, label: "Net Change", value: `${netChange >= 0 ? "+" : ""}${formatNumber(netChange)}`, iconClass: "text-red-600", bgClass: "bg-red-500/10", valueClass: netChange >= 0 ? "text-green-600" : "text-red-600" },
-        ].map((stat, i) => (
+        {([
+          { icon: Users, label: "Total Employees", value: <AnimatedNumber value={stats.total_employment} />, iconClass: "text-primary", bgClass: "bg-primary/10" },
+          { icon: DollarSign, label: "Median Pay", value: <AnimatedNumber value={stats.median_pay} prefix="$" />, iconClass: "text-emerald-600", bgClass: "bg-emerald-500/10" },
+          { icon: Building2, label: "Agencies", value: <AnimatedNumber value={stats.agencies_count} />, iconClass: "text-blue-600", bgClass: "bg-blue-500/10" },
+          { icon: UserPlus, label: "New Hires", value: <AnimatedNumber value={stats.total_accessions} />, iconClass: "text-green-600", bgClass: "bg-green-500/10" },
+          { icon: TrendingDown, label: "Net Change", value: <AnimatedNumber value={netChange} prefix={netChange >= 0 ? "+" : ""} />, iconClass: "text-red-600", bgClass: "bg-red-500/10", valueClass: netChange >= 0 ? "text-green-600" : "text-red-600" },
+        ] as { icon: React.ComponentType<{ className?: string }>; label: string; value: React.ReactNode; iconClass: string; bgClass: string; valueClass?: string }[]).map((stat, i) => (
           <Card key={stat.label} className={`py-3 sm:py-4 ${i === 4 ? "col-span-2 lg:col-span-1" : ""}`}>
             <CardContent className="pb-0">
               <div className="flex items-center gap-2">
@@ -338,8 +384,8 @@ export default async function HomePage() {
         </Card>
       </div>
 
-      {/* Two-column: Tenure + Education */}
-      <div className="mb-6 grid items-start gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
+      {/* Three-column: Tenure + Education + Age */}
+      <div className="mb-6 grid items-start gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-3">
         <Card>
           <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-base sm:text-lg">Pay by Tenure</CardTitle>
@@ -387,10 +433,22 @@ export default async function HomePage() {
             />
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Pay by Age</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Average compensation across age groups
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <RadarPayChart data={ageData} config={ageConfig} />
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Insight Cards: STEM + Supervisory */}
-      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 sm:grid-cols-2">
+      {/* Insight Cards: STEM + Supervisory + Work Schedule */}
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-base sm:text-lg">Pay by Field</CardTitle>
@@ -467,6 +525,50 @@ export default async function HomePage() {
               </p>
             </CardFooter>
           )}
+        </Card>
+
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">Work Schedule</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Employee distribution by work schedule type
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <DonutChart data={scheduleData} />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* GS Grade Distribution + STEM vs Non-STEM Scatter */}
+      <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">GS Grade Distribution</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Employee count by General Schedule grade level
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <VerticalBarChart
+              data={gradeData}
+              config={gradeConfig}
+              colors={gradeColors}
+              className="h-[300px] w-full"
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="text-base sm:text-lg">STEM vs Non-STEM Pay</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Average pay by tenure — STEM workers vs all others
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-2 sm:px-6">
+            <ScatterPayChart stemData={stemScatter} nonStemData={nonStemScatter} />
+          </CardContent>
         </Card>
       </div>
 
