@@ -16,6 +16,8 @@ const links = [
   { href: "/employment", label: "Employment" },
   { href: "/accessions", label: "New Hires" },
   { href: "/separations", label: "Departures" },
+  { href: "/org-chart", label: "Org Chart" },
+  { href: "/ai-exposure", label: "AI Exposure" },
 ];
 
 export function Nav() {
@@ -29,7 +31,7 @@ export function Nav() {
           href="/"
           className="text-lg font-bold tracking-tight text-foreground"
         >
-          LevelsGov
+          🏛️ LevelsGov
         </Link>
 
         {/* Desktop nav */}

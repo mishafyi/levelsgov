@@ -1,0 +1,2174 @@
+{
+  "0610": {
+    "score": 4,
+    "rationale": "Federal nurses provide hands-on patient care requiring physical presence and clinical judgment; AI assists with documentation, triage protocols, and diagnostic support but cannot replace bedside care."
+  },
+  "0301": {
+    "score": 7,
+    "rationale": "Miscellaneous admin and program specialists do policy analysis, correspondence, and program coordination that is largely knowledge work; AI can draft documents and analyze data but human judgment on program decisions remains essential."
+  },
+  "2210": {
+    "score": 7,
+    "rationale": "IT management involves systems administration, cybersecurity, and project oversight that is fully digital; AI assists with code, monitoring, and troubleshooting but architectural decisions and security judgment still require humans."
+  },
+  "0343": {
+    "score": 8,
+    "rationale": "Management and program analysts produce written evaluations, policy memos, workflow analyses, and organizational studies that are predominantly text-based analytical work highly amenable to LLM assistance."
+  },
+  "1802": {
+    "score": 5,
+    "rationale": "Compliance inspection support involves both field inspections requiring physical presence and desk-based documentation review; AI can assist with checklist analysis and report generation but on-site verification is essential."
+  },
+  "1801": {
+    "score": 5,
+    "rationale": "General inspection and enforcement combines field investigations, interviews, and physical presence with analytical report writing; AI aids research and documentation but cannot conduct inspections or interviews."
+  },
+  "1811": {
+    "score": 4,
+    "rationale": "Criminal investigators conduct interviews, surveillance, undercover operations, and courtroom testimony requiring extensive interpersonal skills and physical presence; AI assists with evidence analysis and report drafting."
+  },
+  "0679": {
+    "score": 4,
+    "rationale": "Medical support assistants handle patient scheduling, records management, and front-desk clinical support with significant patient interaction; AI can automate scheduling and data entry but patient-facing duties remain."
+  },
+  "1102": {
+    "score": 8,
+    "rationale": "Contracting specialists draft solicitations, evaluate proposals, negotiate terms, and manage contract documents that are heavily text-based and rule-driven; AI can generate and review contract language, though final award decisions require human judgment."
+  },
+  "0905": {
+    "score": 7,
+    "rationale": "Federal attorneys conduct legal research, draft briefs, and provide counsel that is knowledge-intensive digital work; AI excels at legal research and drafting but courtroom advocacy, client counseling, and strategic judgment require human expertise."
+  },
+  "0303": {
+    "score": 8,
+    "rationale": "Clerical and assistant roles involve data entry, correspondence, filing, mail processing, and routine office tasks that are highly structured and repetitive, making them very amenable to AI automation."
+  },
+  "0201": {
+    "score": 7,
+    "rationale": "HR management specialists handle classification, staffing, labor relations, and policy interpretation through largely document-based work; AI can draft position descriptions, screen applications, and analyze policy but sensitive employee relations require human judgment."
+  },
+  "0602": {
+    "score": 4,
+    "rationale": "Federal medical officers (physicians) conduct physical examinations, diagnose conditions, and provide direct patient care requiring clinical expertise and physical presence; AI supports diagnostics and documentation but cannot replace the physician."
+  },
+  "0801": {
+    "score": 6,
+    "rationale": "General engineers perform design, analysis, and project management mixing digital CAD/modeling work with site visits and inspections; AI assists with calculations, simulations, and report writing but engineering judgment and field work remain human-dependent."
+  },
+  "0962": {
+    "score": 7,
+    "rationale": "Contact representatives interact with the public by phone and in writing to explain benefits, resolve issues, and process claims using established guidelines; AI chatbots and assistants can handle routine inquiries but complex cases need human empathy and judgment."
+  },
+  "0501": {
+    "score": 8,
+    "rationale": "Financial administration specialists manage budgets, analyze fiscal data, prepare financial reports, and ensure compliance with regulations through predominantly digital, rule-based analytical work highly suited to AI assistance."
+  },
+  "1101": {
+    "score": 7,
+    "rationale": "General business and industry specialists analyze business practices, develop policies, and provide advisory services through knowledge work; AI can draft analyses and process data but industry-specific judgment and stakeholder engagement require humans."
+  },
+  "1895": {
+    "score": 3,
+    "rationale": "CBP officers conduct border inspections, enforce immigration and customs laws, operate detection equipment, and make real-time physical interdiction decisions that require extensive physical presence and split-second human judgment."
+  },
+  "0105": {
+    "score": 7,
+    "rationale": "Social insurance administrators process claims, interpret benefit regulations, and make eligibility determinations through largely rule-based desk work; AI can handle routine adjudication and correspondence but complex cases require human interpretation."
+  },
+  "0401": {
+    "score": 5,
+    "rationale": "Natural resources and biological scientists split time between field research, specimen collection, and habitat surveys requiring physical presence, and desk-based data analysis and report writing where AI assists significantly."
+  },
+  "0185": {
+    "score": 4,
+    "rationale": "Federal social workers provide direct counseling, crisis intervention, and case management requiring deep interpersonal engagement and emotional intelligence; AI can assist with documentation and resource identification but cannot replace the therapeutic relationship."
+  },
+  "0346": {
+    "score": 7,
+    "rationale": "Logistics management specialists plan supply chain operations, analyze distribution data, and coordinate materiel movement through largely digital planning and analysis work; AI excels at optimization and forecasting though coordination decisions need human oversight."
+  },
+  "2152": {
+    "score": 3,
+    "rationale": "Air traffic controllers make real-time safety-critical decisions requiring split-second judgment, situational awareness, and direct communication with pilots; the high-stakes, real-time nature creates strong barriers to AI replacement despite digital interfaces."
+  },
+  "1896": {
+    "score": 2,
+    "rationale": "Border patrol agents conduct patrols in remote terrain, track and apprehend individuals, and perform law enforcement operations requiring extensive physical endurance, presence, and real-time tactical decision-making in the field."
+  },
+  "0996": {
+    "score": 8,
+    "rationale": "Veterans claims examiners review medical evidence, apply rating criteria, and issue benefits decisions through highly structured, rule-based document review work that AI can substantially assist with, though final adjudication requires human accountability."
+  },
+  "0080": {
+    "score": 6,
+    "rationale": "Security administration specialists develop security policies, conduct risk assessments, manage clearance processes, and oversee physical security programs mixing analytical desk work with facility assessments; AI assists with policy drafting and risk analysis."
+  },
+  "0601": {
+    "score": 5,
+    "rationale": "General health scientists conduct research, analyze health data, and develop public health programs, splitting between laboratory or field work requiring physical presence and data-driven analysis and writing where AI provides strong support."
+  },
+  "0340": {
+    "score": 7,
+    "rationale": "Program managers oversee federal programs, coordinate stakeholders, manage budgets, and make strategic decisions through knowledge work; AI assists with reporting, analysis, and planning but leadership, stakeholder management, and accountability require human presence."
+  },
+  "0620": {
+    "score": 3,
+    "rationale": "Practical nurses (LPNs) provide direct patient care including wound dressing, medication administration, vital signs monitoring, and bathing assistance that is predominantly hands-on physical work with limited AI applicability."
+  },
+  "0802": {
+    "score": 6,
+    "rationale": "Engineering technicians perform testing, inspection, drafting, and technical support work mixing hands-on equipment operation and field measurements with digital documentation and CAD work; AI assists with calculations and documentation."
+  },
+  "0007": {
+    "score": 2,
+    "rationale": "Correctional officers maintain security and order in federal prisons through physical supervision, inmate management, emergency response, and facility patrols; the role is fundamentally physical and interpersonal with minimal digital work product."
+  },
+  "0660": {
+    "score": 6,
+    "rationale": "Federal pharmacists verify prescriptions, counsel patients, and manage medication therapy through a mix of clinical knowledge work and patient interaction; AI assists with drug interaction checks and formulary management but clinical judgment and patient counseling remain human tasks."
+  },
+  "0621": {
+    "score": 2,
+    "rationale": "Nursing assistants provide direct personal care including bathing, feeding, ambulation, and vital signs measurement that is almost entirely hands-on physical work; AI has very limited applicability to these core duties."
+  },
+  "0855": {
+    "score": 7,
+    "rationale": "Electronics engineers design, develop, and test electronic systems through predominantly digital work involving simulation, circuit design, and technical analysis; AI assists with design optimization and documentation though complex system engineering requires human expertise."
+  },
+  "0132": {
+    "score": 7,
+    "rationale": "Intelligence specialists analyze data from multiple sources, produce intelligence assessments, and write analytical reports that are heavily knowledge-based; AI excels at pattern recognition and data synthesis but source evaluation and strategic analysis require human judgment."
+  },
+  "0101": {
+    "score": 7,
+    "rationale": "Social scientists conduct research, perform statistical analysis, and write policy reports through predominantly digital analytical work; AI assists substantially with literature review, data analysis, and drafting but research design and interpretation require human expertise."
+  },
+  "0560": {
+    "score": 8,
+    "rationale": "Budget analysts formulate, justify, and execute budgets through highly structured numerical analysis, spreadsheet work, and written justifications that are predominantly digital and rule-based, making them very amenable to AI assistance."
+  },
+  "0830": {
+    "score": 6,
+    "rationale": "Mechanical engineers design systems, perform analysis, and manage projects mixing digital CAD/simulation work with physical prototyping, testing, and facility inspections; AI assists with calculations and documentation but engineering judgment and hands-on verification remain essential."
+  },
+  "0083": {
+    "score": 2,
+    "rationale": "Federal police officers conduct patrols, respond to emergencies, enforce laws, and make arrests requiring physical presence, tactical skills, and real-time interpersonal judgment; AI has minimal applicability to core law enforcement duties."
+  },
+  "0089": {
+    "score": 6,
+    "rationale": "Emergency management specialists develop disaster plans, coordinate response operations, and conduct exercises mixing desk-based planning and analysis with field deployment during emergencies; AI assists with planning documents and data analysis but crisis response requires human leadership."
+  },
+  "1701": {
+    "score": 5,
+    "rationale": "Education and training specialists design curricula, deliver instruction, and evaluate learning outcomes requiring significant interpersonal engagement and classroom presence; AI can generate training materials and assessments but effective teaching requires human connection."
+  },
+  "0640": {
+    "score": 3,
+    "rationale": "Health aids and technicians perform specimen collection, equipment operation, patient transport, and clinical measurements through predominantly hands-on work with direct patient contact; AI has limited applicability to these physical tasks."
+  },
+  "3566": {
+    "score": 1,
+    "rationale": "Custodial workers perform cleaning, floor maintenance, waste removal, and facility upkeep that is almost entirely manual physical labor with virtually no digital work component."
+  },
+  "0510": {
+    "score": 8,
+    "rationale": "Accountants prepare financial statements, reconcile accounts, ensure regulatory compliance, and analyze fiscal data through highly structured, digital, rule-based work that AI can substantially perform, though professional judgment on complex issues remains necessary."
+  },
+  "0592": {
+    "score": 8,
+    "rationale": "Tax examiners review tax returns, verify information, and apply tax code provisions through highly structured, rule-based document processing work that is very amenable to AI automation, though complex cases require human interpretation."
+  },
+  "0810": {
+    "score": 6,
+    "rationale": "Civil engineers design infrastructure, manage construction projects, and conduct site inspections mixing digital design and analysis work with physical field presence; AI assists with modeling and documentation but field judgment and stakeholder coordination require humans."
+  },
+  "0180": {
+    "score": 5,
+    "rationale": "Federal psychologists provide direct patient therapy, psychological assessments, and crisis intervention requiring deep interpersonal engagement; AI can assist with assessment scoring and documentation but the therapeutic relationship and clinical judgment are fundamentally human."
+  },
+  "1550": {
+    "score": 8,
+    "rationale": "Computer scientists develop algorithms, write code, design systems, and conduct computational research that is entirely digital; AI coding assistants can generate and review substantial portions of code though novel research and architectural decisions require human expertise."
+  },
+  "4749": {
+    "score": 1,
+    "rationale": "Maintenance mechanics repair and maintain buildings, plumbing, electrical systems, and equipment through hands-on physical trades work; AI has minimal applicability beyond diagnostic reference lookup."
+  },
+  "0511": {
+    "score": 8,
+    "rationale": "Auditors examine financial records, assess internal controls, and produce audit reports through predominantly digital, rule-based analytical work; AI can perform data analysis, identify anomalies, and draft findings though professional judgment on materiality and risk remains human."
+  },
+  "1712": {
+    "score": 5,
+    "rationale": "Training instructors deliver classroom and hands-on instruction to federal employees requiring interpersonal presence and adaptive teaching; AI can develop course content and assessments but effective instruction, mentoring, and skills demonstration require human engagement."
+  },
+  "1224": {
+    "score": 8,
+    "rationale": "Patent examiners search prior art, analyze patent claims, and write office actions through highly structured, text-intensive analytical work; AI excels at prior art search and claim comparison though patentability determinations require expert human judgment."
+  },
+  "0462": {
+    "score": 3,
+    "rationale": "Forestry technicians conduct field surveys, timber marking, wildfire suppression, and trail maintenance in remote outdoor environments; the work is predominantly physical and field-based with limited digital component."
+  },
+  "0861": {
+    "score": 7,
+    "rationale": "Aerospace engineers design, analyze, and test aircraft and spacecraft systems through predominantly digital simulation, modeling, and analysis work; AI assists with design optimization and documentation though complex systems engineering and safety certification require human expertise."
+  },
+  "0081": {
+    "score": 2,
+    "rationale": "Firefighters and fire protection specialists conduct firefighting operations, rescue, inspections, and emergency response requiring physical fitness, courage, and real-time situational judgment in dangerous conditions."
+  },
+  "1301": {
+    "score": 6,
+    "rationale": "Physical scientists conduct research, analyze experimental data, and publish findings mixing laboratory or field work requiring physical presence with data-intensive analysis and writing where AI provides significant assistance."
+  },
+  "1910": {
+    "score": 6,
+    "rationale": "Quality assurance specialists inspect products, review processes, and ensure compliance through a mix of physical inspections and desk-based documentation review; AI assists with data analysis and report generation but hands-on quality checks require human presence."
+  },
+  "0901": {
+    "score": 7,
+    "rationale": "General legal and kindred administration involves claims adjudication, legal research, regulatory interpretation, and administrative law through heavily document-based knowledge work; AI assists with research and drafting but legal determinations require human accountability."
+  },
+  "0341": {
+    "score": 7,
+    "rationale": "Administrative officers manage office operations, budgets, facilities, and personnel actions through predominantly digital administrative work; AI can handle correspondence, reporting, and analysis but organizational leadership and decision-making require human judgment."
+  },
+  "8852": {
+    "score": 2,
+    "rationale": "Aircraft mechanics inspect, repair, and maintain military and federal aircraft through hands-on mechanical work requiring physical dexterity, safety-critical judgment, and direct interaction with aircraft systems."
+  },
+  "2101": {
+    "score": 6,
+    "rationale": "Transportation specialists manage freight movement, analyze shipping data, rate cargo, and coordinate logistics through a mix of desk-based analysis and operational coordination; AI assists with optimization and documentation but operational judgment requires humans."
+  },
+  "0512": {
+    "score": 8,
+    "rationale": "Internal revenue agents conduct complex tax audits, analyze financial records, and apply tax law through highly structured, document-intensive analytical work; AI excels at financial analysis and regulation application though professional audit judgment remains necessary."
+  },
+  "0671": {
+    "score": 7,
+    "rationale": "Health system specialists manage healthcare delivery programs, analyze health data, and coordinate clinical operations through predominantly knowledge-based administrative work; AI assists with data analysis and program evaluation but healthcare system leadership requires human judgment."
+  },
+  "0661": {
+    "score": 4,
+    "rationale": "Pharmacy technicians prepare medications, manage inventory, process prescriptions, and interact with patients through a mix of physical dispensing tasks and digital record-keeping; AI assists with verification and inventory management but hands-on compounding requires human presence."
+  },
+  "0856": {
+    "score": 5,
+    "rationale": "Electronics technicians install, test, calibrate, and repair electronic equipment through predominantly hands-on work with some digital diagnostic and documentation tasks; AI assists with troubleshooting guides and documentation but physical repair work requires human skill."
+  },
+  "2005": {
+    "score": 7,
+    "rationale": "Supply clerks and technicians process requisitions, maintain inventory records, and track shipments through largely digital, repetitive data management work; AI can automate much of the data entry and tracking though physical warehouse tasks require human presence."
+  },
+  "2010": {
+    "score": 7,
+    "rationale": "Inventory management specialists analyze stock levels, forecast demand, and optimize distribution through predominantly digital analytical work; AI excels at demand forecasting and optimization though supply chain judgment and vendor relationships require humans."
+  },
+  "0203": {
+    "score": 7,
+    "rationale": "HR assistants process personnel actions, maintain records, answer employee questions, and prepare HR documents through largely repetitive, rule-based desk work; AI can automate much of the processing and correspondence though employee interaction requires human presence."
+  },
+  "1702": {
+    "score": 7,
+    "rationale": "Education and training technicians develop curricula, create instructional materials, and administer training programs \u2014 largely digital knowledge work where AI can draft content and assessments, but human facilitation and classroom presence remain important."
+  },
+  "0018": {
+    "score": 5,
+    "rationale": "Safety and occupational health managers conduct physical site inspections and hazard assessments requiring on-site presence, but also produce substantial written reports, compliance analyses, and policy documents that AI can assist with."
+  },
+  "0644": {
+    "score": 4,
+    "rationale": "Medical technologists perform hands-on laboratory testing (blood work, cultures, urinalysis) requiring manual dexterity and physical instrument operation, though AI-assisted image analysis and result interpretation are emerging."
+  },
+  "0318": {
+    "score": 9,
+    "rationale": "Secretaries handle correspondence, scheduling, document preparation, meeting coordination, and records management \u2014 nearly all digital tasks that current AI tools can perform or dramatically accelerate."
+  },
+  "1035": {
+    "score": 7,
+    "rationale": "Public affairs specialists write press releases, manage media relations, craft messaging, and handle communications strategy \u2014 AI excels at drafting content, but strategic judgment, relationship management, and real-time crisis response require human presence."
+  },
+  "0647": {
+    "score": 3,
+    "rationale": "Diagnostic radiologic technologists physically position patients, operate imaging equipment, and ensure radiation safety \u2014 hands-on clinical work where AI assists with image analysis but cannot replace the physical patient interaction."
+  },
+  "5801": {
+    "score": 2,
+    "rationale": "Miscellaneous transportation and mobile equipment maintenance workers perform hands-on mechanical repair, inspection, and servicing of vehicles and equipment \u2014 physical trade work with minimal digital component."
+  },
+  "6907": {
+    "score": 2,
+    "rationale": "Materials handlers physically receive, store, move, and ship supplies and equipment in warehouses \u2014 manual labor where AI-driven logistics optimization helps but cannot replace the physical handling."
+  },
+  "1601": {
+    "score": 6,
+    "rationale": "Equipment, facilities, and services specialists manage facility operations, plan equipment acquisitions, and oversee service contracts \u2014 a mix of on-site oversight and administrative/analytical work that AI can partially automate."
+  },
+  "7408": {
+    "score": 1,
+    "rationale": "Food service workers prepare and serve food, clean kitchen facilities, and maintain sanitation standards \u2014 almost entirely physical labor with negligible digital work product."
+  },
+  "1670": {
+    "score": 5,
+    "rationale": "Equipment services specialists manage equipment maintenance programs, track inventories, and coordinate repairs \u2014 hybrid roles combining on-site equipment oversight with administrative tracking and scheduling that AI can assist."
+  },
+  "0850": {
+    "score": 7,
+    "rationale": "Electrical engineers design, analyze, and evaluate electrical systems using digital tools, simulations, and technical documents \u2014 knowledge-intensive work where AI augments analysis and drafting, but professional engineering judgment and accountability remain essential."
+  },
+  "3806": {
+    "score": 1,
+    "rationale": "Sheet metal mechanics lay out, fabricate, assemble, and install sheet metal parts and components \u2014 skilled manual trade work with virtually no AI-automatable digital component."
+  },
+  "0950": {
+    "score": 8,
+    "rationale": "Paralegal specialists research legal precedents, draft documents, review case files, and organize evidence \u2014 predominantly digital text-heavy work where LLMs can perform legal research, summarization, and document drafting at high quality."
+  },
+  "1862": {
+    "score": 4,
+    "rationale": "Consumer safety inspectors physically inspect food processing facilities, manufacturing plants, and import operations for compliance \u2014 field-based work requiring physical presence, though inspection documentation and data analysis benefit from AI."
+  },
+  "0503": {
+    "score": 9,
+    "rationale": "Financial clerical and assistance workers process payments, reconcile accounts, maintain financial records, and handle routine transactions \u2014 highly structured digital tasks that AI and automation can perform with minimal human oversight."
+  },
+  "1515": {
+    "score": 8,
+    "rationale": "Operations research analysts build mathematical models, analyze data, and optimize decision-making processes \u2014 highly analytical digital work where AI excels at modeling, data analysis, and pattern recognition, though novel problem formulation still needs humans."
+  },
+  "1152": {
+    "score": 7,
+    "rationale": "Production control specialists plan, schedule, and coordinate manufacturing or service operations using digital tracking systems \u2014 largely desk-based coordination work where AI can optimize scheduling and flag issues, but operational judgment is still needed."
+  },
+  "0570": {
+    "score": 7,
+    "rationale": "Financial institution examiners analyze bank records, assess regulatory compliance, and evaluate financial risk \u2014 digital analytical work where AI can process large datasets and flag anomalies, but regulatory judgment and enforcement authority require human examiners."
+  },
+  "1710": {
+    "score": 6,
+    "rationale": "Education and vocational training specialists design programs, teach, and counsel students \u2014 AI can generate curricula and instructional content, but classroom teaching, mentoring, and interpersonal guidance require human presence and empathy."
+  },
+  "2805": {
+    "score": 2,
+    "rationale": "Electricians install, maintain, and repair electrical wiring, fixtures, and control equipment \u2014 skilled hands-on trade work in physical environments where AI has minimal direct application beyond diagnostic aids."
+  },
+  "0675": {
+    "score": 8,
+    "rationale": "Medical records technicians code diagnoses, maintain health information systems, and ensure documentation compliance \u2014 predominantly digital work with structured data entry and classification tasks that AI-powered coding and NLP tools can largely automate."
+  },
+  "0028": {
+    "score": 6,
+    "rationale": "Environmental protection specialists analyze environmental data, review permits, develop policy, and conduct some field assessments \u2014 mixed analytical and field work where AI assists with data analysis and document review but field inspections and stakeholder engagement require humans."
+  },
+  "2003": {
+    "score": 7,
+    "rationale": "Supply program managers plan, coordinate, and manage supply chain operations using digital logistics systems \u2014 knowledge work involving data analysis, forecasting, and contract management that AI can substantially augment."
+  },
+  "5803": {
+    "score": 2,
+    "rationale": "Heavy mobile equipment mechanics diagnose, repair, and maintain bulldozers, cranes, and similar heavy machinery \u2014 skilled physical trade work with minimal digital component beyond diagnostic tools."
+  },
+  "1320": {
+    "score": 6,
+    "rationale": "Chemists conduct laboratory research, analyze samples, and interpret experimental data \u2014 a mix of hands-on bench work that AI cannot perform and analytical/computational tasks where AI assists with data analysis and literature review."
+  },
+  "0404": {
+    "score": 3,
+    "rationale": "Biological science technicians collect field samples, maintain laboratory equipment, conduct tests, and record data \u2014 primarily hands-on field and lab work with some data recording that AI can assist but not replace."
+  },
+  "5703": {
+    "score": 1,
+    "rationale": "Motor vehicle operators drive trucks, buses, and other government vehicles to transport personnel, supplies, and equipment \u2014 physical driving work where autonomous vehicle technology exists but is not deployed in federal fleets."
+  },
+  "0085": {
+    "score": 2,
+    "rationale": "Security guards physically patrol facilities, control access, monitor security systems, and respond to incidents \u2014 work requiring physical presence and human judgment in real-time situations, with AI limited to surveillance analytics."
+  },
+  "0649": {
+    "score": 3,
+    "rationale": "Medical instrument technicians operate, calibrate, and maintain complex diagnostic and therapeutic equipment like dialysis machines and EEG devices \u2014 hands-on patient-facing clinical work with limited AI applicability beyond equipment diagnostics."
+  },
+  "0854": {
+    "score": 7,
+    "rationale": "Computer engineers design and develop computer hardware and systems, integrating hardware with software \u2014 digital knowledge work where AI assists with design, simulation, and coding, but engineering judgment and physical prototyping remain essential."
+  },
+  "1825": {
+    "score": 6,
+    "rationale": "Aviation safety specialists investigate accidents, inspect aircraft, and evaluate compliance with safety regulations \u2014 requires physical inspections and field investigations, combined with substantial analytical report writing that AI can augment."
+  },
+  "0457": {
+    "score": 4,
+    "rationale": "Soil conservationists work directly with landowners in the field to assess erosion, plan conservation practices, and provide technical guidance \u2014 field-intensive work with interpersonal advisory components, supplemented by GIS analysis and report writing that AI can assist."
+  },
+  "1165": {
+    "score": 7,
+    "rationale": "Loan specialists evaluate loan applications, assess creditworthiness, determine eligibility, and manage portfolios \u2014 primarily digital analytical work where AI can automate underwriting decisions, but complex cases and policy judgment still need humans."
+  },
+  "0391": {
+    "score": 6,
+    "rationale": "Telecommunications specialists plan, implement, and manage communications systems and networks \u2014 technical knowledge work combining hands-on infrastructure management with digital planning and analysis that AI can partially automate."
+  },
+  "0525": {
+    "score": 8,
+    "rationale": "Accounting technicians maintain financial records, process vouchers, reconcile accounts, and prepare routine financial reports \u2014 structured digital work with repetitive tasks that AI and automation tools can handle with high accuracy."
+  },
+  "0110": {
+    "score": 7,
+    "rationale": "Economists analyze economic data, develop models, write policy briefs, and forecast trends \u2014 digital analytical work where AI excels at data processing and report drafting, but novel economic reasoning and policy interpretation require human expertise."
+  },
+  "0603": {
+    "score": 4,
+    "rationale": "Physician assistants examine patients, diagnose conditions, prescribe treatments, and perform procedures \u2014 clinical patient-facing work requiring physical presence, empathy, and medical judgment, though AI assists with diagnostics and documentation."
+  },
+  "7404": {
+    "score": 1,
+    "rationale": "Cooks prepare meals by planning menus, cooking food, and maintaining kitchen operations \u2014 hands-on physical work with minimal digital component that AI cannot meaningfully automate with current technology."
+  },
+  "2604": {
+    "score": 2,
+    "rationale": "Electronics mechanics install, maintain, troubleshoot, and repair electronic equipment and systems \u2014 skilled hands-on trade work requiring physical dexterity and on-site presence, with AI limited to diagnostic assistance."
+  },
+  "2001": {
+    "score": 5,
+    "rationale": "General supply specialists manage inventory, process requisitions, and maintain stock records \u2014 a mix of physical warehouse presence and digital inventory management tasks where AI optimizes ordering and tracking but physical oversight remains necessary."
+  },
+  "0633": {
+    "score": 3,
+    "rationale": "Physical therapists assess patient mobility, design treatment plans, and provide hands-on therapeutic interventions \u2014 clinical work centered on physical patient contact and interpersonal motivation where AI's role is limited to documentation and treatment planning support."
+  },
+  "4102": {
+    "score": 1,
+    "rationale": "Painters prepare surfaces and apply paint, stain, and protective coatings to buildings and structures \u2014 entirely physical manual trade work with no meaningful AI exposure."
+  },
+  "0986": {
+    "score": 8,
+    "rationale": "Legal assistance specialists prepare legal documents, conduct research, maintain case files, and handle correspondence \u2014 predominantly digital text-processing work where AI excels at drafting, research, and document organization."
+  },
+  "0025": {
+    "score": 3,
+    "rationale": "Park rangers patrol federal lands, enforce regulations, conduct search and rescue, interpret natural/cultural resources, and interact with visitors \u2014 primarily field-based work requiring physical presence, law enforcement authority, and interpersonal skills."
+  },
+  "0086": {
+    "score": 8,
+    "rationale": "Security clerical and assistance workers process security clearance paperwork, maintain access records, issue badges, and handle administrative security functions \u2014 routine digital clerical tasks that AI can largely automate."
+  },
+  "0344": {
+    "score": 8,
+    "rationale": "Management and program clerical and assistance workers handle correspondence, data entry, scheduling, file management, and administrative tracking \u2014 repetitive digital tasks that current AI tools can perform with high proficiency."
+  },
+  "1640": {
+    "score": 3,
+    "rationale": "Facility operations services workers operate and maintain building systems (HVAC, utilities, grounds) \u2014 primarily physical on-site work managing facility infrastructure with some digital monitoring that AI can assist."
+  },
+  "0681": {
+    "score": 3,
+    "rationale": "Dental assistants prepare patients, hand instruments to dentists, take X-rays, and maintain dental equipment \u2014 hands-on clinical support work requiring physical presence and patient interaction with minimal AI applicability."
+  },
+  "4204": {
+    "score": 1,
+    "rationale": "Pipefitters install, maintain, and repair piping systems for steam, water, gas, and other fluids \u2014 skilled physical trade work in building infrastructure with virtually no AI-automatable component."
+  },
+  "0930": {
+    "score": 6,
+    "rationale": "Hearings and appeals specialists (including ALJs) conduct hearings, evaluate evidence, and render decisions \u2014 legal knowledge work where AI assists with case research and document review, but adjudicatory authority, credibility assessments, and due process require human decision-makers."
+  },
+  "1170": {
+    "score": 7,
+    "rationale": "Realty specialists appraise property, negotiate acquisitions, manage federal real estate portfolios, and handle leasing \u2014 analytical work involving market analysis and document preparation that AI can substantially augment, though site visits and negotiations require humans."
+  },
+  "0696": {
+    "score": 5,
+    "rationale": "Consumer safety officers evaluate product safety, review scientific data, and conduct some inspections of regulated products \u2014 hybrid work combining field inspections with scientific data analysis and report writing that AI can assist."
+  },
+  "0685": {
+    "score": 6,
+    "rationale": "Public health program specialists plan, implement, and evaluate public health programs involving data analysis, stakeholder coordination, and policy development \u2014 knowledge work where AI assists with data analysis and report writing, but community engagement and program judgment require humans."
+  },
+  "0630": {
+    "score": 5,
+    "rationale": "Dietitians and nutritionists assess patient nutritional needs, develop meal plans, and provide counseling \u2014 clinical work combining patient interaction and individualized care planning with evidence-based analysis that AI can assist but not replace the interpersonal counseling component."
+  },
+  "0622": {
+    "score": 3,
+    "rationale": "Medical supply aides and technicians manage, sterilize, distribute, and inventory medical supplies and equipment \u2014 primarily physical handling work in clinical settings with some inventory tracking that AI can optimize."
+  },
+  "1109": {
+    "score": 7,
+    "rationale": "Grants management specialists review applications, monitor compliance, analyze budgets, and administer federal grant programs \u2014 predominantly digital analytical work where AI can screen applications and track compliance, but award decisions and relationship management need human judgment."
+  },
+  "1530": {
+    "score": 8,
+    "rationale": "Statisticians design surveys, analyze data, build statistical models, and interpret results \u2014 highly analytical digital work where AI and machine learning tools can automate much of the data processing, modeling, and reporting."
+  },
+  "3414": {
+    "score": 1,
+    "rationale": "Machinists set up and operate machine tools to fabricate precision metal parts \u2014 skilled physical trade work requiring manual dexterity and hands-on machining with negligible AI exposure beyond CNC programming aids."
+  },
+  "1001": {
+    "score": 7,
+    "rationale": "General arts and information specialists manage public communications, exhibits, publications, and information dissemination \u2014 digital content work where AI excels at drafting and design, but creative direction and institutional messaging require human judgment."
+  },
+  "0130": {
+    "score": 6,
+    "rationale": "Foreign affairs specialists analyze geopolitical developments, negotiate agreements, and manage diplomatic programs \u2014 knowledge work where AI aids research and analysis, but diplomatic judgment, cultural sensitivity, and relationship-building are inherently human."
+  },
+  "0840": {
+    "score": 7,
+    "rationale": "Nuclear engineers design, analyze, and evaluate nuclear systems and safety protocols \u2014 specialized digital engineering work where AI assists with modeling and analysis, but the safety-critical nature and regulatory accountability demand human expertise."
+  },
+  "5334": {
+    "score": 2,
+    "rationale": "Marine machinery mechanics repair and maintain propulsion systems, auxiliary equipment, and hull systems on vessels \u2014 hands-on mechanical trade work in challenging physical environments with minimal AI applicability."
+  },
+  "2102": {
+    "score": 8,
+    "rationale": "Transportation clerks and assistants process shipping documents, track shipments, maintain transportation records, and handle routine logistics correspondence \u2014 structured digital clerical work that AI can largely automate."
+  },
+  "0645": {
+    "score": 3,
+    "rationale": "Medical technicians perform routine laboratory tests, draw blood, prepare specimens, and assist in clinical procedures \u2014 hands-on clinical support work requiring physical patient interaction with some data recording that AI can assist."
+  },
+  "0819": {
+    "score": 7,
+    "rationale": "Environmental engineers design pollution control systems, analyze environmental data, and develop remediation plans \u2014 digital engineering work where AI augments modeling, data analysis, and report writing, but site assessments and engineering judgment remain human-dependent."
+  },
+  "2610": {
+    "score": 2,
+    "rationale": "Electronic integrated systems mechanics install, maintain, and repair complex electronic systems integrating multiple technologies \u2014 skilled hands-on technical work requiring physical troubleshooting with AI limited to diagnostic support."
+  },
+  "5716": {
+    "score": 1,
+    "rationale": "Engineering equipment operators run heavy construction equipment like bulldozers, graders, and excavators \u2014 entirely physical equipment operation work in outdoor environments with no meaningful AI automation in current federal operations."
+  },
+  "2181": {
+    "score": 3,
+    "rationale": "Aircraft pilots require extensive hands-on flying, situational awareness, and physical presence in the cockpit; AI assists with autopilot and navigation but cannot replace the pilot-in-command role, especially in military/government operations."
+  },
+  "1105": {
+    "score": 8,
+    "rationale": "Purchasing specialists do primarily digital contract and procurement work\u2014solicitations, bid evaluations, price analysis, and documentation\u2014most of which AI can draft, compare, and automate, though final award decisions still require human judgment."
+  },
+  "4701": {
+    "score": 1,
+    "rationale": "General maintenance and operations workers perform hands-on physical tasks like repairs, cleaning, and facility upkeep that require physical presence and manual dexterity with minimal digital component."
+  },
+  "0306": {
+    "score": 8,
+    "rationale": "Government information specialists manage FOIA requests, public communications, and information disclosure\u2014heavily text-based work where AI excels at drafting responses, redacting documents, and searching records, though policy sensitivity still requires human review."
+  },
+  "1810": {
+    "score": 5,
+    "rationale": "General investigators conduct interviews, field surveillance, collect evidence, and write reports; the field work and interpersonal judgment are hard to automate, but AI significantly aids report writing, record analysis, and pattern detection."
+  },
+  "0260": {
+    "score": 7,
+    "rationale": "EEO specialists analyze complaints, review policies, write determinations, and conduct mediations\u2014primarily knowledge work with significant interpersonal mediation components; AI can draft analyses and review case files but human judgment is essential for fairness determinations."
+  },
+  "0665": {
+    "score": 3,
+    "rationale": "Speech pathologists and audiologists provide direct patient therapy requiring physical presence, clinical observation, and therapeutic rapport; AI can assist with diagnostics and treatment planning but cannot deliver the hands-on clinical care."
+  },
+  "1340": {
+    "score": 7,
+    "rationale": "Meteorologists analyze atmospheric data, run models, and produce forecasts\u2014knowledge work where AI/ML already handles much of the pattern recognition and modeling, but expert judgment is still needed for high-stakes weather warnings and model interpretation."
+  },
+  "1169": {
+    "score": 5,
+    "rationale": "Internal revenue officers conduct field collection activities including taxpayer visits, asset seizures, and negotiations\u2014requiring physical presence and interpersonal skills\u2014combined with significant case analysis and documentation work that AI can assist."
+  },
+  "5306": {
+    "score": 2,
+    "rationale": "Air conditioning equipment mechanics perform hands-on installation, repair, and maintenance of HVAC systems requiring physical dexterity and on-site troubleshooting with only minor digital record-keeping."
+  },
+  "0107": {
+    "score": 8,
+    "rationale": "Health insurance administration involves reviewing claims, applying coverage rules, processing determinations, and managing policy documents\u2014highly structured digital work where AI can automate rule application, claims adjudication, and correspondence."
+  },
+  "3703": {
+    "score": 1,
+    "rationale": "Welders perform entirely hands-on physical fabrication and repair work requiring manual skill, physical presence, and real-time material judgment with negligible digital work product."
+  },
+  "1805": {
+    "score": 8,
+    "rationale": "Investigative analysts perform primarily desk-based analytical work\u2014reviewing records, identifying patterns, writing intelligence products, and connecting data across sources\u2014tasks where AI excels at pattern recognition, summarization, and link analysis."
+  },
+  "0456": {
+    "score": 3,
+    "rationale": "Wildland fire managers work extensively in the field directing suppression operations, assessing terrain and fire behavior, and managing crews in dangerous conditions; AI aids planning and modeling but the core work demands physical presence and real-time field judgment."
+  },
+  "0680": {
+    "score": 4,
+    "rationale": "Dental officers provide direct clinical care requiring hands-on procedures, patient interaction, and clinical judgment; AI assists with imaging analysis and treatment planning but cannot perform dental procedures."
+  },
+  "0631": {
+    "score": 3,
+    "rationale": "Occupational therapists deliver hands-on patient therapy, assess functional abilities through direct observation, and build therapeutic relationships\u2014physical and interpersonal work that AI cannot replicate, though it aids documentation and treatment planning."
+  },
+  "1750": {
+    "score": 8,
+    "rationale": "Instructional systems specialists design training curricula, develop course materials, and create learning content\u2014primarily digital knowledge work where AI can generate content, design assessments, and build instructional frameworks with high efficiency."
+  },
+  "1310": {
+    "score": 6,
+    "rationale": "Physicists conduct research involving experimental design, theoretical analysis, data interpretation, and publication\u2014creative scientific work where AI aids computation and literature review but novel hypothesis generation and experimental work still require human expertise."
+  },
+  "6901": {
+    "score": 2,
+    "rationale": "Warehousing and stock handling workers perform physical tasks\u2014receiving, storing, issuing, and moving materials\u2014requiring presence in warehouses with limited digital work beyond basic inventory tracking."
+  },
+  "0967": {
+    "score": 8,
+    "rationale": "Passport and visa examiners review applications against regulatory criteria, verify documents, and make eligibility determinations\u2014structured, rules-based document processing that AI can largely automate, though fraud detection and edge cases still benefit from human review."
+  },
+  "2150": {
+    "score": 4,
+    "rationale": "Transportation operations specialists manage vehicle fleets, coordinate movements, and oversee logistics\u2014a mix of on-site operational oversight and planning/scheduling work where AI aids optimization but physical supervision remains necessary."
+  },
+  "4742": {
+    "score": 2,
+    "rationale": "Utility systems repair and operation workers maintain and operate physical plant systems like water, sewer, and electrical infrastructure on-site, requiring hands-on mechanical skill with minimal digital work."
+  },
+  "6914": {
+    "score": 2,
+    "rationale": "Store workers handle physical receipt, storage, and issuance of supplies and materials, requiring on-site presence and manual handling with only basic inventory record-keeping."
+  },
+  "0486": {
+    "score": 4,
+    "rationale": "Wildlife biologists conduct extensive field surveys, habitat assessments, and species monitoring requiring physical presence outdoors, combined with data analysis and report writing that AI can assist with."
+  },
+  "0342": {
+    "score": 7,
+    "rationale": "Support services administrators manage facility operations, property, mail, printing, and administrative services\u2014primarily office-based coordination and management work where AI can handle scheduling, resource allocation, and reporting, though oversight judgment remains human."
+  },
+  "8602": {
+    "score": 2,
+    "rationale": "Aircraft engine mechanics perform highly specialized hands-on maintenance, inspection, and repair of aircraft engines requiring physical skill, safety-critical precision, and on-site presence."
+  },
+  "5210": {
+    "score": 1,
+    "rationale": "Riggers perform entirely physical work\u2014lifting, moving, and positioning heavy loads using cables, ropes, and hoisting equipment\u2014with negligible digital component."
+  },
+  "0808": {
+    "score": 7,
+    "rationale": "Architects design buildings and review construction plans\u2014creative knowledge work where AI can generate designs, produce drawings, and check code compliance, but aesthetic judgment, site visits, and client collaboration still require human expertise."
+  },
+  "1173": {
+    "score": 7,
+    "rationale": "Housing managers administer housing programs, process applications, inspect properties, and manage tenant relations\u2014a mix of desk-based policy work (aided by AI) and on-site inspections and interpersonal interactions that keep exposure moderate-to-high."
+  },
+  "0403": {
+    "score": 5,
+    "rationale": "Microbiologists conduct laboratory research requiring hands-on bench work, specimen handling, and experimental procedures, combined with data analysis and publication\u2014the physical lab component limits AI exposure while the analytical side benefits from it."
+  },
+  "0809": {
+    "score": 5,
+    "rationale": "Construction control technicians inspect construction sites, verify compliance with plans and specs, and document findings\u2014requiring frequent physical site presence combined with report writing and plan review that AI can assist."
+  },
+  "0482": {
+    "score": 4,
+    "rationale": "Fish biologists conduct fieldwork in aquatic environments including sampling, habitat assessment, and species monitoring, combined with data analysis and reporting; the extensive field component limits AI exposure."
+  },
+  "2810": {
+    "score": 2,
+    "rationale": "High voltage electricians perform dangerous hands-on electrical work on power transmission and distribution systems requiring physical presence, specialized safety procedures, and manual skill."
+  },
+  "0460": {
+    "score": 4,
+    "rationale": "Foresters manage forest resources through field cruising, timber marking, fire planning, and ecosystem monitoring\u2014substantial outdoor fieldwork combined with analysis and planning tasks where AI assists but cannot replace on-the-ground assessment."
+  },
+  "1315": {
+    "score": 6,
+    "rationale": "Hydrologists study water systems through modeling, data analysis, and report writing\u2014primarily knowledge work aided by AI for data processing and modeling\u2014but field data collection and expert interpretation of complex environmental systems still require human judgment."
+  },
+  "0006": {
+    "score": 4,
+    "rationale": "Correctional institution administrators manage prison operations requiring constant physical presence, security oversight, crisis response, and staff supervision\u2014interpersonal and safety-critical leadership work where AI aids administrative tasks but cannot replace on-site management."
+  },
+  "2130": {
+    "score": 7,
+    "rationale": "Traffic managers plan and coordinate freight and passenger transportation, analyze shipping routes, negotiate rates, and manage logistics\u2014primarily desk-based optimization work where AI excels at route planning and cost analysis, though stakeholder coordination remains human."
+  },
+  "0701": {
+    "score": 4,
+    "rationale": "Veterinary medical officers perform clinical examinations, surgical procedures, and inspections of animal health and food safety\u2014hands-on clinical and field inspection work where AI aids diagnostics but cannot replace physical examination and treatment."
+  },
+  "0305": {
+    "score": 9,
+    "rationale": "Mail and file clerks sort, distribute, and manage physical and digital correspondence and records\u2014highly routine work where AI-powered document management, automated routing, and digital transformation are rapidly eliminating the need for manual processing."
+  },
+  "1311": {
+    "score": 5,
+    "rationale": "Physical science technicians collect field samples, operate laboratory instruments, and record data\u2014a mix of hands-on technical work and data processing where AI aids analysis but physical specimen handling and equipment operation require human presence."
+  },
+  "8801": {
+    "score": 2,
+    "rationale": "Aircraft overhaul workers perform hands-on disassembly, inspection, repair, and reassembly of aircraft structures and components\u2014physical precision work in hangars with minimal digital component beyond documentation."
+  },
+  "1980": {
+    "score": 5,
+    "rationale": "Agricultural commodity graders physically inspect and evaluate agricultural products for quality, condition, and grade\u2014requiring sensory evaluation and on-site presence\u2014combined with standardized classification criteria that AI vision systems are beginning to assist with."
+  },
+  "2091": {
+    "score": 8,
+    "rationale": "Sales store clerks perform point-of-sale transactions, inventory management, and customer service record-keeping\u2014routine clerical retail operations that are heavily digitized and largely automatable through self-service and AI inventory systems."
+  },
+  "5378": {
+    "score": 2,
+    "rationale": "Powered support systems mechanics maintain and repair generators, compressors, and other powered equipment through hands-on troubleshooting and physical repair work with minimal digital component."
+  },
+  "0193": {
+    "score": 5,
+    "rationale": "Archeologists conduct excavations, field surveys, artifact analysis, and cultural resource assessments\u2014significant fieldwork requiring physical presence combined with research, documentation, and report writing where AI aids literature review and pattern analysis."
+  },
+  "3502": {
+    "score": 1,
+    "rationale": "Laborers perform heavy physical tasks such as digging, lifting, loading, and grounds maintenance with virtually no digital work product."
+  },
+  "0102": {
+    "score": 6,
+    "rationale": "Social science aids and technicians collect survey data, code responses, perform statistical tabulations, and prepare reports\u2014a mix of fieldwork and desk-based data processing where AI handles much of the analytical and clerical work."
+  },
+  "0662": {
+    "score": 4,
+    "rationale": "Optometrists provide direct eye examinations, prescribe corrective lenses, and diagnose conditions through clinical patient encounters requiring hands-on examination; AI aids imaging analysis but cannot replace the clinical interaction."
+  },
+  "6912": {
+    "score": 3,
+    "rationale": "Materials examining and identifying workers physically inspect, test, and classify materials and supplies\u2014hands-on work requiring visual and tactile assessment, though AI vision systems are beginning to assist with standardized identification tasks."
+  },
+  "1316": {
+    "score": 5,
+    "rationale": "Hydrologic technicians collect water measurements in the field, maintain monitoring equipment, and process data\u2014a blend of outdoor fieldwork and desk-based data management where AI aids the analytical portion but field operations require physical presence."
+  },
+  "0690": {
+    "score": 5,
+    "rationale": "Industrial hygienists conduct workplace inspections, collect air and material samples, and assess occupational hazards\u2014requiring on-site physical presence for exposure assessment combined with data analysis and report writing that AI can assist."
+  },
+  "2151": {
+    "score": 7,
+    "rationale": "Dispatchers coordinate transportation movements, assign resources, and manage schedules\u2014primarily desk-based work involving real-time decision-making that AI optimization and scheduling tools can substantially automate, though emergency judgment calls remain human."
+  },
+  "1084": {
+    "score": 7,
+    "rationale": "Visual information specialists create graphics, illustrations, photographs, and multimedia content\u2014creative digital work where AI generative tools dramatically accelerate production, but art direction, brand judgment, and client communication still require human oversight."
+  },
+  "1529": {
+    "score": 8,
+    "rationale": "Mathematical statisticians design studies, develop statistical models, and analyze complex datasets\u2014highly digital analytical work where AI handles data processing, model fitting, and even methodology selection, though novel research design and interpretation still need human expertise."
+  },
+  "0963": {
+    "score": 9,
+    "rationale": "Legal instruments examiners review deeds, mortgages, and other legal documents for completeness and compliance with requirements\u2014highly structured, rules-based document processing that AI can perform with high accuracy."
+  },
+  "1350": {
+    "score": 5,
+    "rationale": "Geologists conduct field mapping, rock and soil sampling, and geological surveys requiring extensive outdoor work, combined with laboratory analysis, modeling, and report writing where AI assists with data interpretation and literature synthesis."
+  },
+  "1421": {
+    "score": 7,
+    "rationale": "Archives technicians arrange, describe, preserve, and provide access to historical records\u2014primarily desk-based work where AI excels at cataloging, metadata generation, OCR, and search, though physical handling of fragile materials and contextual judgment still need humans."
+  },
+  "0636": {
+    "score": 3,
+    "rationale": "Rehabilitation therapy assistants provide direct hands-on patient care under therapist supervision\u2014physical assistance with exercises, mobility, and daily activities\u2014where AI cannot replace the in-person therapeutic interaction."
+  },
+  "0545": {
+    "score": 9,
+    "rationale": "Military pay specialists process pay actions, calculate entitlements, and maintain pay records according to complex but codified rules\u2014highly structured digital processing work that AI can automate with rules engines and automated calculation."
+  },
+  "4352": {
+    "score": 1,
+    "rationale": "Composite and plastic fabricators perform hands-on manufacturing\u2014laying up, molding, and finishing composite materials\u2014requiring physical skill and presence with minimal digital work product."
+  },
+  "0935": {
+    "score": 6,
+    "rationale": "Administrative law judges conduct hearings, evaluate evidence, and write legal decisions\u2014knowledge work where AI aids legal research, drafting, and case analysis, but constitutional due process requirements mandate a human decision-maker and courtroom presence."
+  },
+  "0060": {
+    "score": 2,
+    "rationale": "Chaplains provide spiritual counseling, conduct religious services, and offer emotional support during crises\u2014deeply interpersonal and emotionally centered work requiring human presence, empathy, and trust that AI fundamentally cannot provide."
+  },
+  "0806": {
+    "score": 7,
+    "rationale": "Materials engineers analyze material properties, develop specifications, and solve engineering problems\u2014primarily knowledge work where AI assists with modeling, literature review, and data analysis, but experimental design and novel problem-solving still require human expertise."
+  },
+  "5426": {
+    "score": 2,
+    "rationale": "Lock and dam operators physically operate navigation locks and dams, monitor water levels, and maintain mechanical equipment on-site\u2014requiring constant physical presence and real-time operational judgment in variable conditions."
+  },
+  "3820": {
+    "score": 1,
+    "rationale": "Shipfitters perform physical fabrication and assembly of ship structures\u2014cutting, shaping, and fitting metal components\u2014entirely hands-on trade work with negligible digital component."
+  },
+  "1144": {
+    "score": 7,
+    "rationale": "Commissary managers oversee retail store operations, manage inventory, supervise staff, and handle procurement\u2014primarily administrative and managerial work where AI aids inventory optimization, scheduling, and reporting, though staff and customer management require human presence."
+  },
+  "5352": {
+    "score": 2,
+    "rationale": "Industrial equipment mechanics troubleshoot, repair, and maintain heavy industrial machinery through hands-on mechanical work requiring physical presence, diagnostic skill, and manual dexterity."
+  },
+  "0308": {
+    "score": 8,
+    "rationale": "Records and information management is heavily digital\u2014organizing, classifying, retrieving, and disposing of records\u2014tasks that AI excels at through search, categorization, and metadata extraction, with limited need for physical presence or complex judgment."
+  },
+  "2606": {
+    "score": 2,
+    "rationale": "Electronic industrial controls mechanics perform hands-on diagnosis, repair, and calibration of physical control systems in industrial settings; AI can assist with troubleshooting guides but cannot replace the manual dexterity and on-site presence required."
+  },
+  "0505": {
+    "score": 7,
+    "rationale": "Financial management involves budgeting, reporting, policy compliance, and fiscal analysis\u2014primarily knowledge work with digital outputs where AI can automate routine analysis, though senior judgment on policy interpretation and strategic decisions remains human-dependent."
+  },
+  "1889": {
+    "score": 7,
+    "rationale": "Import compliance work involves reviewing documentation, classifying goods, checking regulatory databases, and assessing tariff rules\u2014largely digital analytical tasks AI can substantially assist with, though enforcement judgment and legal interpretation still require human oversight."
+  },
+  "7407": {
+    "score": 1,
+    "rationale": "Meatcutting is almost entirely physical manual labor involving knife skills, carcass breakdown, and food safety handling in refrigerated environments; AI has negligible applicability to the core hands-on work."
+  },
+  "5823": {
+    "score": 2,
+    "rationale": "Automotive mechanics perform physical diagnosis and repair of vehicles requiring hands-on work under hoods and chassis; AI can assist with diagnostic codes and repair manuals but cannot turn wrenches or replace components."
+  },
+  "2892": {
+    "score": 2,
+    "rationale": "Aircraft electricians install, inspect, and repair electrical wiring and systems on aircraft, requiring hands-on precision work in confined spaces with strict safety protocols that demand physical presence and manual skill."
+  },
+  "1560": {
+    "score": 9,
+    "rationale": "Data science is almost entirely digital\u2014writing code, building models, analyzing datasets, and producing reports\u2014where AI tools can generate code, perform exploratory analysis, build and tune models, and draft findings, making it one of the most AI-exposed occupations."
+  },
+  "1176": {
+    "score": 5,
+    "rationale": "Building management combines physical facility oversight (inspections, tenant interactions, maintenance coordination) with administrative tasks like lease management and budgeting; AI assists the paperwork side but cannot replace on-site presence and interpersonal coordination."
+  },
+  "0858": {
+    "score": 7,
+    "rationale": "Bioengineering and biomedical engineering is heavily knowledge-based\u2014research, design, modeling, and regulatory analysis\u2014where AI accelerates literature review, simulation, and data analysis, though creative design and experimental validation still require human expertise."
+  },
+  "1160": {
+    "score": 8,
+    "rationale": "Financial analysis is predominantly digital analytical work\u2014building models, reviewing financial data, writing reports, and forecasting\u2014where AI can perform the bulk of routine quantitative analysis and draft narratives, with humans needed primarily for strategic judgment."
+  },
+  "0408": {
+    "score": 4,
+    "rationale": "Ecology involves substantial fieldwork\u2014collecting specimens, conducting surveys, monitoring habitats\u2014combined with data analysis and report writing; AI can accelerate the analytical and writing portions but cannot replace the essential outdoor field presence."
+  },
+  "1150": {
+    "score": 6,
+    "rationale": "Industrial specialists analyze production capabilities, review contractor operations, and assess manufacturing processes, blending on-site facility visits with report writing and data analysis; AI handles the analytical/documentation side well but site assessments require human presence."
+  },
+  "0638": {
+    "score": 3,
+    "rationale": "Recreation and creative arts therapists provide direct, in-person therapeutic interventions using art, music, or recreation with patients, requiring deep interpersonal connection, emotional attunement, and physical presence that AI cannot replicate."
+  },
+  "1520": {
+    "score": 8,
+    "rationale": "Mathematics positions involve theorem proving, algorithm development, statistical modeling, and analytical problem-solving\u2014almost entirely cognitive and digital work where AI can solve equations, verify proofs, and perform computations, though novel research still needs human creativity."
+  },
+  "0998": {
+    "score": 7,
+    "rationale": "Claims assistance and examining involves reviewing documentation, applying regulatory criteria, verifying eligibility, and processing decisions\u2014structured digital decision-making that AI can substantially automate, though complex or contested claims still benefit from human judgment."
+  },
+  "0895": {
+    "score": 6,
+    "rationale": "Industrial engineering technicians collect time-study data, assist with process analysis, and prepare technical documentation, blending some on-site measurement work with digital analysis; AI can handle much of the data analysis and documentation but floor observations require presence."
+  },
+  "0186": {
+    "score": 4,
+    "rationale": "Social services aides and assistants provide direct in-person support to clients\u2014helping with applications, referrals, and basic counseling\u2014requiring interpersonal skills and physical presence, though AI can assist with form processing and information lookup."
+  },
+  "0544": {
+    "score": 8,
+    "rationale": "Civilian pay processing involves applying pay rules, calculating entitlements, processing payroll actions, and verifying records\u2014highly structured digital work that AI and automation can handle extensively, with human oversight needed mainly for exceptions and disputes."
+  },
+  "0991": {
+    "score": 7,
+    "rationale": "Workers' compensation claims examining involves reviewing medical records, applying legal standards, calculating benefits, and making eligibility determinations\u2014primarily document-centric analytical work that AI can substantially assist with, though contested cases require human adjudicative judgment."
+  },
+  "0150": {
+    "score": 7,
+    "rationale": "Geography positions involve spatial analysis, GIS work, mapping, remote sensing, and report writing\u2014predominantly digital analytical tasks where AI and machine learning tools excel at pattern recognition and geospatial processing, though field verification and research design remain human tasks."
+  },
+  "1849": {
+    "score": 5,
+    "rationale": "Wage and hour investigators conduct on-site workplace inspections, interview employers and employees, review payroll records, and apply labor law\u2014a hybrid of field presence, interpersonal interviewing, and analytical document review where AI aids the analytical side but cannot conduct inspections."
+  },
+  "4607": {
+    "score": 1,
+    "rationale": "Carpentry is hands-on skilled trade work\u2014measuring, cutting, shaping, and assembling wood structures\u2014performed on construction sites with power tools and manual labor that AI cannot perform."
+  },
+  "6910": {
+    "score": 5,
+    "rationale": "Materials expediting involves tracking, locating, and coordinating the movement of parts and supplies through warehouses and supply chains, combining physical warehouse work with digital tracking systems; AI can optimize logistics and automate tracking but physical handling remains manual."
+  },
+  "0020": {
+    "score": 6,
+    "rationale": "Community planning involves research, zoning analysis, report writing, public engagement, and policy development; AI can assist with data analysis, GIS modeling, and drafting plans, but public meetings, stakeholder engagement, and political judgment require human presence and discretion."
+  },
+  "6904": {
+    "score": 2,
+    "rationale": "Tools and parts attendants physically receive, store, issue, and inventory tools and parts in shops and warehouses, requiring hands-on material handling and in-person customer service at tool cribs that AI cannot perform."
+  },
+  "1822": {
+    "score": 3,
+    "rationale": "Mine safety and health inspectors conduct on-site underground and surface mine inspections, test air quality, examine equipment, and enforce safety regulations\u2014work that is overwhelmingly physical and field-based, with AI only useful for report writing and data lookup."
+  },
+  "0326": {
+    "score": 8,
+    "rationale": "Office automation clerical and assistance work involves typing, data entry, document formatting, spreadsheet management, and correspondence\u2014highly routine digital tasks that AI can perform or substantially automate."
+  },
+  "1981": {
+    "score": 3,
+    "rationale": "Agricultural commodity aides assist with inspecting, grading, and sampling agricultural products on-site at warehouses and processing facilities, requiring physical presence and hands-on examination; AI can help with documentation but not the physical inspection work."
+  },
+  "0668": {
+    "score": 3,
+    "rationale": "Podiatrists provide direct patient care\u2014examining feet, performing procedures, diagnosing conditions, and prescribing treatments\u2014requiring physical examination and hands-on clinical skills that AI cannot perform, though AI can assist with diagnostics and documentation."
+  },
+  "0188": {
+    "score": 3,
+    "rationale": "Recreation specialists plan and lead in-person recreational programs, activities, and events for diverse populations, requiring interpersonal engagement, physical presence, and adaptive facilitation skills that AI cannot replicate."
+  },
+  "3705": {
+    "score": 3,
+    "rationale": "Non-destructive testing involves hands-on use of ultrasonic, radiographic, and other physical testing equipment on materials and welds, requiring skilled manual operation and on-site presence; AI can assist with image interpretation but not equipment operation."
+  },
+  "1040": {
+    "score": 8,
+    "rationale": "Language specialists perform translation, interpretation analysis, and foreign language document processing\u2014tasks where modern AI excels at translation and text analysis, though nuanced cultural interpretation and real-time high-stakes interpreting still benefit from human expertise."
+  },
+  "0682": {
+    "score": 2,
+    "rationale": "Dental hygienists perform hands-on clinical procedures\u2014cleaning teeth, taking X-rays, applying sealants, and examining patients' mouths\u2014requiring direct physical patient contact that AI cannot perform."
+  },
+  "1083": {
+    "score": 8,
+    "rationale": "Technical writing and editing is predominantly digital text production\u2014creating manuals, specifications, and documentation\u2014where AI can draft, revise, structure, and edit technical content, with humans needed mainly for accuracy verification and subject-matter nuance."
+  },
+  "4206": {
+    "score": 1,
+    "rationale": "Plumbing involves physically installing, repairing, and maintaining pipes, fixtures, and water systems in buildings, requiring hands-on skilled trade work on-site that AI cannot perform."
+  },
+  "0871": {
+    "score": 7,
+    "rationale": "Naval architecture involves ship design, structural analysis, hydrostatic calculations, and engineering documentation\u2014primarily digital knowledge work where AI can assist with modeling, simulation, and drafting, though creative design integration and engineering judgment remain human tasks."
+  },
+  "5301": {
+    "score": 2,
+    "rationale": "Miscellaneous industrial equipment maintenance workers physically repair, maintain, and troubleshoot diverse industrial machinery on-site, requiring hands-on mechanical skills and physical presence that AI cannot replace."
+  },
+  "1082": {
+    "score": 8,
+    "rationale": "Writing and editing is almost entirely digital text production\u2014drafting, revising, and editing documents, press releases, and publications\u2014where AI can generate and refine text at high quality, though editorial judgment, voice, and creative direction still benefit from human oversight."
+  },
+  "0893": {
+    "score": 7,
+    "rationale": "Chemical engineering involves process design, simulation, research analysis, and technical documentation\u2014heavily knowledge-based work where AI accelerates modeling, literature review, and calculations, though laboratory work and novel process development still require human expertise."
+  },
+  "0580": {
+    "score": 7,
+    "rationale": "Credit union examiners review financial statements, assess risk, analyze compliance with regulations, and write examination reports\u2014primarily digital analytical work where AI can automate data analysis and flag anomalies, though on-site examination and regulatory judgment require human involvement."
+  },
+  "1306": {
+    "score": 6,
+    "rationale": "Health physics involves radiation monitoring, dosimetry analysis, contamination surveys, and regulatory compliance\u2014mixing on-site measurement and field work with data analysis and reporting; AI assists with calculations and documentation but field monitoring requires physical presence."
+  },
+  "0335": {
+    "score": 8,
+    "rationale": "Computer clerks and assistants perform data entry, system operations, user support, and routine IT tasks\u2014highly structured digital work that AI and automation tools can substantially perform or augment."
+  },
+  "8255": {
+    "score": 2,
+    "rationale": "Pneudraulic systems mechanics physically repair and maintain pneumatic and hydraulic systems on equipment, requiring hands-on diagnosis, disassembly, part replacement, and testing that demands manual skill and physical presence."
+  },
+  "5402": {
+    "score": 2,
+    "rationale": "Boiler plant operators physically monitor, operate, and maintain boilers and related equipment, requiring on-site presence to manage steam pressure, water levels, and fuel systems; AI can assist with monitoring but operators must be physically present for safety."
+  },
+  "1071": {
+    "score": 7,
+    "rationale": "Audiovisual production involves scripting, filming, editing, and producing video/audio content; AI tools can now generate scripts, edit footage, create graphics, and assist with post-production, though creative direction, on-location shooting, and artistic judgment still need humans."
+  },
+  "0896": {
+    "score": 7,
+    "rationale": "Industrial engineering involves process optimization, workflow analysis, time studies, and systems design\u2014primarily knowledge work with digital modeling and analysis where AI excels, though some on-site observation and cross-functional collaboration require human involvement."
+  },
+  "1715": {
+    "score": 5,
+    "rationale": "Vocational rehabilitation counselors work directly with disabled individuals to assess abilities, develop employment plans, and coordinate services\u2014requiring significant interpersonal engagement and client interaction, with AI useful for case documentation and job matching but not the counseling relationship."
+  },
+  "6652": {
+    "score": 2,
+    "rationale": "Aircraft ordnance systems mechanics physically install, maintain, and repair weapons release and armament systems on military aircraft, requiring hands-on mechanical and electrical work in demanding environments that AI cannot perform."
+  },
+  "1740": {
+    "score": 5,
+    "rationale": "Education services specialists develop curricula, coordinate training programs, and provide instructional design\u2014mixing knowledge work (content development, analysis) with interpersonal facilitation and classroom/workshop delivery; AI assists content creation but delivery and learner engagement need humans."
+  },
+  "0670": {
+    "score": 7,
+    "rationale": "Health system administration involves planning, organizing, and directing healthcare delivery programs through policy analysis, budget management, and performance metrics\u2014primarily digital knowledge work where AI can automate reporting and analysis, though leadership and stakeholder management require human judgment."
+  },
+  "5220": {
+    "score": 1,
+    "rationale": "Shipwrights perform hands-on structural work on vessels\u2014fitting, shaping, and repairing hull structures using heavy tools and equipment in shipyards\u2014physical skilled trade work that AI cannot perform."
+  },
+  "5407": {
+    "score": 2,
+    "rationale": "Electrical power controlling operators monitor and operate switchboards and power distribution systems, requiring on-site physical presence to throw switches, respond to emergencies, and maintain equipment; AI can assist with monitoring but cannot replace hands-on operation."
+  },
+  "8268": {
+    "score": 2,
+    "rationale": "Aircraft pneudraulic systems mechanics physically maintain and repair pneumatic and hydraulic systems on aircraft, requiring hands-on precision work in safety-critical environments that demands physical presence and manual skill."
+  },
+  "0454": {
+    "score": 4,
+    "rationale": "Rangeland management involves extensive fieldwork\u2014assessing vegetation, soil conditions, and livestock impacts across vast landscapes\u2014combined with data analysis and management plans; AI assists with remote sensing and planning documents but cannot replace on-the-ground assessment."
+  },
+  "2186": {
+    "score": 6,
+    "rationale": "Technical systems program managers oversee complex transportation technology programs, coordinating stakeholders, managing schedules and budgets, and ensuring technical requirements are met\u2014knowledge work where AI assists with analysis and documentation but program leadership and decision-making require human judgment."
+  },
+  "1410": {
+    "score": 7,
+    "rationale": "Librarians catalog, organize, and retrieve information, manage collections, conduct research assistance, and curate resources\u2014tasks increasingly digital where AI excels at search, cataloging, and recommendation, though community engagement and specialized reference services benefit from human expertise."
+  },
+  "0828": {
+    "score": 7,
+    "rationale": "Construction analysts review plans, specifications, cost estimates, and contractor proposals for construction projects\u2014primarily document-based analytical work where AI can assist with cost modeling, specification review, and compliance checking, though site knowledge and negotiation remain human tasks."
+  },
+  "0672": {
+    "score": 5,
+    "rationale": "Prosthetic representatives coordinate prosthetic and orthotic services for patients, assessing needs, prescribing devices, and managing vendor relationships\u2014combining direct patient interaction and clinical assessment with procurement and administrative work; AI aids the administrative side but patient care requires human presence."
+  },
+  "0170": {
+    "score": 7,
+    "rationale": "History positions involve archival research, document analysis, writing interpretive reports, and preserving historical records\u2014predominantly knowledge work where AI can accelerate document analysis, literature synthesis, and drafting, though original interpretation and archival fieldwork remain human tasks."
+  },
+  "0669": {
+    "score": 8,
+    "rationale": "Medical records administration involves organizing, coding, classifying, and managing health information in digital systems\u2014highly structured data work where AI excels at coding, abstracting, auditing records, and ensuring compliance, with human oversight needed for complex cases."
+  },
+  "5413": {
+    "score": 2,
+    "rationale": "Fuel distribution system operators physically operate pumps, valves, and pipeline systems to transfer and store fuel, requiring on-site presence in potentially hazardous environments; AI can monitor gauges but hands-on operation and emergency response demand human presence."
+  },
+  "1860": {
+    "score": 6,
+    "rationale": "Equal opportunity investigators conduct interviews, gather evidence, analyze complaints, and write investigative reports\u2014combining interpersonal interviewing with analytical document work; AI can assist with case research, document analysis, and report drafting but witness interviews and credibility assessments require human judgment."
+  },
+  "0530": {
+    "score": 7,
+    "rationale": "Cash processing involves counting, verifying, sorting, and accounting for currency and financial instruments\u2014highly routine procedural work that is increasingly automated, with AI assisting in anomaly detection and reconciliation, though physical cash handling still requires human or mechanical processing."
+  },
+  "9928": {
+    "score": 1,
+    "rationale": "Ordinary seamen perform physical labor aboard vessels\u2014handling lines, maintaining decks, standing watches, and assisting with cargo\u2014demanding continuous physical presence at sea in all conditions that AI cannot replace."
+  },
+  "0090": {
+    "score": 3,
+    "rationale": "Guides lead tours and provide interpretive information at federal sites, parks, and buildings, requiring in-person public engagement, storytelling, crowd management, and adapting to visitor questions\u2014interpersonal work where AI can supply content but cannot replace the human guide."
+  },
+  "0421": {
+    "score": 3,
+    "rationale": "Plant protection technicians conduct field inspections for plant pests and diseases, collect specimens, set traps, and enforce quarantine regulations\u2014primarily outdoor fieldwork requiring physical presence and hands-on sample collection, with AI useful only for identification assistance and data entry."
+  },
+  "4754": {
+    "score": 1,
+    "rationale": "Cemetery caretaking involves physical groundskeeping\u2014mowing, digging, landscaping, and maintaining cemetery grounds and markers\u2014entirely manual outdoor labor that AI cannot perform."
+  },
+  "1016": {
+    "score": 5,
+    "rationale": "Museum specialists and technicians prepare, preserve, catalog, and install artifacts and exhibits, mixing hands-on conservation and exhibit fabrication with digital cataloging and research; AI assists with documentation and metadata but physical handling of objects requires human skill."
+  },
+  "5725": {
+    "score": 1,
+    "rationale": "Crane operators physically operate heavy lifting equipment on construction sites, shipyards, and warehouses requiring spatial awareness, manual dexterity, and real-time judgment in safety-critical conditions; AI has minimal applicability to this hands-on trade."
+  },
+  "7304": {
+    "score": 1,
+    "rationale": "Laundry workers operate washing, drying, pressing, and folding equipment and handle soiled linens through entirely manual physical labor with virtually no digital work component."
+  },
+  "2030": {
+    "score": 7,
+    "rationale": "Distribution facilities and storage managers plan warehouse operations, analyze inventory data, optimize storage layouts, and manage logistics through predominantly digital planning and analysis work; AI assists with optimization and forecasting but facility oversight and personnel management require human presence."
+  },
+  "0470": {
+    "score": 5,
+    "rationale": "Soil scientists conduct field surveys, collect samples, and classify soils requiring physical fieldwork, combined with laboratory analysis and digital report writing where AI assists with data interpretation; the split between field and desk work lands in the moderate range."
+  },
+  "9985": {
+    "score": 1,
+    "rationale": "Steward utilitymen perform manual cleaning, maintenance, and service tasks aboard vessels in physically demanding maritime environments with virtually no digital work component."
+  },
+  "0405": {
+    "score": 7,
+    "rationale": "Pharmacologists conduct drug research, analyze experimental data, review literature, and write scientific reports through knowledge-intensive work; AI assists substantially with literature review, data analysis, and manuscript drafting though experimental design and interpretation require human expertise."
+  },
+  "1603": {
+    "score": 4,
+    "rationale": "Equipment, facilities, and services assistants coordinate facility maintenance, manage work orders, and support equipment operations mixing physical facility oversight with administrative record-keeping; AI assists with scheduling and documentation but on-site coordination requires human presence."
+  },
+  "0181": {
+    "score": 5,
+    "rationale": "Psychology aids and technicians administer standardized tests, collect behavioral data, and assist with patient intake requiring direct interpersonal interaction; AI can help with scoring and data entry but face-to-face patient contact and observation remain essential."
+  },
+  "1104": {
+    "score": 7,
+    "rationale": "Property disposal specialists manage surplus government property through documentation, valuation, marketing, and sales coordination that is largely desk-based and rule-driven; AI can assist with valuation analysis and documentation but disposal decisions and regulatory compliance require human judgment."
+  },
+  "1420": {
+    "score": 6,
+    "rationale": "Archivists appraise, arrange, describe, and preserve historical records through a mix of physical handling of materials and knowledge-intensive descriptive and research work; AI assists with metadata creation, finding aids, and digitized text analysis but physical preservation and contextual judgment require human expertise."
+  },
+  "5350": {
+    "score": 2,
+    "rationale": "Production machinery mechanics diagnose, repair, and maintain industrial production equipment through hands-on mechanical work requiring physical skill and troubleshooting; AI may assist with diagnostic reference but the core repair work is entirely manual."
+  },
+  "1106": {
+    "score": 8,
+    "rationale": "Procurement clerks and technicians process purchase orders, maintain contract files, track deliveries, and prepare routine procurement documents through highly structured, repetitive desk work that is very amenable to AI automation."
+  },
+  "1881": {
+    "score": 3,
+    "rationale": "CBP interdiction officers conduct physical enforcement operations including vessel boarding, vehicle inspections, and contraband detection in the field requiring physical presence, tactical readiness, and real-time judgment; AI assists with intelligence analysis but core duties are field-based."
+  },
+  "1140": {
+    "score": 7,
+    "rationale": "Trade specialists analyze international trade data, negotiate agreements, interpret trade regulations, and prepare policy recommendations through predominantly digital analytical and written work; AI assists substantially with data analysis and document drafting but trade negotiation and policy judgment require humans."
+  },
+  "6502": {
+    "score": 2,
+    "rationale": "Explosives operators handle, assemble, disassemble, and dispose of munitions and explosives in safety-critical physical operations requiring meticulous manual work and strict protocol adherence; AI has minimal applicability to these hazardous hands-on duties."
+  },
+  "6501": {
+    "score": 2,
+    "rationale": "Ammunition, explosives, and toxic materials workers handle, store, transport, and dispose of hazardous materials through physical labor in safety-critical environments; the work is entirely hands-on with minimal digital component."
+  },
+  "0526": {
+    "score": 8,
+    "rationale": "Tax specialists analyze tax code provisions, interpret regulations, prepare rulings, and advise on tax policy through highly structured, text-intensive analytical work; AI excels at regulatory analysis and document drafting though novel interpretive questions require human expertise."
+  },
+  "5701": {
+    "score": 1,
+    "rationale": "Miscellaneous transportation and mobile equipment operators drive and operate vehicles and heavy equipment in the field requiring physical presence, spatial awareness, and manual operation; AI has minimal applicability to these hands-on duties."
+  },
+  "0399": {
+    "score": 7,
+    "rationale": "Administration and office support student trainees learn and perform routine administrative tasks including data entry, correspondence, filing, and office coordination that are largely digital and structured; AI can assist with most training tasks though the developmental nature requires human mentoring."
+  },
+  "2602": {
+    "score": 3,
+    "rationale": "Electronic measurement equipment mechanics repair, calibrate, and maintain precision test instruments through hands-on technical work requiring physical dexterity and specialized knowledge; AI may assist with diagnostics and technical references but repair work is fundamentally manual."
+  },
+  "6641": {
+    "score": 2,
+    "rationale": "Ordnance equipment mechanics inspect, repair, and maintain weapons systems and ordnance equipment through hands-on mechanical work in safety-critical conditions; AI has minimal applicability beyond diagnostic reference to this physical trade."
+  },
+  "3610": {
+    "score": 1,
+    "rationale": "Insulators apply thermal, acoustic, and fire-resistant insulation materials to pipes, ducts, and structures through entirely physical construction trade work with no meaningful digital component."
+  },
+  "0360": {
+    "score": 7,
+    "rationale": "Equal opportunity compliance specialists investigate discrimination complaints, analyze workforce data, review policies, and write reports through predominantly knowledge-based desk work; AI assists with data analysis, legal research, and report drafting but investigative interviews and compliance determinations require human judgment."
+  },
+  "0458": {
+    "score": 4,
+    "rationale": "Soil conservation technicians conduct field surveys, install erosion control structures, and assist landowners with conservation practices mixing substantial outdoor fieldwork with technical mapping and planning; AI assists with planning tools but field implementation is hands-on."
+  },
+  "1015": {
+    "score": 6,
+    "rationale": "Museum curators research, acquire, interpret, and manage collections through knowledge-intensive scholarly work combined with physical object handling and exhibition planning; AI assists with research, catalog descriptions, and content development but curatorial judgment, provenance evaluation, and public engagement require humans."
+  },
+  "2121": {
+    "score": 5,
+    "rationale": "Railroad safety inspectors conduct physical track, equipment, and operations inspections in the field combined with desk-based reporting and regulatory analysis; AI assists with data analysis and compliance tracking but on-site inspections and safety determinations require human presence."
+  },
+  "9925": {
+    "score": 1,
+    "rationale": "Able seamen perform deck maintenance, line handling, painting, and general vessel upkeep through entirely physical maritime labor aboard ships with minimal digital work."
+  },
+  "3105": {
+    "score": 1,
+    "rationale": "Fabric workers cut, sew, and repair canvas, nylon, and other fabrics for tents, covers, and upholstery through entirely manual craft work with virtually no digital component."
+  },
+  "1412": {
+    "score": 7,
+    "rationale": "Technical information services specialists organize, index, abstract, and disseminate scientific and technical literature through predominantly digital information management work; AI excels at text summarization, classification, and search optimization though collection development and user services require human judgment."
+  },
+  "1863": {
+    "score": 4,
+    "rationale": "Food inspectors conduct on-site inspections of food processing facilities, examine products, and enforce safety regulations requiring physical presence in plants and fields; AI assists with compliance tracking and data analysis but physical inspection and real-time contamination assessment require human senses and judgment."
+  },
+  "1370": {
+    "score": 7,
+    "rationale": "Cartographers compile, design, and produce maps using GIS, remote sensing data, and digital mapping tools through predominantly digital geospatial work; AI assists substantially with automated feature extraction and map generation though cartographic design decisions and data quality assessment require human expertise."
+  },
+  "2123": {
+    "score": 5,
+    "rationale": "Motor carrier safety inspectors physically inspect commercial vehicles, review driver records, and conduct roadside enforcement combining field-based physical inspections with desk-based compliance analysis; AI assists with data tracking and risk targeting but physical inspections require human presence."
+  },
+  "1130": {
+    "score": 7,
+    "rationale": "Public utilities specialists analyze utility rates, review regulatory filings, and advise on energy policy through predominantly desk-based analytical and written work; AI assists with financial analysis, rate modeling, and document review though policy judgment and stakeholder negotiations require humans."
+  },
+  "0899": {
+    "score": 6,
+    "rationale": "Engineering and architecture student trainees learn technical skills mixing digital design and analysis tools with physical site visits and hands-on learning; AI assists with calculations, CAD work, and report drafting but the developmental nature and field components limit full AI applicability."
+  },
+  "1171": {
+    "score": 7,
+    "rationale": "Appraisers determine the value of real property, equipment, and other assets through market analysis, comparative data review, and report writing that is largely analytical desk work; AI assists with comparable analysis and report generation though on-site property inspection and professional valuation judgment require humans."
+  },
+  "1330": {
+    "score": 7,
+    "rationale": "Astronomers and space scientists conduct research, analyze observational data, develop theoretical models, and publish findings through knowledge-intensive digital analytical work; AI assists with data processing, literature review, and modeling but novel scientific insight and experimental design require human expertise."
+  },
+  "2854": {
+    "score": 2,
+    "rationale": "Electrical equipment repairers diagnose, repair, and maintain electrical motors, generators, and distribution equipment through hands-on physical trade work; AI may assist with troubleshooting guides but the core repair work is entirely manual."
+  },
+  "5003": {
+    "score": 1,
+    "rationale": "Gardeners plant, cultivate, prune, mow, and maintain grounds and landscaping through entirely physical outdoor labor with virtually no digital work component."
+  },
+  "6610": {
+    "score": 2,
+    "rationale": "Small arms repairers inspect, disassemble, repair, and test firearms and light weapons through detailed hands-on mechanical work requiring manual dexterity and specialized knowledge; AI has minimal applicability to this physical precision trade."
+  },
+  "5318": {
+    "score": 1,
+    "rationale": "Lock and dam repairers maintain and repair lock chambers, gates, valves, and dam structures through heavy physical labor in outdoor waterway environments with minimal digital work."
+  },
+  "0017": {
+    "score": 5,
+    "rationale": "Explosives safety specialists develop safety standards, conduct inspections, review storage plans, and investigate incidents mixing field-based facility inspections with desk-based policy analysis and report writing; AI assists with regulatory analysis and documentation but on-site safety assessments require human expertise."
+  },
+  "1720": {
+    "score": 6,
+    "rationale": "Education program specialists design curricula, evaluate educational programs, develop policy, and coordinate grants through predominantly knowledge-based administrative work; AI assists with program analysis, content development, and report writing but stakeholder engagement and educational policy judgment require humans."
+  },
+  "0683": {
+    "score": 3,
+    "rationale": "Dental laboratory aids and technicians fabricate crowns, dentures, and prosthetic devices through hands-on craft work requiring manual dexterity and precision; while CAD/CAM tools are increasingly used, much of the work remains physical fabrication with limited AI applicability."
+  },
+  "1361": {
+    "score": 7,
+    "rationale": "Navigational information specialists compile, analyze, and publish nautical charts, notices to mariners, and navigational data through predominantly digital geospatial and data management work; AI assists with data processing and chart updates though accuracy verification and safety-critical decisions require human oversight."
+  },
+  "0485": {
+    "score": 4,
+    "rationale": "Wildlife refuge managers oversee habitat conservation, conduct field surveys, manage visitor programs, and enforce regulations through substantial outdoor fieldwork combined with administrative planning; AI assists with data analysis and planning documents but field-based wildlife management requires human presence."
+  },
+  "1894": {
+    "score": 8,
+    "rationale": "Customs entry and liquidating specialists process import entries, classify commodities, assess duties, and review trade documentation through highly structured, rule-based desk work that is very amenable to AI automation of tariff classification and document processing."
+  },
+  "0540": {
+    "score": 8,
+    "rationale": "Voucher examiners review, verify, and process payment vouchers and claims against established rules and regulations through highly repetitive, structured desk work that AI can substantially automate; human oversight is needed primarily for exception handling."
+  },
+  "2185": {
+    "score": 3,
+    "rationale": "Aircrew technicians operate specialized equipment aboard aircraft, perform in-flight duties, and maintain airborne systems requiring physical presence in aircraft and hands-on equipment operation; AI has limited applicability to these physically demanding, safety-critical airborne duties."
+  },
+  "0667": {
+    "score": 3,
+    "rationale": "Orthotists and prosthetists design, fabricate, and fit orthopedic braces and artificial limbs through hands-on patient interaction, physical assessment, and custom device fabrication; AI may assist with CAD design but fitting, patient evaluation, and manual fabrication require human skill."
+  },
+  "9965": {
+    "score": 1,
+    "rationale": "Wipers clean and maintain engine rooms, machinery spaces, and vessel equipment through entirely manual physical labor aboard ships with no digital work component."
+  },
+  "5406": {
+    "score": 2,
+    "rationale": "Utility systems operators monitor and operate heating, cooling, water treatment, and power generation equipment through hands-on physical operation of industrial systems; AI may assist with monitoring dashboards but equipment operation and emergency response require human presence."
+  },
+  "0704": {
+    "score": 4,
+    "rationale": "Animal health technicians assist veterinarians with examinations, collect specimens, administer treatments, and restrain animals through predominantly hands-on clinical work with direct animal contact; AI assists with record-keeping and lab results but physical animal care requires human presence."
+  },
+  "5705": {
+    "score": 1,
+    "rationale": "Tractor operators drive and operate tractors and associated equipment for mowing, grading, plowing, and hauling through entirely physical outdoor equipment operation with no meaningful digital component."
+  },
+  "1222": {
+    "score": 8,
+    "rationale": "Patent attorneys conduct prior art searches, draft patent applications, prosecute claims before the USPTO, and provide legal counsel through text-intensive, highly structured legal work; AI excels at prior art search, claim drafting, and legal research though strategic prosecution decisions and client counseling require human judgment."
+  },
+  "1630": {
+    "score": 5,
+    "rationale": "Cemetery administration services specialists manage burial operations, maintain records, coordinate with families, and oversee grounds maintenance mixing administrative desk work with field oversight and sensitive interpersonal contact; AI assists with records and scheduling but family interaction and field supervision require human presence."
+  },
+  "0440": {
+    "score": 7,
+    "rationale": "Geneticists conduct research, analyze genomic data, review literature, and publish findings through knowledge-intensive work; AI assists substantially with sequence analysis, literature review, and data interpretation though experimental design and novel scientific insight require human expertise."
+  },
+  "0415": {
+    "score": 7,
+    "rationale": "Toxicologists study chemical effects on organisms, analyze experimental data, conduct risk assessments, and write scientific reports through knowledge-intensive work; AI assists with data analysis, literature review, and risk modeling though experimental design and safety determinations require human expertise."
+  },
+  "1103": {
+    "score": 7,
+    "rationale": "Industrial property managers administer government-owned industrial plants and equipment, negotiate agreements, and manage contractor operations through predominantly desk-based analytical and administrative work; AI assists with contract analysis and reporting but facility oversight and negotiation require human judgment."
+  },
+  "1360": {
+    "score": 6,
+    "rationale": "Oceanographers conduct research mixing shipboard field work, instrument deployment, and sample collection with desk-based data analysis and scientific writing; AI assists substantially with data processing and modeling but ocean-going fieldwork and experimental design require human presence and expertise."
+  },
+  "1667": {
+    "score": 2,
+    "rationale": "Food services workers prepare and serve meals, operate kitchen equipment, and maintain sanitary conditions through predominantly hands-on physical labor in institutional kitchens; AI has minimal applicability to cooking and food service duties."
+  },
+  "0023": {
+    "score": 6,
+    "rationale": "Outdoor recreation planners develop recreation area plans, conduct site assessments, analyze visitor data, and coordinate with stakeholders mixing field-based site evaluation with desk-based planning and analysis; AI assists with data analysis and plan drafting but site assessment and community engagement require human presence."
+  },
+  "4604": {
+    "score": 1,
+    "rationale": "Wood workers operate saws, lathes, planers, and hand tools to cut, shape, and assemble wood products through entirely manual craft work with virtually no digital component."
+  },
+  "0414": {
+    "score": 5,
+    "rationale": "Entomologists study insects through field collection, laboratory analysis, and scientific research mixing outdoor specimen collection and identification with desk-based data analysis and report writing; AI assists with species identification and literature review but fieldwork requires human presence."
+  },
+  "0803": {
+    "score": 6,
+    "rationale": "Safety engineers evaluate workplace hazards, design safety systems, conduct facility inspections, and develop safety programs mixing on-site inspections with desk-based analysis and report writing; AI assists with risk analysis and standards compliance but physical site assessments require human presence."
+  },
+  "3416": {
+    "score": 2,
+    "rationale": "Toolmakers fabricate, repair, and modify precision tools, dies, jigs, and fixtures using machine tools and hand tools through skilled manual craft work; AI has minimal applicability to this hands-on precision machining trade."
+  },
+  "0131": {
+    "score": 7,
+    "rationale": "International relations specialists analyze foreign policy issues, prepare diplomatic communications, monitor global developments, and advise on international agreements through predominantly knowledge-based analytical and written work; AI assists with research, translation, and drafting but diplomatic judgment and relationship management require humans."
+  },
+  "1831": {
+    "score": 8,
+    "rationale": "Securities compliance examiners review financial disclosures, analyze trading data, examine broker-dealer records, and assess regulatory compliance through highly structured, document-intensive analytical work; AI excels at pattern detection in financial data and regulatory document review though enforcement determinations require human judgment."
+  },
+  "0561": {
+    "score": 8,
+    "rationale": "Budget clerical and assistance staff perform data entry, spreadsheet maintenance, budget tracking, and routine financial calculations \u2014 highly structured digital tasks that AI can automate or dramatically accelerate."
+  },
+  "1008": {
+    "score": 5,
+    "rationale": "Interior designers create space plans, select materials, and oversee installations requiring on-site assessments and aesthetic judgment; AI can generate renderings and suggest layouts but physical space evaluation and client collaboration remain human-dependent."
+  },
+  "0646": {
+    "score": 3,
+    "rationale": "Pathology technicians prepare tissue specimens, operate laboratory equipment, and perform histological procedures \u2014 hands-on bench work requiring manual dexterity, though AI-assisted image analysis of slides is emerging."
+  },
+  "1313": {
+    "score": 7,
+    "rationale": "Geophysicists analyze seismic, gravitational, and electromagnetic data using computational models and digital tools \u2014 knowledge-intensive analytical work where AI assists with data processing and pattern recognition, but scientific interpretation and field survey design require human expertise."
+  },
+  "1531": {
+    "score": 8,
+    "rationale": "Statistical assistants compile data, run standard analyses, create tables and charts, and perform quality checks \u2014 routine quantitative desk work that AI tools can perform rapidly with high accuracy."
+  },
+  "1226": {
+    "score": 7,
+    "rationale": "Design patent examiners review patent applications for ornamental designs by comparing prior art and assessing novelty \u2014 largely digital research and analysis work where AI can search databases and compare visual designs, but legal determinations still require human judgment."
+  },
+  "4818": {
+    "score": 2,
+    "rationale": "Aircraft survival flight equipment repair workers inspect, maintain, and repair ejection seats, parachutes, oxygen systems, and survival gear \u2014 skilled hands-on mechanical work with safety-critical physical requirements that AI cannot perform."
+  },
+  "1341": {
+    "score": 6,
+    "rationale": "Meteorological technicians collect weather data, operate instruments, and prepare forecasts using digital tools and models \u2014 a hybrid of equipment operation and data analysis where AI significantly aids forecasting but instrument maintenance and observation require human presence."
+  },
+  "1146": {
+    "score": 7,
+    "rationale": "Agricultural marketing specialists analyze commodity markets, develop marketing programs, and draft regulations \u2014 knowledge work involving data analysis, report writing, and policy development that AI can substantially augment, though stakeholder negotiation and agricultural judgment remain human tasks."
+  },
+  "0382": {
+    "score": 8,
+    "rationale": "Telephone operators route calls, provide directory information, and handle routine inquiries \u2014 highly repetitive communication tasks that AI-powered voice systems and automated call routing can now perform at near-human quality."
+  },
+  "0030": {
+    "score": 2,
+    "rationale": "Sports specialists organize athletic programs, coach participants, and oversee physical fitness activities \u2014 work centered on physical presence, demonstration, and interpersonal motivation where AI has minimal applicability."
+  },
+  "3359": {
+    "score": 2,
+    "rationale": "Instrument mechanics repair, calibrate, and maintain precision instruments and gauges \u2014 skilled manual trade work requiring physical dexterity and diagnostic touch with negligible AI-automatable components."
+  },
+  "0987": {
+    "score": 8,
+    "rationale": "Tax law specialists research tax code, analyze legal issues, draft rulings, and interpret regulations \u2014 predominantly text-based legal-analytical work where AI excels at research, drafting, and statutory analysis, though novel interpretive decisions still need human expertise."
+  },
+  "0673": {
+    "score": 5,
+    "rationale": "Hospital housekeeping managers oversee sanitation programs, manage staff, ensure regulatory compliance, and inspect facilities \u2014 a mix of on-site physical oversight and administrative planning where AI assists with scheduling and compliance tracking but physical inspections and personnel management remain human tasks."
+  },
+  "0189": {
+    "score": 2,
+    "rationale": "Recreation aids and assistants lead activities, supervise participants, set up equipment, and provide direct support at recreational facilities \u2014 primarily physical and interpersonal work with minimal digital component."
+  },
+  "3801": {
+    "score": 1,
+    "rationale": "Miscellaneous metal workers perform general metalworking tasks including cutting, grinding, bending, and assembling metal parts \u2014 manual skilled trade work with virtually no AI-automatable digital component."
+  },
+  "0480": {
+    "score": 6,
+    "rationale": "Fish and wildlife administrators manage conservation programs, develop policies, analyze population data, and coordinate stakeholder activities \u2014 a mix of field-oriented program management and desk-based policy and data analysis work where AI assists with the analytical components."
+  },
+  "1654": {
+    "score": 5,
+    "rationale": "Printing services specialists manage print production, coordinate with customers, and oversee digital and offset printing operations \u2014 hybrid work combining equipment operation and production oversight with administrative scheduling and quality control that AI can partially assist."
+  },
+  "1220": {
+    "score": 7,
+    "rationale": "Patent administrators manage patent application workflows, interpret patent law, and coordinate examination processes \u2014 primarily desk-based knowledge work involving legal and procedural analysis where AI can streamline document review and case management, though administrative judgment remains essential."
+  },
+  "8840": {
+    "score": 1,
+    "rationale": "Aircraft mechanical parts repair workers inspect, repair, and replace aircraft structural and mechanical components \u2014 safety-critical hands-on trade work requiring physical skill and direct inspection with no meaningful AI automation pathway."
+  },
+  "0648": {
+    "score": 3,
+    "rationale": "Therapeutic radiologic technologists operate radiation therapy equipment, position patients, and calculate dosages \u2014 hands-on clinical work requiring physical patient interaction, though AI assists with treatment planning and dose optimization."
+  },
+  "3378": {
+    "score": 3,
+    "rationale": "Precision measurement equipment calibration workers test and adjust instruments to exacting standards using reference equipment \u2014 skilled hands-on technical work requiring physical manipulation and environmental control, with some AI-assisted data logging."
+  },
+  "9924": {
+    "score": 1,
+    "rationale": "Able seamen perform physical shipboard duties including line handling, cargo operations, watch standing, and vessel maintenance \u2014 manual maritime labor requiring physical presence and seamanship skills with no AI replacement pathway."
+  },
+  "1373": {
+    "score": 4,
+    "rationale": "Land surveyors measure and map terrain using physical instruments and GPS equipment in the field, then process data digitally \u2014 a hybrid of outdoor fieldwork and desk-based computation where AI assists with data processing but field measurements require human presence."
+  },
+  "1145": {
+    "score": 7,
+    "rationale": "Agricultural program specialists administer farm programs, determine eligibility, analyze policy impacts, and process applications \u2014 largely desk-based knowledge work involving regulation interpretation and data analysis that AI can substantially assist, though agricultural expertise and stakeholder judgment remain human."
+  },
+  "0651": {
+    "score": 3,
+    "rationale": "Respiratory therapists administer breathing treatments, manage ventilators, and provide direct patient care \u2014 hands-on clinical work requiring physical patient interaction and real-time clinical decision-making where AI assists with monitoring but cannot replace the therapist."
+  },
+  "0699": {
+    "score": 4,
+    "rationale": "Medical and health student trainees rotate through clinical settings learning patient care, procedures, and diagnostics \u2014 primarily in-person clinical training with some research and documentation components where AI assists with study and note-taking."
+  },
+  "5048": {
+    "score": 1,
+    "rationale": "Animal caretakers feed, water, groom, exercise, and monitor the health of animals in government facilities \u2014 almost entirely physical hands-on work requiring direct animal interaction with minimal digital component."
+  },
+  "5026": {
+    "score": 2,
+    "rationale": "Pest control workers apply pesticides, set traps, inspect premises, and manage infestations \u2014 primarily physical field work requiring on-site presence and chemical handling, with some record-keeping AI could assist."
+  },
+  "0993": {
+    "score": 8,
+    "rationale": "Railroad retirement claims examiners review applications, verify eligibility, calculate benefits, and adjudicate claims against regulatory criteria \u2014 rule-based desk work processing structured data where AI can handle routine determinations, though complex or disputed cases need human review."
+  },
+  "1411": {
+    "score": 7,
+    "rationale": "Library technicians catalog materials, maintain databases, assist patrons, and manage circulation systems \u2014 largely digital information-management work where AI can automate cataloging, searching, and recommendations, but patron assistance and physical collection management remain human tasks."
+  },
+  "4801": {
+    "score": 2,
+    "rationale": "Miscellaneous general equipment maintenance workers inspect, maintain, and repair a variety of equipment and systems \u2014 hands-on physical repair work requiring manual skill with minimal digital work product."
+  },
+  "0881": {
+    "score": 7,
+    "rationale": "Petroleum engineers design extraction processes, analyze reservoir data, run simulations, and optimize production \u2014 digital-heavy engineering work where AI assists with modeling and data analysis, but field oversight and professional engineering judgment remain essential."
+  },
+  "1010": {
+    "score": 5,
+    "rationale": "Exhibits specialists design, fabricate, and install museum and interpretive exhibits \u2014 a creative hybrid of physical construction and design work where AI can assist with concept development and graphic design but physical fabrication and spatial installation require human presence."
+  },
+  "4804": {
+    "score": 1,
+    "rationale": "Locksmiths install, repair, and rekey locks and security hardware \u2014 entirely hands-on manual trade work requiring physical dexterity and on-site presence with no meaningful AI automation pathway."
+  },
+  "0304": {
+    "score": 7,
+    "rationale": "Information receptionists greet visitors, answer inquiries, direct callers, and provide routine information \u2014 work increasingly handled by AI chatbots, kiosks, and automated phone systems, though some in-person reception duties and complex inquiries still benefit from human presence."
+  },
+  "3501": {
+    "score": 2,
+    "rationale": "Miscellaneous general services and support workers perform cleaning, grounds maintenance, laboring, and facility upkeep \u2014 predominantly physical manual labor with minimal digital component."
+  },
+  "0430": {
+    "score": 6,
+    "rationale": "Botanists conduct plant research involving both fieldwork (specimen collection, habitat surveys) and lab/desk analysis (taxonomy, data analysis, report writing) \u2014 AI significantly aids literature review, data analysis, and species identification but field collection and experimental design require human expertise."
+  },
+  "5409": {
+    "score": 3,
+    "rationale": "Water treatment plant operators monitor and adjust chemical processes, operate valves and pumps, and ensure water quality \u2014 hands-on facility operation requiring physical presence, though AI-assisted SCADA monitoring and process optimization are emerging."
+  },
+  "7002": {
+    "score": 1,
+    "rationale": "Packers wrap, pack, crate, and prepare items for shipment \u2014 repetitive physical manual labor with no meaningful digital work product or AI automation pathway in a government context."
+  },
+  "0119": {
+    "score": 8,
+    "rationale": "Economics assistants compile economic data, prepare statistical tables, maintain databases, and support economists with routine analytical tasks \u2014 structured digital desk work that AI tools can perform rapidly including data compilation, tabulation, and basic analysis."
+  },
+  "1060": {
+    "score": 5,
+    "rationale": "Photographers capture images for documentation, public affairs, and scientific purposes requiring physical presence, composition skill, and on-location work; AI assists with editing, enhancement, and cataloging but creative and field capture remain human tasks."
+  },
+  "0187": {
+    "score": 4,
+    "rationale": "Social services specialists provide case management, counseling referrals, and direct client assistance \u2014 interpersonal work requiring empathy, cultural competency, and in-person client interaction, with some administrative documentation AI can assist."
+  },
+  "0413": {
+    "score": 6,
+    "rationale": "Physiologists conduct research on biological systems using laboratory experiments and computational analysis \u2014 a mix of bench work requiring physical lab presence and data analysis/publication work where AI significantly assists, but experimental design and lab techniques remain human-dependent."
+  },
+  "3869": {
+    "score": 1,
+    "rationale": "Metal forming machine operators set up and run presses, brakes, and forming machines \u2014 hands-on industrial trade work requiring physical operation and adjustment of heavy machinery with no AI-automatable component."
+  },
+  "1510": {
+    "score": 8,
+    "rationale": "Actuaries build probabilistic models, analyze risk data, calculate premiums, and produce statistical reports \u2014 highly analytical digital work where AI excels at modeling, data analysis, and computation, though professional certification standards and judgment on assumptions remain human."
+  },
+  "3711": {
+    "score": 1,
+    "rationale": "Electroplaters operate plating tanks, prepare chemical solutions, and apply metal coatings to parts \u2014 hands-on industrial process work requiring physical chemical handling and quality inspection with minimal digital component."
+  },
+  "9957": {
+    "score": 1,
+    "rationale": "Engine utilitymen maintain and operate marine engineering spaces, perform mechanical repairs, and stand engine room watches \u2014 physical shipboard labor requiring manual skill and constant presence with no AI automation pathway."
+  },
+  "0635": {
+    "score": 3,
+    "rationale": "Kinesiotherapists provide therapeutic exercise programs and physical rehabilitation to patients \u2014 hands-on clinical work requiring physical patient interaction, demonstration of movements, and real-time assessment, with some AI-assisted treatment planning."
+  },
+  "0807": {
+    "score": 6,
+    "rationale": "Landscape architects design outdoor spaces using digital design tools and conduct site assessments \u2014 a hybrid of creative digital design work (where AI assists with rendering and planning) and physical site evaluation requiring human aesthetic judgment and stakeholder collaboration."
+  },
+  "0084": {
+    "score": 1,
+    "rationale": "Nuclear materials couriers physically transport and safeguard nuclear materials under armed security \u2014 work entirely dependent on physical presence, security clearance, and armed protective skills with no AI automation pathway."
+  },
+  "4402": {
+    "score": 1,
+    "rationale": "Bindery workers cut, fold, collate, stitch, and bind printed materials \u2014 manual production work requiring physical handling and machine operation with minimal digital component."
+  },
+  "4605": {
+    "score": 1,
+    "rationale": "Wood crafters shape, carve, and assemble wood products using hand and power tools \u2014 skilled manual craft work with virtually no AI-automatable digital component."
+  },
+  "0804": {
+    "score": 7,
+    "rationale": "Fire protection engineers analyze fire risks, design suppression systems, review building plans, and develop fire codes \u2014 primarily desk-based engineering and regulatory analysis work where AI assists with code review and system design, but professional engineering judgment and site inspections remain essential."
+  },
+  "5309": {
+    "score": 2,
+    "rationale": "Heating and boiler plant equipment mechanics install, maintain, and repair heating systems and boilers \u2014 hands-on skilled trade work requiring physical troubleshooting, welding, and pipefitting with minimal digital component."
+  },
+  "0817": {
+    "score": 6,
+    "rationale": "Survey technicians process field survey data, perform calculations, prepare maps and plats using digital tools, and assist with field measurements \u2014 a hybrid role where the desk-based computation and drafting is AI-amenable but field support and quality assurance require human involvement."
+  },
+  "2601": {
+    "score": 3,
+    "rationale": "Electronic equipment installation and maintenance workers physically install, troubleshoot, and repair electronic systems \u2014 hands-on technical work requiring soldering, wiring, and physical diagnostics, with some AI-assisted troubleshooting guides."
+  },
+  "3401": {
+    "score": 2,
+    "rationale": "Machine tool workers set up and operate lathes, mills, grinders, and other machine tools to fabricate parts \u2014 physical skilled trade work requiring manual operation and measurement with minimal AI applicability."
+  },
+  "5408": {
+    "score": 3,
+    "rationale": "Sewage disposal plant operators monitor treatment processes, operate equipment, and maintain facility systems \u2014 hands-on facility operation requiring physical presence and process adjustments, though AI-assisted monitoring and compliance reporting are emerging."
+  },
+  "0890": {
+    "score": 6,
+    "rationale": "Agricultural engineers design irrigation, drainage, and farm equipment systems using digital modeling and analysis \u2014 engineering knowledge work where AI assists with design optimization and data analysis, but field assessments and site-specific agricultural judgment require human expertise."
+  },
+  "0392": {
+    "score": 7,
+    "rationale": "General telecommunications specialists manage communications systems, develop policies, and coordinate network operations \u2014 largely desk-based technical and administrative work where AI assists with network analysis, documentation, and planning, though system architecture decisions require human expertise."
+  },
+  "6913": {
+    "score": 2,
+    "rationale": "Hazardous waste disposal workers handle, package, transport, and dispose of hazardous materials following strict safety protocols \u2014 physical work requiring protective equipment, on-site presence, and careful manual handling with minimal AI applicability."
+  },
+  "3603": {
+    "score": 1,
+    "rationale": "Masons lay brick, block, stone, and concrete in construction and repair work \u2014 entirely physical skilled trade labor with no meaningful digital work product or AI automation pathway."
+  },
+  "7009": {
+    "score": 1,
+    "rationale": "Equipment cleaning workers wash, degrease, and sanitize tools, machinery, and facilities \u2014 repetitive physical manual labor with no digital component amenable to AI."
+  },
+  "9907": {
+    "score": 2,
+    "rationale": "Third officers serve as navigation watch officers on vessels, handling bridge operations, safety equipment, and emergency response \u2014 physical maritime duties requiring on-board presence and real-time seamanship, with some AI-assisted navigation tools."
+  },
+  "5786": {
+    "score": 2,
+    "rationale": "Small craft operators pilot motorboats, launches, and other small vessels for transportation and patrol duties \u2014 physical operational work requiring on-water presence, situational awareness, and manual boat handling with minimal AI applicability."
+  },
+  "2154": {
+    "score": 6,
+    "rationale": "Air traffic assistance workers support air traffic control operations through flight data processing, communication coordination, and information relay \u2014 desk-based operational support work where AI can assist with data processing and pattern recognition, but real-time coordination and safety responsibilities require human oversight."
+  },
+  "0142": {
+    "score": 7,
+    "rationale": "Workforce development specialists design training programs, analyze workforce data, develop career pathways, and coordinate employment services \u2014 knowledge work involving program design, data analysis, and policy development that AI can substantially augment, though stakeholder engagement and strategic judgment remain human tasks."
+  },
+  "0434": {
+    "score": 5,
+    "rationale": "Plant pathologists combine lab analysis and fieldwork diagnosing plant diseases; AI aids image-based disease identification and genomic analysis but field sampling, specimen collection, and experimental design require human expertise and physical presence."
+  },
+  "5001": {
+    "score": 2,
+    "rationale": "Miscellaneous plant and animal workers perform hands-on care, feeding, habitat maintenance, and field tasks requiring physical presence and manual labor; AI has minimal applicability beyond basic record-keeping."
+  },
+  "0499": {
+    "score": 5,
+    "rationale": "Biological science student trainees assist with lab work, field data collection, and research analysis; AI aids literature review and data analysis but the training role requires hands-on learning and physical participation in scientific methods."
+  },
+  "1371": {
+    "score": 8,
+    "rationale": "Cartographic technicians digitize, compile, and edit map data using GIS software\u2014primarily digital production work where AI can automate feature extraction, data cleanup, and map generation from geospatial datasets."
+  },
+  "5788": {
+    "score": 1,
+    "rationale": "Deckhands perform physical labor on vessels including line handling, cargo operations, deck maintenance, and seamanship tasks requiring strength and physical presence with negligible digital work."
+  },
+  "0244": {
+    "score": 7,
+    "rationale": "Labor-management relations examiners investigate unfair labor practice charges, analyze case records, and write decisions\u2014primarily document-based analytical work where AI can research precedent and draft findings, though judgment on labor disputes requires human expertise."
+  },
+  "9923": {
+    "score": 1,
+    "rationale": "Boatswain's mates supervise deck operations, handle rigging and mooring, and direct physical seamanship activities requiring hands-on maritime skills and physical presence with minimal digital component."
+  },
+  "4406": {
+    "score": 2,
+    "rationale": "Letterpress operators run and maintain mechanical printing presses, set up jobs, and handle physical materials\u2014primarily manual trade work with limited digital involvement in an increasingly obsolete specialty."
+  },
+  "5201": {
+    "score": 2,
+    "rationale": "Miscellaneous occupations in this family cover general labor and support tasks requiring physical presence and manual work; AI has limited applicability beyond basic administrative record-keeping."
+  },
+  "5401": {
+    "score": 2,
+    "rationale": "Miscellaneous industrial equipment operators run heavy machinery and production equipment requiring physical presence, manual dexterity, and real-time operational judgment that AI cannot replace."
+  },
+  "9934": {
+    "score": 2,
+    "rationale": "Third assistant engineers operate and maintain marine propulsion and auxiliary systems aboard vessels, requiring hands-on mechanical work and physical presence in engine rooms with minimal digital work product."
+  },
+  "9994": {
+    "score": 4,
+    "rationale": "Assistant storekeepers on vessels manage inventory, process requisitions, and maintain supply records combining physical warehousing with paperwork; AI can assist with inventory tracking and documentation but physical handling remains essential."
+  },
+  "2502": {
+    "score": 3,
+    "rationale": "Telecommunications mechanics install, maintain, and repair wiring, switching, and transmission equipment requiring hands-on troubleshooting and physical work; AI assists with diagnostics but cannot perform the physical repairs."
+  },
+  "0965": {
+    "score": 8,
+    "rationale": "Land law examiners review title records, mineral rights, and land patents applying legal standards to documentary evidence\u2014highly structured desk-based legal analysis where AI excels at document review, precedent search, and draft determinations."
+  },
+  "9933": {
+    "score": 2,
+    "rationale": "Second assistant engineers operate and maintain marine engineering systems aboard vessels, performing hands-on mechanical work requiring physical presence in engine rooms with minimal digital analytical work."
+  },
+  "7305": {
+    "score": 1,
+    "rationale": "Laundry machine operators load, run, and maintain industrial laundry equipment\u2014repetitive physical labor requiring presence and manual handling with negligible knowledge work component."
+  },
+  "2801": {
+    "score": 2,
+    "rationale": "Miscellaneous electrical installation and maintenance workers perform hands-on wiring, conduit installation, and electrical repair requiring physical dexterity and on-site presence with limited digital work."
+  },
+  "2125": {
+    "score": 6,
+    "rationale": "Highway safety specialists analyze crash data, develop safety standards, review compliance, and write reports\u2014primarily knowledge work with some field inspection; AI aids data analysis and report drafting but policy judgment and site assessments require humans."
+  },
+  "8862": {
+    "score": 1,
+    "rationale": "Aircraft attendants marshal, tow, and service aircraft on the ground, performing physical tasks like fueling and positioning that require manual labor and presence on the flight line."
+  },
+  "0471": {
+    "score": 5,
+    "rationale": "Agronomists study crops, soils, and agricultural practices through a mix of field research, lab analysis, and data interpretation; AI aids data modeling and literature review but field trials and soil assessment require physical presence."
+  },
+  "4602": {
+    "score": 1,
+    "rationale": "Blocking and bracing workers secure cargo using wood and other materials for shipment\u2014entirely physical manual labor requiring craft skill and on-site presence with no meaningful digital component."
+  },
+  "2131": {
+    "score": 8,
+    "rationale": "Freight rate specialists analyze tariff schedules, compute shipping costs, and classify commodities\u2014highly structured numerical and regulatory work where AI can automate rate lookups, classification, and cost calculations."
+  },
+  "6968": {
+    "score": 1,
+    "rationale": "Aircraft freight loaders physically load and unload cargo on aircraft, secure loads, and operate material handling equipment\u2014manual labor requiring physical strength and presence with minimal digital work."
+  },
+  "5767": {
+    "score": 1,
+    "rationale": "Airfield clearing equipment operators drive heavy machinery to maintain runways and taxiways including snow removal and debris clearing\u2014physical equipment operation requiring on-site presence and manual skill."
+  },
+  "0455": {
+    "score": 3,
+    "rationale": "Range technicians work outdoors managing rangelands, monitoring vegetation, conducting surveys, and implementing conservation plans; AI assists with remote sensing data and reporting but the core work demands extensive field presence."
+  },
+  "6941": {
+    "score": 4,
+    "rationale": "Bulk money handlers count, verify, sort, and process large volumes of currency using specialized equipment; while counting/sorting is increasingly automated, physical handling, security protocols, and equipment operation still require human presence."
+  },
+  "5423": {
+    "score": 1,
+    "rationale": "Sandblasters operate abrasive blasting equipment to clean and prepare surfaces\u2014entirely physical manual trade work requiring protective equipment, physical presence, and manual control with no digital component."
+  },
+  "0082": {
+    "score": 4,
+    "rationale": "U.S. Marshals serve warrants, transport prisoners, provide court security, and conduct fugitive investigations requiring extensive physical presence, law enforcement action, and interpersonal skills; AI aids case research and intelligence analysis but cannot replace fieldwork."
+  },
+  "4737": {
+    "score": 2,
+    "rationale": "General equipment mechanics diagnose, repair, and maintain a variety of mechanical equipment through hands-on troubleshooting and physical labor; AI can assist with diagnostic reference but the work is fundamentally manual."
+  },
+  "9998": {
+    "score": 5,
+    "rationale": "Yeoman-storekeepers on vessels combine clerical/administrative duties (correspondence, records, payroll) with supply management; the administrative portion is highly amenable to AI but physical supply handling and shipboard duties require presence."
+  },
+  "2032": {
+    "score": 3,
+    "rationale": "Packaging specialists design and test packaging for shipment, select materials, and physically pack items\u2014combining some analytical design work with significant hands-on physical execution; AI assists with specifications but cannot perform the physical work."
+  },
+  "4255": {
+    "score": 2,
+    "rationale": "Fuel distribution system mechanics install, maintain, and repair fuel piping, pumps, and storage systems\u2014hands-on mechanical trade work requiring physical presence and manual skill with minimal digital component."
+  },
+  "0135": {
+    "score": 6,
+    "rationale": "Foreign agricultural affairs specialists analyze international agricultural trade policies, negotiate agreements, and prepare reports\u2014knowledge work with diplomatic interpersonal components; AI aids research and drafting but cross-cultural negotiation and policy judgment require human expertise."
+  },
+  "4401": {
+    "score": 3,
+    "rationale": "Miscellaneous printing and reproduction workers operate various printing, copying, and binding equipment\u2014primarily physical production work with some digital prepress tasks; AI has limited applicability beyond digital file preparation."
+  },
+  "6605": {
+    "score": 2,
+    "rationale": "Artillery repairers maintain, troubleshoot, and repair weapons systems through hands-on mechanical and electronic work requiring specialized physical skills, security clearances, and on-site presence."
+  },
+  "0050": {
+    "score": 3,
+    "rationale": "Funeral directors manage remains, coordinate ceremonies, counsel bereaved families, and handle regulatory compliance; the deep interpersonal/emotional labor and physical handling of remains resist automation, though AI can assist with paperwork and logistics."
+  },
+  "0332": {
+    "score": 7,
+    "rationale": "Computer operators monitor systems, run batch jobs, manage backups, and respond to alerts in data centers\u2014digital operational work increasingly automated by AI-driven monitoring, auto-scaling, and self-healing systems, though physical hardware intervention still occurs."
+  },
+  "2230": {
+    "score": 7,
+    "rationale": "DHS cybersecurity specialists analyze threats, monitor networks, investigate incidents, and develop security policies\u2014digital knowledge work where AI aids threat detection and log analysis, but adversarial thinking, incident response judgment, and policy decisions require human expertise."
+  },
+  "9993": {
+    "score": 5,
+    "rationale": "Junior supply officers on vessels manage procurement, inventory, and logistics paperwork alongside physical supply operations; the administrative portion is AI-amenable but shipboard supply management and physical duties require presence."
+  },
+  "2110": {
+    "score": 8,
+    "rationale": "Transportation industry analysts study economic conditions, carrier performance, market data, and regulatory impacts through primarily desk-based research and report writing\u2014analytical knowledge work where AI excels at data analysis, trend identification, and drafting."
+  },
+  "0873": {
+    "score": 5,
+    "rationale": "Marine survey technicians collect hydrographic data, inspect vessel conditions, and conduct field surveys combining significant fieldwork with data processing and report writing; AI aids data analysis but physical surveying requires human presence."
+  },
+  "1599": {
+    "score": 7,
+    "rationale": "Mathematics and statistics student trainees assist with data analysis, statistical modeling, and computational work\u2014primarily digital analytical tasks where AI can perform calculations and generate models, though the training role requires human mentorship."
+  },
+  "9906": {
+    "score": 2,
+    "rationale": "Second officers serve as navigators on vessels, standing bridge watches, managing charts, and overseeing safety equipment\u2014requiring physical presence at sea, real-time situational judgment, and hands-on maritime operations."
+  },
+  "4403": {
+    "score": 2,
+    "rationale": "Hand compositors manually set type and arrange printing elements\u2014a largely obsolete physical craft requiring manual dexterity and specialized skill with negligible digital work product."
+  },
+  "5704": {
+    "score": 1,
+    "rationale": "Forklift operators drive powered industrial trucks to move materials in warehouses and loading docks\u2014physical equipment operation requiring spatial awareness and on-site presence with minimal digital component."
+  },
+  "5415": {
+    "score": 2,
+    "rationale": "Air conditioning equipment operators monitor and operate HVAC and refrigeration systems in federal buildings, adjusting controls and performing routine maintenance\u2014primarily physical operational work with some digital monitoring."
+  },
+  "1501": {
+    "score": 8,
+    "rationale": "General mathematicians and statisticians perform data analysis, statistical modeling, and quantitative research\u2014heavily digital analytical work where AI can automate calculations, model building, and report generation, though novel methodology design still requires human insight."
+  },
+  "9973": {
+    "score": 1,
+    "rationale": "Second cooks prepare meals aboard vessels, performing hands-on food preparation, cooking, and galley management requiring physical presence and culinary skill with negligible digital work."
+  },
+  "0190": {
+    "score": 6,
+    "rationale": "General anthropologists conduct research through fieldwork, interviews, cultural analysis, and scholarly writing; AI significantly aids literature review, data coding, and report drafting, but ethnographic fieldwork and cultural interpretation require human judgment and presence."
+  },
+  "0904": {
+    "score": 8,
+    "rationale": "Law clerks perform legal research, draft memoranda, analyze case law, and prepare judicial opinions\u2014primarily text-based analytical work where AI excels at legal research, citation checking, and drafting, though judicial reasoning still requires human oversight."
+  },
+  "2504": {
+    "score": 2,
+    "rationale": "Wire communications cable splicers physically splice, terminate, and repair copper and fiber optic cables\u2014hands-on skilled trade work requiring manual dexterity and field presence with minimal digital component."
+  },
+  "2299": {
+    "score": 7,
+    "rationale": "IT student trainees assist with programming, system administration, and technical support\u2014digital work where AI can generate code, troubleshoot issues, and automate tasks, though the training role involves mentorship and hands-on learning."
+  },
+  "3809": {
+    "score": 2,
+    "rationale": "Mobile equipment metal mechanics weld, fabricate, and repair metal components on vehicles and heavy equipment\u2014hands-on skilled trade work requiring physical dexterity, material knowledge, and on-site presence."
+  },
+  "4010": {
+    "score": 3,
+    "rationale": "Prescription eyeglass makers grind, polish, and fit lenses to precise specifications using specialized equipment\u2014skilled manual work with some digital measurement tools; AI cannot perform the physical lens crafting."
+  },
+  "5782": {
+    "score": 2,
+    "rationale": "Ship operators navigate and operate vessels, manage engines, and oversee marine operations requiring physical presence aboard ship, real-time judgment, and hands-on seamanship with limited digital analytical work."
+  },
+  "1147": {
+    "score": 8,
+    "rationale": "Agricultural market reporters collect, analyze, and publish market data on crop prices, livestock, and commodities\u2014structured data gathering and report writing where AI can automate data aggregation, trend analysis, and standardized report generation."
+  },
+  "9997": {
+    "score": 4,
+    "rationale": "First radio electronics technicians maintain and repair complex shipboard electronics and communications equipment\u2014hands-on technical work with some digital diagnostics; AI aids troubleshooting references but physical repairs require human skill and presence."
+  },
+  "9942": {
+    "score": 2,
+    "rationale": "Second electricians install, maintain, and repair electrical systems aboard vessels\u2014hands-on trade work requiring physical presence in confined shipboard spaces with minimal digital analytical component."
+  },
+  "9931": {
+    "score": 3,
+    "rationale": "Chief engineers oversee all marine engineering operations aboard vessels, managing machinery, crew, and maintenance\u2014combining hands-on technical oversight with management decisions; AI aids maintenance scheduling and diagnostics but the role demands physical presence and leadership."
+  },
+  "0350": {
+    "score": 2,
+    "rationale": "Equipment operators run copiers, duplicating machines, and other office production equipment\u2014primarily physical machine operation with some digital file handling; the role is being eliminated by digital workflows more than augmented by AI."
+  },
+  "4454": {
+    "score": 2,
+    "rationale": "Intaglio press operators run specialized high-security printing presses for currency and documents\u2014skilled physical machine operation requiring precise manual adjustments and quality control with limited digital component."
+  },
+  "5784": {
+    "score": 2,
+    "rationale": "Riverboat operators pilot vessels on inland waterways, requiring navigational judgment, physical presence at the helm, and real-time response to river conditions with minimal digital analytical work."
+  },
+  "1399": {
+    "score": 6,
+    "rationale": "Physical science student trainees assist with laboratory experiments, data collection, and analysis; AI aids data processing and literature review but hands-on lab work and field measurements require physical participation."
+  },
+  "0160": {
+    "score": 7,
+    "rationale": "Civil rights analysts investigate discrimination complaints, analyze policies, and write findings\u2014primarily document-based knowledge work where AI assists with case research, pattern analysis, and report drafting, though judgment on civil rights determinations requires human expertise."
+  },
+  "9944": {
+    "score": 3,
+    "rationale": "Electronics technicians on vessels install, maintain, and repair navigation, communication, and electronic systems\u2014hands-on technical work with some digital diagnostics; AI aids troubleshooting but physical repairs require human skill and shipboard presence."
+  },
+  "0199": {
+    "score": 6,
+    "rationale": "Social science student trainees assist with research, data collection, and analysis across social science disciplines; AI aids literature review, data analysis, and writing, but fieldwork, interviews, and learning require human participation."
+  },
+  "9952": {
+    "score": 2,
+    "rationale": "Deck engineer-machinists maintain and repair both deck machinery and engine room equipment aboard vessels\u2014hands-on mechanical trade work requiring physical presence and manual skill in maritime environments."
+  },
+  "0019": {
+    "score": 5,
+    "rationale": "Safety technicians inspect workplaces, investigate accidents, monitor hazards, and write reports\u2014combining physical site inspections with analytical documentation; AI aids report writing and regulatory research but on-site hazard assessment requires human presence."
+  },
+  "4840": {
+    "score": 2,
+    "rationale": "Tool and equipment repairing is hands-on manual work\u2014diagnosing, disassembling, and fixing physical tools and equipment\u2014where AI can assist with troubleshooting references but cannot perform the physical repair."
+  },
+  "3701": {
+    "score": 2,
+    "rationale": "Miscellaneous metal processing involves operating furnaces, heat-treating, and physically handling metal stock in industrial settings; AI has minimal applicability to the core manual and machine-tending tasks."
+  },
+  "5806": {
+    "score": 1,
+    "rationale": "Mobile equipment servicing involves fueling, lubricating, and performing basic maintenance on vehicles and heavy equipment in the field\u2014almost entirely physical labor with negligible AI relevance."
+  },
+  "9920": {
+    "score": 2,
+    "rationale": "Boatswains supervise deck crews, manage mooring and anchoring operations, and maintain vessel deck equipment\u2014primarily physical seamanship requiring on-site presence and manual skill with minimal digital work."
+  },
+  "0437": {
+    "score": 4,
+    "rationale": "Horticulture blends hands-on plant cultivation, propagation, and landscape management with some knowledge work on species selection and growing protocols; AI can assist with plant identification and care planning but cannot replace the physical growing work."
+  },
+  "0361": {
+    "score": 7,
+    "rationale": "Equal opportunity assistants process complaints, review documentation, conduct intake interviews, and prepare case files\u2014primarily administrative knowledge work where AI can draft correspondence and analyze case data, though interpersonal complaint-handling still needs humans."
+  },
+  "9932": {
+    "score": 2,
+    "rationale": "First assistant engineers operate and maintain shipboard propulsion and auxiliary machinery, standing engine room watches that require physical presence, manual valve operations, and real-time mechanical judgment."
+  },
+  "1382": {
+    "score": 6,
+    "rationale": "Food technology involves laboratory analysis, product development research, and regulatory compliance review\u2014a mix of bench science and knowledge work where AI can assist with literature review, data analysis, and regulatory research but lab work requires human hands."
+  },
+  "0599": {
+    "score": 8,
+    "rationale": "Financial management student trainees learn budgeting, accounting, and fiscal analysis through primarily digital, rule-based tasks such as data entry, reconciliation, and report preparation that AI can substantially perform or assist with."
+  },
+  "0698": {
+    "score": 4,
+    "rationale": "Environmental health technicians collect samples, conduct field inspections of food establishments and water systems, and perform lab tests requiring physical presence; AI can help with data recording and regulatory reference but not the on-site inspection work."
+  },
+  "4714": {
+    "score": 2,
+    "rationale": "Model making is highly skilled manual craft work\u2014shaping, assembling, and finishing physical scale models and prototypes using hand and machine tools\u2014where AI has very limited applicability beyond reference lookup."
+  },
+  "6511": {
+    "score": 1,
+    "rationale": "Missile and toxic materials handling involves physically moving, storing, and disposing of hazardous munitions and chemicals under strict safety protocols\u2014entirely manual work in dangerous environments where AI cannot substitute for human presence."
+  },
+  "0099": {
+    "score": 7,
+    "rationale": "General student trainees perform entry-level office and analytical tasks across various fields\u2014mostly learning through structured assignments like research, data gathering, and report drafting that AI can substantially assist with."
+  },
+  "0029": {
+    "score": 5,
+    "rationale": "Environmental protection assistants combine field sampling, site inspections, and monitoring with office-based data recording and compliance documentation; AI assists with the administrative side but fieldwork requires physical presence."
+  },
+  "1199": {
+    "score": 8,
+    "rationale": "Business and industry student trainees perform entry-level analytical tasks\u2014market research, data compilation, report drafting, and policy review\u2014that are predominantly digital and well-suited to AI assistance."
+  },
+  "9902": {
+    "score": 3,
+    "rationale": "Vessel masters command ships, making real-time navigational and safety decisions while managing crew and cargo operations; the role demands physical presence on the bridge, experienced seamanship judgment, and leadership that AI cannot replace, though navigation aids are increasingly automated."
+  },
+  "3808": {
+    "score": 1,
+    "rationale": "Boilermaking involves fabricating, assembling, and repairing boilers and pressure vessels through heavy welding, riveting, and metalwork\u2014entirely physical skilled trades work with negligible AI exposure."
+  },
+  "9905": {
+    "score": 3,
+    "rationale": "First officers serve as second-in-command on vessels, standing bridge watches, managing navigation, and overseeing deck operations; the role requires physical presence, real-time judgment, and seamanship skills, though electronic navigation tools provide some AI-adjacent assistance."
+  },
+  "3306": {
+    "score": 2,
+    "rationale": "Optical instrument repairing involves precision manual disassembly, cleaning, alignment, and calibration of telescopes, binoculars, and similar instruments\u2014skilled hands-on work where AI has minimal direct applicability."
+  },
+  "9975": {
+    "score": 1,
+    "rationale": "Assistant cooks perform food preparation, cooking, and galley maintenance aboard vessels\u2014physical manual labor in a kitchen environment where AI has essentially no role in the core hands-on tasks."
+  },
+  "3111": {
+    "score": 2,
+    "rationale": "Sewing machine operators run industrial sewing equipment to stitch fabric, leather, and other materials\u2014repetitive but physical manual work where robotic automation is more relevant than AI, and human dexterity is still needed for non-standard items."
+  },
+  "7006": {
+    "score": 1,
+    "rationale": "Preservation servicing involves cleaning, coating, wrapping, and protecting equipment and materials for storage or shipment\u2014entirely physical manual tasks with no meaningful AI application."
+  },
+  "9995": {
+    "score": 3,
+    "rationale": "Chief radio electronics technicians maintain and repair shipboard communications and electronic systems, requiring physical troubleshooting and soldering; AI can assist with diagnostic references and schematics but the hands-on repair and at-sea presence are essential."
+  },
+  "5729": {
+    "score": 1,
+    "rationale": "Drill rig operators physically operate drilling equipment in the field, managing heavy machinery, monitoring drill performance, and handling pipe\u2014entirely physical outdoor work where AI has negligible direct application."
+  },
+  "5031": {
+    "score": 2,
+    "rationale": "Insect production workers rear and manage insect colonies for biological control or research, involving physical husbandry tasks like feeding, harvesting, and maintaining rearing facilities; AI can assist with protocol optimization but not the manual colony care."
+  },
+  "9976": {
+    "score": 1,
+    "rationale": "Cook-bakers prepare food and baked goods aboard vessels, performing hands-on cooking, baking, and galley operations that are entirely physical and manual with no meaningful AI exposure."
+  },
+  "4104": {
+    "score": 2,
+    "rationale": "Sign painters create lettering and graphics on physical surfaces by hand or with templates\u2014skilled manual craft work where AI-generated designs could inform layouts but the physical application of paint remains entirely human."
+  },
+  "1020": {
+    "score": 6,
+    "rationale": "Illustrators create technical and artistic visual content, increasingly using digital tools; AI image generation can produce drafts and variations, significantly augmenting the workflow, but professional illustration still requires human creative direction, refinement, and client judgment."
+  },
+  "3707": {
+    "score": 1,
+    "rationale": "Metalizing involves operating spray equipment to apply metal coatings to surfaces\u2014a physical industrial process requiring manual equipment operation and surface preparation with no meaningful AI application."
+  },
+  "9954": {
+    "score": 2,
+    "rationale": "Unlicensed junior engineers assist in shipboard engine room operations, performing physical maintenance, standing watches, and handling machinery\u2014hands-on maritime mechanical work requiring on-vessel presence."
+  },
+  "8810": {
+    "score": 2,
+    "rationale": "Aircraft propeller mechanics inspect, repair, balance, and overhaul propeller assemblies through precision hands-on mechanical work with strict airworthiness standards; AI can provide maintenance references but cannot perform the physical disassembly and repair."
+  },
+  "2183": {
+    "score": 5,
+    "rationale": "Air navigation involves flight planning, route analysis, and in-flight navigational decisions blending digital tools with real-time situational awareness; AI increasingly assists with route optimization and flight management systems but human judgment remains critical for safety decisions."
+  },
+  "0241": {
+    "score": 5,
+    "rationale": "Mediators facilitate negotiations between disputing parties, requiring strong interpersonal skills, emotional intelligence, and the ability to read room dynamics; AI can assist with case research and background analysis but cannot replace the human presence and rapport-building essential to mediation."
+  },
+  "1397": {
+    "score": 8,
+    "rationale": "Document analysis involves examining documents for authenticity, comparing handwriting, analyzing inks, and identifying alterations\u2014increasingly digital forensic work where AI pattern recognition and image analysis can perform a large portion of comparison and classification tasks."
+  },
+  "9908": {
+    "score": 3,
+    "rationale": "Ship's communication officers manage radio, satellite, and electronic communications aboard vessels, requiring physical presence at sea and equipment operation; AI assists with signal processing and automated systems but the at-sea role and equipment maintenance remain human-dependent."
+  },
+  "4417": {
+    "score": 3,
+    "rationale": "Offset press operators set up, operate, and maintain printing presses\u2014physical machine operation requiring hands-on adjustments for ink, registration, and paper feed; AI has limited relevance beyond pre-press digital workflow automation."
+  },
+  "0435": {
+    "score": 5,
+    "rationale": "Plant physiologists conduct laboratory and field research on plant biological processes, splitting time between bench experiments requiring physical presence and data analysis and publication where AI can substantially assist."
+  },
+  "0642": {
+    "score": 4,
+    "rationale": "Nuclear medicine technicians administer radiopharmaceuticals to patients, operate imaging equipment, and ensure radiation safety\u2014requiring physical patient contact and equipment operation; AI can assist with image analysis and dosimetry calculations but not hands-on patient care."
+  },
+  "9901": {
+    "score": 2,
+    "rationale": "Miscellaneous vessel jobs encompass various shipboard duties\u2014deck maintenance, cargo handling, and vessel upkeep\u2014that are predominantly physical manual labor performed at sea with minimal AI applicability."
+  },
+  "0106": {
+    "score": 7,
+    "rationale": "Unemployment insurance specialists process claims, determine eligibility, interpret regulations, and manage case documentation\u2014primarily rule-based digital knowledge work where AI can automate routine determinations and draft correspondence, with humans needed for appeals and complex cases."
+  },
+  "5221": {
+    "score": 5,
+    "rationale": "Lofting involves creating full-scale templates and patterns from engineering drawings for ship or aircraft construction, blending precise manual drafting with increasingly digital CAD-based layout work; AI can assist with digital pattern generation but physical template work remains manual."
+  },
+  "4201": {
+    "score": 1,
+    "rationale": "Plumbing and pipefitting involves installing, repairing, and maintaining pipe systems\u2014entirely hands-on physical trades work in buildings and facilities where AI has no meaningful direct application."
+  },
+  "9945": {
+    "score": 2,
+    "rationale": "Refrigeration engineers operate and maintain shipboard refrigeration and air conditioning systems, performing hands-on mechanical work in engine rooms and cargo holds that requires physical presence and manual troubleshooting skill."
+  },
+  "9936": {
+    "score": 2,
+    "rationale": "Engine midshipmen are trainees learning shipboard engineering operations through hands-on work with propulsion and auxiliary machinery\u2014physical maritime training with minimal AI exposure beyond reference materials."
+  },
+  "0958": {
+    "score": 7,
+    "rationale": "Employee benefits law involves legal research, drafting opinions, interpreting benefits statutes, and advising on ERISA and FEHB matters\u2014primarily digital legal knowledge work where AI excels at research and drafting, though complex legal judgment and litigation strategy remain human tasks."
+  },
+  "5737": {
+    "score": 2,
+    "rationale": "Locomotive engineers operate trains, managing throttle, braking, and signal compliance while monitoring track conditions\u2014requiring physical presence in the cab and real-time situational judgment with minimal AI exposure beyond automated safety systems."
+  },
+  "0313": {
+    "score": 5,
+    "rationale": "Work unit supervisors manage clerical and administrative teams, handling scheduling, performance evaluation, workflow coordination, and personnel issues; AI can assist with administrative tasks and reporting but the interpersonal leadership and on-site supervision remain human-dependent."
+  },
+  "0072": {
+    "score": 7,
+    "rationale": "Fingerprint identification involves comparing print patterns, classifying ridge details, and matching latent prints against databases\u2014increasingly automated through AI-powered AFIS systems that handle bulk matching, though expert human verification is still required for court-admissible identifications."
+  },
+  "4805": {
+    "score": 3,
+    "rationale": "Medical equipment repairers diagnose and fix hospital devices like ventilators, monitors, and imaging machines through hands-on troubleshooting, calibration, and part replacement; AI can assist with diagnostics and service manuals but the physical repair work requires human skill."
+  },
+  "0688": {
+    "score": 5,
+    "rationale": "Sanitarians conduct field inspections of food service, water supply, and waste disposal facilities while also analyzing data and writing compliance reports; AI assists with regulatory research and report drafting but on-site inspections require physical presence and professional judgment."
+  },
+  "6601": {
+    "score": 2,
+    "rationale": "Miscellaneous armament work involves assembling, disassembling, testing, and maintaining weapons systems and ordnance\u2014hands-on mechanical and safety-critical work in controlled environments where AI has minimal direct applicability."
+  },
+  "0390": {
+    "score": 7,
+    "rationale": "Telecommunications processing involves managing message traffic, operating communications systems, and maintaining records\u2014largely digital procedural work that AI can substantially automate through message routing, classification, and processing."
+  },
+  "2161": {
+    "score": 3,
+    "rationale": "Marine cargo specialists oversee loading, stowage, and discharge of cargo on vessels, requiring physical presence at docks and aboard ships to inspect and direct operations; AI can assist with cargo planning and documentation but not the physical oversight."
+  },
+  "5042": {
+    "score": 1,
+    "rationale": "Tree trimming and removing is physical outdoor work involving climbing, chainsaws, and heavy equipment operation in often hazardous conditions\u2014entirely manual labor with no meaningful AI application."
+  },
+  "0487": {
+    "score": 5,
+    "rationale": "Animal scientists conduct research on livestock genetics, nutrition, and management, splitting between field/barn work with animals and laboratory or desk-based data analysis and publication; AI substantially assists the analytical side but cannot replace hands-on animal husbandry."
+  },
+  "7601": {
+    "score": 2,
+    "rationale": "Miscellaneous personal services workers provide direct physical services such as barbering, laundry, or custodial work requiring hands-on labor and interpersonal interaction; AI has negligible applicability to these manual service tasks."
+  },
+  "3769": {
+    "score": 1,
+    "rationale": "Shot peening machine operators set up and run machines that blast metal surfaces with shot to improve fatigue resistance\u2014physical industrial machine operation with no meaningful AI exposure."
+  },
+  "4301": {
+    "score": 2,
+    "rationale": "Miscellaneous pliable materials work involves cutting, shaping, and forming rubber, plastic, and similar materials by hand or machine\u2014physical fabrication work where AI has minimal direct applicability."
+  },
+  "0459": {
+    "score": 2,
+    "rationale": "Irrigation system operators manage water distribution infrastructure\u2014opening valves, monitoring canals, adjusting flow rates, and maintaining ditches and structures\u2014primarily physical outdoor work with some sensor monitoring that AI could marginally assist with."
+  },
+  "1730": {
+    "score": 8,
+    "rationale": "Education research involves designing studies, analyzing data, reviewing literature, and writing reports and policy recommendations\u2014predominantly digital analytical work where AI can perform literature synthesis, statistical analysis, and draft findings extensively."
+  },
+  "1372": {
+    "score": 7,
+    "rationale": "Geodesy involves mathematical modeling of the Earth's shape and gravity field, satellite data processing, and coordinate system analysis\u2014primarily computational and analytical work where AI assists with data processing and modeling, though some field survey work requires physical presence."
+  },
+  "0880": {
+    "score": 6,
+    "rationale": "Mining engineers design extraction plans, analyze geological data, and oversee mine operations, blending digital design and analysis work with underground site visits; AI assists with modeling, simulation, and report writing but site-specific engineering judgment and inspections require human presence."
+  },
+  "9968": {
+    "score": 2,
+    "rationale": "Chief stewards manage food service operations aboard vessels, supervising galley staff, ordering supplies, and planning menus while physically present at sea; the management role has some administrative work AI can assist with but the shipboard service oversight is inherently physical."
+  },
+  "0140": {
+    "score": 8,
+    "rationale": "Workforce research and analysis involves collecting labor market data, performing statistical analyses, writing policy reports, and forecasting trends\u2014predominantly digital analytical work where AI can automate data analysis, generate reports, and model scenarios."
+  },
+  "9988": {
+    "score": 4,
+    "rationale": "Pursers manage administrative and financial operations aboard vessels\u2014payroll, records, passenger services, and regulatory paperwork; while the administrative tasks are AI-amenable, the role requires physical presence at sea and interpersonal crew/passenger interactions."
+  },
+  "3601": {
+    "score": 1,
+    "rationale": "Miscellaneous structural and finishing work involves physical construction tasks like drywall installation, plastering, and general building maintenance\u2014entirely hands-on trades work with no meaningful AI exposure."
+  },
+  "4373": {
+    "score": 1,
+    "rationale": "Molding involves shaping materials using molds and presses\u2014physical fabrication work requiring manual handling, machine operation, and quality inspection by touch and sight with no meaningful AI application."
+  },
+  "4441": {
+    "score": 2,
+    "rationale": "Bookbinding involves cutting, folding, gluing, sewing, and finishing printed materials into bound volumes\u2014skilled manual craft work where AI has very limited applicability beyond possible pre-press digital layout assistance."
+  }
+}
