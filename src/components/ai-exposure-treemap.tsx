@@ -36,6 +36,86 @@ interface Rect extends OccupationData {
   value: number;
 }
 
+// ── Broad category mapping (60 OPM groups → 12 categories) ────────────
+
+const BROAD_CATEGORY: Record<string, string> = {
+  // Healthcare
+  "06": "Healthcare",
+  "07": "Healthcare",           // Veterinary
+  // Law Enforcement / Security
+  "00": "Law Enforcement",      // Misc: police, fire, corrections, security
+  "18": "Law Enforcement",      // Investigation
+  // Engineering
+  "08": "Engineering",
+  // IT / Cyber
+  "22": "IT / Cyber",
+  // Admin / Clerical
+  "03": "Admin / Clerical",
+  "16": "Admin / Clerical",     // Equipment, Facilities, and Services
+  // Legal
+  "09": "Legal",
+  "12": "Legal",                // Copyright, Patent, and Trademark
+  // Science
+  "04": "Science",              // Biological Sciences
+  "13": "Science",              // Physical Sciences
+  "15": "Science",              // Mathematics and Statistics
+  // Finance / Accounting
+  "05": "Finance / Accounting",
+  "11": "Finance / Accounting", // Business and Industry
+  // Trades / Maintenance
+  "25": "Trades / Maintenance",
+  "26": "Trades / Maintenance",
+  "28": "Trades / Maintenance",
+  "31": "Trades / Maintenance",
+  "33": "Trades / Maintenance",
+  "34": "Trades / Maintenance",
+  "35": "Trades / Maintenance",
+  "36": "Trades / Maintenance",
+  "37": "Trades / Maintenance",
+  "38": "Trades / Maintenance",
+  "39": "Trades / Maintenance",
+  "40": "Trades / Maintenance",
+  "41": "Trades / Maintenance",
+  "42": "Trades / Maintenance",
+  "43": "Trades / Maintenance",
+  "44": "Trades / Maintenance",
+  "46": "Trades / Maintenance",
+  "47": "Trades / Maintenance",
+  "48": "Trades / Maintenance",
+  "50": "Trades / Maintenance",
+  "52": "Trades / Maintenance",
+  "53": "Trades / Maintenance",
+  "54": "Trades / Maintenance",
+  "57": "Trades / Maintenance",
+  "58": "Trades / Maintenance",
+  "65": "Trades / Maintenance",
+  "66": "Trades / Maintenance",
+  "70": "Trades / Maintenance",
+  "73": "Trades / Maintenance",
+  "74": "Trades / Maintenance",
+  "76": "Trades / Maintenance",
+  "82": "Trades / Maintenance",
+  "86": "Trades / Maintenance",
+  "88": "Trades / Maintenance",
+  "99": "Trades / Maintenance", // Vessel jobs
+  // Education
+  "17": "Education",
+  "14": "Education",            // Library and Archives
+  "10": "Education",            // Information and Arts
+  // Supply / Logistics
+  "20": "Supply / Logistics",
+  "21": "Supply / Logistics",   // Transportation
+  "69": "Supply / Logistics",   // Warehousing
+  // Management / Policy
+  "01": "Management / Policy",  // Social Science, Psychology, Welfare
+  "02": "Management / Policy",  // Human Resources
+  "19": "Management / Policy",  // Quality Assurance
+};
+
+function getBroadCategory(categoryCode: string): string {
+  return BROAD_CATEGORY[categoryCode] || "Other";
+}
+
 // ── Color scale (AI exposure: green → red) ─────────────────────────────
 
 function exposureColor(score: number | null): [number, number, number] {
@@ -317,7 +397,7 @@ function Stats({ data, ageExposure, eduExposure }: { data: OccupationData[]; age
           >
             OPM
           </a>
-          , scored Mar 2026
+          , scored by Claude Opus, Mar 2026
         </p>
       </div>
 
@@ -534,6 +614,7 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
   const containerRef = useRef<HTMLDivElement>(null);
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
   const rectsRef = useRef<Rect[]>([]);
+  const catRectsRef = useRef<{ name: string; rx: number; ry: number; rw: number; rh: number }[]>([]);
   const hoveredRef = useRef<Rect | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number; y: number } | null>(null);
@@ -578,7 +659,7 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
 
     const byCategory: Record<string, OccupationData[]> = {};
     for (const d of data) {
-      const key = d.category_code;
+      const key = getBroadCategory(d.category_code);
       if (!byCategory[key]) byCategory[key] = [];
       byCategory[key].push(d);
     }
@@ -594,7 +675,15 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
     const catRects = squarify(categories, tx, ty, tw, th);
 
     const rects: Rect[] = [];
+    const catRectsList: { name: string; rx: number; ry: number; rw: number; rh: number }[] = [];
     for (const cr of catRects) {
+      catRectsList.push({
+        name: cr.cat,
+        rx: cr.rx,
+        ry: cr.ry,
+        rw: cr.rw,
+        rh: cr.rh,
+      });
       const innerGap = GAP;
       const items = cr.items.map((d) => ({ ...d, value: d.employees }));
       const innerRects = squarify(
@@ -610,6 +699,7 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
     }
 
     rectsRef.current = rects;
+    catRectsRef.current = catRectsList;
   }, [data]);
 
   // Draw treemap to a given context
@@ -669,6 +759,56 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
 
           ctx.restore();
         }
+      }
+
+      // Draw group name overlays
+      for (const cr of catRectsRef.current) {
+        if (cr.rw < 60 || cr.rh < 30) continue;
+
+        const fontSize = Math.min(11, Math.max(8, cr.rw / 18));
+        ctx.font = `600 ${fontSize}px -apple-system, system-ui, sans-serif`;
+
+        const maxLabelWidth = cr.rw - 12;
+        let label = cr.name;
+        let textWidth = ctx.measureText(label).width;
+
+        // Truncate with ellipsis if too wide
+        if (textWidth > maxLabelWidth) {
+          while (label.length > 1 && ctx.measureText(label + "\u2026").width > maxLabelWidth) {
+            label = label.slice(0, -1);
+          }
+          label += "\u2026";
+          textWidth = ctx.measureText(label).width;
+        }
+
+        // Position at bottom-left of group
+        const px = cr.rx + 4;
+        const py = cr.ry + cr.rh - 4;
+
+        // Dark pill background
+        const padX = 4;
+        const padY = 2;
+        ctx.fillStyle = "rgba(0,0,0,0.55)";
+        ctx.beginPath();
+        const bx = px - padX;
+        const by = py - fontSize - padY;
+        const bw = Math.min(textWidth + padX * 2, maxLabelWidth + padX * 2);
+        const bh = fontSize + padY * 2;
+        const br = 3;
+        ctx.moveTo(bx + br, by);
+        ctx.lineTo(bx + bw - br, by);
+        ctx.quadraticCurveTo(bx + bw, by, bx + bw, by + br);
+        ctx.lineTo(bx + bw, by + bh - br);
+        ctx.quadraticCurveTo(bx + bw, by + bh, bx + bw - br, by + bh);
+        ctx.lineTo(bx + br, by + bh);
+        ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - br);
+        ctx.lineTo(bx, by + br);
+        ctx.quadraticCurveTo(bx, by, bx + br, by);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(label, px, py);
       }
     },
     []
@@ -876,28 +1016,33 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
         {/* Magnifier toggle */}
         <button
           onClick={() => setMagnifierOn((v) => !v)}
-          className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
+          className={`absolute right-3 top-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
             magnifierOn
-              ? "border-white/30 bg-white/15 text-white"
-              : "border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80"
+              ? "border-white/40 bg-white/20 text-white shadow-lg shadow-black/30"
+              : "border-white/20 bg-black/50 text-white/70 hover:bg-black/60 hover:text-white"
           }`}
           title={magnifierOn ? "Turn off magnifier" : "Turn on magnifier"}
         >
           <svg
-            width="18"
-            height="18"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            <line x1="11" y1="8" x2="11" y2="14" />
-            <line x1="8" y1="11" x2="14" y2="11" />
+            {!magnifierOn && (
+              <>
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </>
+            )}
           </svg>
+          {magnifierOn ? "Magnifier On" : "Magnify"}
         </button>
       </div>
       <div
