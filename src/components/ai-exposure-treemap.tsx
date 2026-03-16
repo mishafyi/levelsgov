@@ -551,6 +551,10 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
     const container = containerRef.current;
     if (!canvas || !container || data.length === 0) return;
 
+    // Reset canvas size so flex container can shrink freely
+    canvas.style.width = "0px";
+    canvas.style.height = "0px";
+
     const dpr = window.devicePixelRatio || 1;
     const w = container.clientWidth;
     const h = container.clientHeight;
@@ -862,7 +866,7 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
   return (
     <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden bg-[#0a0a0f]">
       <Stats data={data} ageExposure={ageExposure} eduExposure={eduExposure} />
-      <div ref={containerRef} className="relative flex-1">
+      <div ref={containerRef} className="relative flex-1 overflow-hidden">
         <canvas
           ref={canvasRef}
           onMouseMove={handleMouseMove}
