@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { query } from "@/lib/db";
+
+export const metadata: Metadata = {
+  title: "Federal Org Chart",
+  description:
+    "Interactive organizational chart of U.S. federal government agencies across executive, legislative, and judicial branches.",
+  alternates: { canonical: "/org-chart" },
+};
 import {
   OrgChart,
   type AgencyData,
@@ -44,16 +52,16 @@ type SubelementRow = Record<string, unknown> & {
 async function getData(): Promise<OrgChartData> {
   const [agencies, subelements] = await Promise.all([
     query<AgencyRow>(
-      `SELECT agency, agency_code, COUNT(*) as total
+      `SELECT agency, agency_code, SUM(employee_count) as total
        FROM employment
        GROUP BY agency, agency_code
-       ORDER BY COUNT(*) DESC`
+       ORDER BY SUM(employee_count) DESC`
     ),
     query<SubelementRow>(
-      `SELECT agency_code, agency_subelement, agency_subelement_code, COUNT(*) as total
+      `SELECT agency_code, agency_subelement, agency_subelement_code, SUM(employee_count) as total
        FROM employment
        GROUP BY agency_code, agency_subelement, agency_subelement_code
-       ORDER BY agency_code, COUNT(*) DESC`
+       ORDER BY agency_code, SUM(employee_count) DESC`
     ),
   ]);
 

@@ -7,7 +7,7 @@ const USPayMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-[300px] items-center justify-center text-sm text-muted-foreground">
+      <div className="flex items-center justify-center text-sm text-muted-foreground" style={{ aspectRatio: "800/500" }}>
         Loading map...
       </div>
     ),
@@ -19,7 +19,7 @@ const USStateImpactMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-[300px] items-center justify-center text-sm text-muted-foreground">
+      <div className="flex items-center justify-center text-sm text-muted-foreground" style={{ aspectRatio: "800/500" }}>
         Loading map...
       </div>
     ),

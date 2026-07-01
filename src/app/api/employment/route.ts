@@ -50,8 +50,9 @@ export async function GET(request: NextRequest) {
       pageSize: filters.pageSize ?? 50,
     });
   } catch (error) {
+    console.error("Employment API error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch employment data", message: String(error) },
+      { error: "Failed to fetch employment data" },
       { status: 500 }
     );
   }

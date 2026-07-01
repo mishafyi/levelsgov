@@ -35,21 +35,22 @@ export function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {links.map((link) => (
-            <Button
-              key={link.href}
-              variant="ghost"
-              asChild
-              className={
-                pathname === link.href
-                  ? "bg-accent text-accent-foreground"
-                  : ""
-              }
-            >
-              <Link href={link.href}>{link.label}</Link>
-            </Button>
-          ))}
+        <nav aria-label="Main navigation" className="hidden items-center gap-1 md:flex">
+          {links.map((link) => {
+            const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+            return (
+              <Button
+                key={link.href}
+                variant="ghost"
+                asChild
+                className={isActive ? "bg-accent text-accent-foreground" : ""}
+              >
+                <Link href={link.href} {...(isActive ? { "aria-current": "page" as const } : {})}>
+                  {link.label}
+                </Link>
+              </Button>
+            );
+          })}
         </nav>
 
         {/* Mobile hamburger */}
@@ -77,22 +78,23 @@ export function Nav() {
                 </Link>
               </SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col gap-1 px-4">
-              {links.map((link) => (
-                <Button
-                  key={link.href}
-                  variant="ghost"
-                  asChild
-                  className={`justify-start ${
-                    pathname === link.href
-                      ? "bg-accent text-accent-foreground"
-                      : ""
-                  }`}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <Link href={link.href}>{link.label}</Link>
-                </Button>
-              ))}
+            <nav aria-label="Main navigation" className="flex flex-col gap-1 px-4">
+              {links.map((link) => {
+                const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+                return (
+                  <Button
+                    key={link.href}
+                    variant="ghost"
+                    asChild
+                    className={`justify-start ${isActive ? "bg-accent text-accent-foreground" : ""}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <Link href={link.href} {...(isActive ? { "aria-current": "page" as const } : {})}>
+                      {link.label}
+                    </Link>
+                  </Button>
+                );
+              })}
             </nav>
           </SheetContent>
         </Sheet>

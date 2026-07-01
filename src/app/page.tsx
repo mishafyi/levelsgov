@@ -25,24 +25,13 @@ import { getStats, getHomepageInsights } from "@/lib/filters";
 import { HorizontalBarChart, VerticalBarChart, NetChangeBarChart, TreemapChart, AreaLineChart, RadarPayChart, ScatterPayChart, DonutChart } from "@/components/home-charts";
 import { USPayMapLazy, USStateImpactMapLazy } from "@/components/us-pay-map-lazy";
 import { AnimatedNumber } from "@/components/animated-number";
+import { formatNumber, formatPay } from "@/lib/format";
 
 function formatSnapshotDate(yyyymm: string): string {
   const year = yyyymm.slice(0, 4);
   const month = yyyymm.slice(4, 6);
   const date = new Date(Number(year), Number(month) - 1);
   return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-}
-
-function formatNumber(n: number): string {
-  return new Intl.NumberFormat("en-US").format(n);
-}
-
-function formatPay(n: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(n);
 }
 
 export default async function HomePage() {
@@ -260,7 +249,7 @@ export default async function HomePage() {
   }));
   const gradeConfig = { value: { label: "Employees", color: "var(--chart-2)" } };
   const gradeColors = insights.gradeDistribution.map((_, i, arr) => {
-    const t = i / (arr.length - 1);
+    const t = arr.length > 1 ? i / (arr.length - 1) : 0;
     return `hsl(210, ${50 + t * 30}%, ${65 - t * 25}%)`;
   });
 
@@ -303,7 +292,7 @@ export default async function HomePage() {
       {/* Hero */}
       <div className="mb-6 text-center sm:mb-10">
         <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
-          LevelsGov
+          Federal Workforce Pay &amp; Data
         </h1>
         <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:mt-3 sm:text-lg">
           Federal workforce compensation data, transparent and searchable.
@@ -328,7 +317,7 @@ export default async function HomePage() {
                 </div>
                 <p className="text-[11px] text-muted-foreground sm:text-xs">{stat.label}</p>
               </div>
-              <p className={`mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl ${stat.valueClass ?? ""}`}>
+              <p className={`mt-1.5 text-xl font-bold tabular-nums sm:mt-2 sm:text-2xl ${stat.valueClass ?? ""}`}>
                 {stat.value}
               </p>
             </CardContent>
@@ -336,7 +325,8 @@ export default async function HomePage() {
         ))}
       </div>
 
-      {/* Pay by State */}
+      {/* ── Compensation ── */}
+      <h2 className="mb-4 text-xl font-bold tracking-tight sm:mb-6 sm:text-2xl">Compensation</h2>
       <Card className="mb-6 sm:mb-10">
         <CardHeader className="px-4 sm:px-6">
           <CardTitle className="text-base sm:text-lg">Federal Pay by State</CardTitle>
@@ -447,7 +437,8 @@ export default async function HomePage() {
         </Card>
       </div>
 
-      {/* Insight Cards: STEM + Supervisory + Work Schedule */}
+      {/* ── Workforce Composition ── */}
+      <h2 className="mb-4 text-xl font-bold tracking-tight sm:mb-6 sm:text-2xl">Workforce Composition</h2>
       <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="px-4 sm:px-6">
@@ -572,7 +563,8 @@ export default async function HomePage() {
         </Card>
       </div>
 
-      {/* Workforce Trends */}
+      {/* ── Attrition & STEM ── */}
+      <h2 className="mb-4 text-xl font-bold tracking-tight sm:mb-6 sm:text-2xl">Attrition &amp; STEM</h2>
       <div className="mb-6 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader className="px-4 sm:px-6">

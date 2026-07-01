@@ -1,21 +1,28 @@
 #!/usr/bin/env python3
-"""Auto-download OPM data files and import new ones into PostgreSQL.
+"""Daily OPM data sync — check for updates, download, and import into PostgreSQL.
 
-Fetches the OPM data downloads page, discovers available data files for
-Federal Employment, Accessions, and Separations, downloads any new files
-to data/, and runs import.py for each file not already in the database.
+Uses the direct OPM API:
+  GET https://data.opm.gov/api/blob/download/chunked/{dataset}_{YYYYMM}_{version}.txt
+
+No authentication required. Files are pipe-delimited TXT.
 
 Usage:
-    python3 scripts/download.py            # download & import new files
-    python3 scripts/download.py --dry-run  # show what would be downloaded
+    python3 scripts/download.py                       # daily sync (last 3 months)
+    python3 scripts/download.py --months 18           # backfill 18 months
+    python3 scripts/download.py --dataset employment  # one dataset only
+    python3 scripts/download.py --dry-run             # preview without downloading
+    python3 scripts/download.py --no-import           # download only
+    python3 scripts/download.py --latest-only         # skip older versions
 """
 
 import argparse
 import hashlib
 import os
-import re
 import subprocess
 import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta
 
 import psycopg2
 import requests
@@ -24,20 +31,21 @@ import requests
 # Configuration
 # ---------------------------------------------------------------------------
 
-OPM_PAGE_URL = "https://data.opm.gov/explore-data/data/data-downloads"
-
-# The three datasets we care about, mapped to filename prefixes
-DATASETS = {
-    "accessions": "Federal Accessions Raw Data",
-    "separations": "Federal Separations Raw Data",
-    "employment": "Federal Employment Raw Data",
-}
+API_BASE = "https://data.opm.gov/api/blob/download/chunked"
+DATASETS = ["employment", "accessions", "separations"]
+MAX_VERSION = 5
+PROBE_TIMEOUT = 20
+DOWNLOAD_TIMEOUT = 600
+PROBE_WORKERS = 6
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
-
 SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 IMPORT_SCRIPT = os.path.join(SCRIPTS_DIR, "import.py")
 
+
+# ---------------------------------------------------------------------------
+# Database helpers
+# ---------------------------------------------------------------------------
 
 def get_connection():
     """Return a psycopg2 connection using DATABASE_URL or local defaults."""
@@ -47,17 +55,8 @@ def get_connection():
     return psycopg2.connect(port=5433, dbname="fedwork")
 
 
-def sha256_hash(filepath: str) -> str:
-    """Compute the SHA-256 hex digest of a file."""
-    h = hashlib.sha256()
-    with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
 def get_imported_hashes() -> set[str]:
-    """Return the set of file hashes already imported (status='complete')."""
+    """Return file hashes already imported (status='complete')."""
     try:
         conn = get_connection()
         cur = conn.cursor()
@@ -66,159 +65,120 @@ def get_imported_hashes() -> set[str]:
         conn.close()
         return hashes
     except Exception as exc:
-        print(f"Warning: could not query data_imports: {exc}")
+        log(f"Warning: could not query data_imports: {exc}")
         return set()
 
 
 # ---------------------------------------------------------------------------
-# URL discovery
+# Helpers
 # ---------------------------------------------------------------------------
 
-def discover_download_links_from_page() -> list[dict]:
-    """Try to scrape download links from the OPM data downloads page.
-
-    Returns a list of dicts with keys: dataset_type, url, filename, label.
-    May return empty list if the page uses client-side rendering.
-    """
-    links = []
-    try:
-        resp = requests.get(OPM_PAGE_URL, timeout=30)
-        resp.raise_for_status()
-        text = resp.text
-
-        # Look for direct download URLs (txt/csv/zip files)
-        url_pattern = re.compile(
-            r'href=["\']?(https?://[^\s"\'<>]+\.(?:txt|csv|zip))["\']?', re.IGNORECASE
-        )
-        for match in url_pattern.finditer(text):
-            url = match.group(1)
-            filename = url.rsplit("/", 1)[-1]
-            for ds_type, ds_label in DATASETS.items():
-                if ds_type in filename.lower():
-                    links.append({
-                        "dataset_type": ds_type,
-                        "url": url,
-                        "filename": filename,
-                        "label": ds_label,
-                    })
-                    break
-    except Exception as exc:
-        print(f"Warning: could not fetch OPM page: {exc}")
-
-    return links
+def log(msg: str) -> None:
+    ts = datetime.now().strftime("%H:%M:%S")
+    print(f"[{ts}] {msg}")
 
 
-def build_known_pattern_urls() -> list[dict]:
-    """Construct download URLs based on known OPM filename patterns.
+def sha256_hash(filepath: str) -> str:
+    h = hashlib.sha256()
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
-    OPM files follow the pattern:
-        {dataset_type}_{YYYYMM}_{version}_{date}.txt
 
-    We generate candidate URLs for recent months and common URL bases.
-    """
-    from datetime import datetime, timedelta
-
-    links = []
-
-    # Generate YYYYMM values for the last 6 months
-    today = datetime.now()
-    months = []
-    for i in range(6):
-        dt = today.replace(day=1) - timedelta(days=30 * i)
+def generate_months(count: int) -> list[str]:
+    """Generate YYYYMM strings going back `count` months from today."""
+    months: list[str] = []
+    dt = datetime.now().replace(day=1)
+    for _ in range(count):
         months.append(dt.strftime("%Y%m"))
-    # Deduplicate while preserving order
-    seen = set()
-    unique_months = []
-    for m in months:
-        if m not in seen:
-            seen.add(m)
-            unique_months.append(m)
-
-    # Known URL base patterns for OPM data downloads
-    url_bases = [
-        "https://data.opm.gov/datadownloads",
-        "https://data.opm.gov/media/data",
-        "https://data.opm.gov/downloads",
-        "https://data.opm.gov/data",
-        "https://data.opm.gov/files",
-        "https://data.opm.gov/explore-data/data/downloads",
-    ]
-
-    versions = ["1", "2"]
-
-    for ds_type in DATASETS:
-        for month in unique_months:
-            for version in versions:
-                filename = f"{ds_type}_{month}_{version}.txt"
-                for base in url_bases:
-                    links.append({
-                        "dataset_type": ds_type,
-                        "url": f"{base}/{filename}",
-                        "filename": filename,
-                        "label": DATASETS[ds_type],
-                    })
-
-    return links
+        dt -= timedelta(days=1)
+        dt = dt.replace(day=1)
+    return months
 
 
-def probe_url(url: str) -> bool:
-    """Return True if the URL returns a successful response with content."""
+def build_url(dataset: str, month: str, version: int) -> str:
+    return f"{API_BASE}/{dataset}_{month}_{version}.txt"
+
+
+# ---------------------------------------------------------------------------
+# Discovery (parallel probing)
+# ---------------------------------------------------------------------------
+
+def probe_one(dataset: str, month: str, version: int) -> dict | None:
+    """Check if a file exists on OPM. Returns file info dict or None."""
+    url = build_url(dataset, month, version)
     try:
-        resp = requests.head(url, allow_redirects=True, timeout=15)
-        if resp.status_code == 200:
-            content_type = resp.headers.get("content-type", "")
-            content_length = resp.headers.get("content-length", "0")
-            # Accept text/plain files with actual content
-            if "text" in content_type or int(content_length) > 1000:
-                return True
-        return False
-    except Exception:
-        return False
+        resp = requests.get(
+            url,
+            headers={"Range": "bytes=0-0"},
+            stream=True,
+            timeout=PROBE_TIMEOUT,
+        )
+        resp.close()
+        if resp.status_code in (200, 206):
+            return {
+                "dataset": dataset,
+                "month": month,
+                "version": version,
+                "filename": f"{dataset}_{month}_{version}.txt",
+                "url": url,
+            }
+    except requests.RequestException:
+        pass
+    return None
 
 
-def discover_all_links() -> list[dict]:
-    """Combine page scraping and known-pattern probing to find download URLs."""
+def discover_files(datasets: list[str], months: list[str]) -> list[dict]:
+    """Probe the API in parallel to find all available files.
 
-    # Strategy 1: Try to scrape the page directly
-    print("Checking OPM data downloads page ...")
-    links = discover_download_links_from_page()
-    if links:
-        print(f"  Found {len(links)} download links from page.")
-        return links
+    For each dataset-month, probes version 1 first, then higher versions
+    only if version 1 exists. This avoids wasting time on non-existent months.
+    """
+    found: list[dict] = []
 
-    print("  Page uses JavaScript rendering; trying known URL patterns ...")
+    # Phase 1: probe version 1 for all dataset-months in parallel
+    v1_tasks = [(d, m, 1) for d in datasets for m in months]
 
-    # Strategy 2: Probe known URL patterns
-    pattern_links = build_known_pattern_urls()
-    valid_links = []
+    with ThreadPoolExecutor(max_workers=PROBE_WORKERS) as pool:
+        v1_futures = {pool.submit(probe_one, d, m, v): (d, m) for d, m, v in v1_tasks}
+        has_v1: set[tuple[str, str]] = set()
 
-    # Try each URL base with the most recent month first
-    checked = set()
-    for link in pattern_links:
-        if link["url"] in checked:
-            continue
-        checked.add(link["url"])
-        if probe_url(link["url"]):
-            print(f"  Found: {link['url']}")
-            valid_links.append(link)
+        done = 0
+        total = len(v1_futures)
+        for fut in as_completed(v1_futures):
+            done += 1
+            result = fut.result()
+            if result:
+                found.append(result)
+                has_v1.add(v1_futures[fut])
+            print(f"\r  Phase 1: {done}/{total} probed, {len(found)} found", end="", flush=True)
 
-    if valid_links:
-        return valid_links
+        print()
 
-    print("  No download URLs discovered via probing.")
-    print()
-    print("  The OPM site uses a Blazor app with dynamically generated download")
-    print("  links that cannot be discovered through automated HTTP requests.")
-    print()
-    print("  To download files manually:")
-    print(f"    1. Visit {OPM_PAGE_URL}")
-    print(f"    2. Download the files to {DATA_DIR}/")
-    print("    3. Re-run this script to import them, or run import.py directly:")
-    print("       python3 scripts/import.py <dataset_type> <file_path>")
-    print()
-    print("  Checking for local files in data/ directory instead ...")
+        # Phase 2: for months that have v1, probe v2..MAX_VERSION
+        higher_tasks = [
+            (d, m, v)
+            for d, m in has_v1
+            for v in range(2, MAX_VERSION + 1)
+        ]
+        if higher_tasks:
+            h_futures = {pool.submit(probe_one, d, m, v): (d, m, v) for d, m, v in higher_tasks}
+            done = 0
+            total = len(h_futures)
+            for fut in as_completed(h_futures):
+                done += 1
+                result = fut.result()
+                if result:
+                    found.append(result)
+                print(f"\r  Phase 2: {done}/{total} probed, {len(found)} total", end="", flush=True)
+            print()
 
-    return []
+    print(f"  Found {len(found)} files across {len(has_v1)} active months.")
+
+    # Sort by dataset, month desc, version desc
+    found.sort(key=lambda x: (x["dataset"], x["month"], x["version"]), reverse=True)
+    return found
 
 
 # ---------------------------------------------------------------------------
@@ -226,167 +186,174 @@ def discover_all_links() -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def download_file(url: str, dest_path: str) -> bool:
-    """Download a file from url to dest_path. Returns True on success."""
+    """Stream-download a file. Returns True on success."""
+    tmp_path = dest_path + ".tmp"
     try:
-        print(f"  Downloading {url} ...")
-        resp = requests.get(url, stream=True, timeout=120)
+        resp = requests.get(url, stream=True, timeout=DOWNLOAD_TIMEOUT)
         resp.raise_for_status()
 
-        total = int(resp.headers.get("content-length", 0))
         downloaded = 0
-
-        with open(dest_path, "wb") as f:
+        with open(tmp_path, "wb") as f:
             for chunk in resp.iter_content(chunk_size=1 << 20):
                 f.write(chunk)
                 downloaded += len(chunk)
-                if total:
-                    pct = downloaded * 100 / total
-                    print(f"\r  {downloaded:,} / {total:,} bytes ({pct:.0f}%)", end="", flush=True)
+                mb = downloaded / (1 << 20)
+                print(f"\r    {mb:.1f} MB", end="", flush=True)
 
-        if total:
-            print()  # newline after progress
-        print(f"  Saved to {dest_path}")
+        os.rename(tmp_path, dest_path)
+        print(f"\r    {downloaded / (1 << 20):.1f} MB -> {os.path.basename(dest_path)}          ")
         return True
     except Exception as exc:
-        print(f"  Download failed: {exc}")
-        if os.path.exists(dest_path):
-            os.remove(dest_path)
+        print(f"\n    Download failed: {exc}")
+        for p in (tmp_path, dest_path):
+            if os.path.exists(p):
+                os.remove(p)
         return False
 
 
-def find_local_files() -> list[dict]:
-    """Find data files already present in the data/ directory."""
-    files = []
-    if not os.path.isdir(DATA_DIR):
-        return files
-
-    for fname in sorted(os.listdir(DATA_DIR)):
-        if not fname.endswith(".txt"):
-            continue
-        for ds_type in DATASETS:
-            if fname.startswith(ds_type):
-                files.append({
-                    "dataset_type": ds_type,
-                    "filename": fname,
-                    "filepath": os.path.join(DATA_DIR, fname),
-                    "label": DATASETS[ds_type],
-                })
-                break
-
-    return files
-
-
-def run_import(dataset_type: str, filepath: str) -> bool:
-    """Run scripts/import.py for a given file. Returns True on success."""
-    print(f"  Running import: {dataset_type} {os.path.basename(filepath)}")
+def run_import(dataset: str, filepath: str) -> bool:
+    """Run scripts/import.py for a given file."""
     result = subprocess.run(
-        [sys.executable, IMPORT_SCRIPT, dataset_type, filepath],
+        [sys.executable, IMPORT_SCRIPT, dataset, filepath],
         capture_output=False,
     )
     return result.returncode == 0
 
 
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Download and import OPM federal workforce data files."
+        description="Daily OPM data sync — check, download, import.",
     )
     parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show what would be downloaded/imported without taking action.",
+        "--dry-run", action="store_true",
+        help="Show what would be downloaded without action.",
+    )
+    parser.add_argument(
+        "--months", type=int, default=3,
+        help="How many months back to check (default: 3).",
+    )
+    parser.add_argument(
+        "--dataset", choices=DATASETS,
+        help="Sync only one dataset.",
+    )
+    parser.add_argument(
+        "--no-import", action="store_true",
+        help="Download files but skip database import.",
+    )
+    parser.add_argument(
+        "--latest-only", action="store_true",
+        help="Only keep the highest version per dataset-month.",
     )
     args = parser.parse_args()
 
-    # Ensure data directory exists
+    if args.months < 1:
+        sys.exit("Error: --months must be a positive integer.")
+
+    t0 = time.time()
     os.makedirs(DATA_DIR, exist_ok=True)
 
-    # Get already-imported file hashes
+    target_datasets = [args.dataset] if args.dataset else DATASETS
+    months = generate_months(args.months)
+
+    log("OPM Data Sync")
+    print(f"  Datasets: {', '.join(target_datasets)}")
+    print(f"  Window:   {months[-1]} to {months[0]} ({len(months)} months)")
+    print(f"  Output:   {DATA_DIR}/")
+    print()
+
+    # What's already imported?
     imported_hashes = get_imported_hashes()
-    print(f"Database has {len(imported_hashes)} previously imported file(s).")
+    log(f"{len(imported_hashes)} file(s) already in database.")
     print()
 
-    # Try to discover download links from OPM
-    remote_links = discover_all_links()
+    # Discover available files on OPM
+    log("Discovering available files ...")
+    available = discover_files(target_datasets, months)
 
-    # Collect files to process: either downloaded or already local
-    files_to_import: list[dict] = []
+    if not available:
+        log("No files found on OPM. Data may not be published yet.")
+        return
 
-    if remote_links:
-        for link in remote_links:
-            dest = os.path.join(DATA_DIR, link["filename"])
+    # Optionally filter to latest version per dataset-month
+    if args.latest_only:
+        best: dict[tuple[str, str], dict] = {}
+        for item in available:
+            key = (item["dataset"], item["month"])
+            if key not in best or item["version"] > best[key]["version"]:
+                best[key] = item
+        available = sorted(best.values(), key=lambda x: (x["dataset"], x["month"]), reverse=True)
+        log(f"Latest-only: {len(available)} files after filtering.")
 
-            if os.path.isfile(dest):
-                file_hash = sha256_hash(dest)
-                if file_hash in imported_hashes:
-                    print(f"  Already imported: {link['filename']} (hash match)")
-                    continue
-                # File exists but not imported -- queue it
-                files_to_import.append({
-                    "dataset_type": link["dataset_type"],
-                    "filename": link["filename"],
-                    "filepath": dest,
-                })
-            else:
-                if args.dry_run:
-                    print(f"  [DRY RUN] Would download: {link['url']}")
-                    print(f"             -> {dest}")
-                    files_to_import.append({
-                        "dataset_type": link["dataset_type"],
-                        "filename": link["filename"],
-                        "filepath": dest,
-                        "needs_download": True,
-                    })
-                else:
-                    if download_file(link["url"], dest):
-                        files_to_import.append({
-                            "dataset_type": link["dataset_type"],
-                            "filename": link["filename"],
-                            "filepath": dest,
-                        })
-    else:
-        # Fall back to local files in data/
-        local_files = find_local_files()
-        if not local_files:
-            print("No data files found in data/ directory.")
-            print(f"Place .txt data files in {DATA_DIR}/ and re-run.")
-            return
+    # Determine what needs downloading/importing
+    to_process: list[dict] = []
+    skipped = 0
 
-        print(f"Found {len(local_files)} local file(s) in data/:")
-        for lf in local_files:
-            file_hash = sha256_hash(lf["filepath"])
+    for item in available:
+        dest = os.path.join(DATA_DIR, item["filename"])
+        item["filepath"] = dest
+
+        if os.path.isfile(dest):
+            file_hash = sha256_hash(dest)
             if file_hash in imported_hashes:
-                print(f"  Already imported: {lf['filename']} (hash match)")
-            else:
-                print(f"  New file: {lf['filename']}")
-                files_to_import.append(lf)
-
-    # Import new files
-    print()
-    if not files_to_import:
-        print("No new files to import. Everything is up to date.")
-        return
-
-    if args.dry_run:
-        print(f"[DRY RUN] Would import {len(files_to_import)} file(s):")
-        for f in files_to_import:
-            status = "(needs download)" if f.get("needs_download") else "(local)"
-            print(f"  {f['dataset_type']:15s} {f['filename']} {status}")
-        return
-
-    print(f"Importing {len(files_to_import)} new file(s) ...")
-    print()
-
-    success_count = 0
-    for f in files_to_import:
-        print(f"--- {f['filename']} ---")
-        if run_import(f["dataset_type"], f["filepath"]):
-            success_count += 1
-            print()
+                skipped += 1
+                continue
+            # File on disk but not in DB — needs import only
+            item["needs_download"] = False
         else:
-            print(f"  FAILED to import {f['filename']}")
-            print()
+            item["needs_download"] = True
 
-    print(f"Done. {success_count}/{len(files_to_import)} file(s) imported successfully.")
+        to_process.append(item)
+
+    print()
+    log(f"{skipped} up-to-date, {len(to_process)} to process.")
+
+    if not to_process:
+        elapsed = time.time() - t0
+        log(f"Everything current. ({elapsed:.0f}s)")
+        return
+
+    # Dry run output
+    if args.dry_run:
+        print()
+        for item in to_process:
+            action = "download+import" if item["needs_download"] else "import-only"
+            print(f"  [{action:16s}] {item['filename']}")
+        log(f"Dry run complete. {len(to_process)} file(s) would be processed.")
+        return
+
+    # Process files
+    print()
+    success = 0
+    failed = 0
+
+    for i, item in enumerate(to_process, 1):
+        log(f"[{i}/{len(to_process)}] {item['filename']}")
+
+        if item["needs_download"]:
+            if not download_file(item["url"], item["filepath"]):
+                failed += 1
+                continue
+
+        if args.no_import:
+            success += 1
+            continue
+
+        if run_import(item["dataset"], item["filepath"]):
+            success += 1
+        else:
+            log(f"  FAILED to import {item['filename']}")
+            failed += 1
+
+    elapsed = time.time() - t0
+    print()
+    log(f"Done. {success} succeeded, {failed} failed. ({elapsed:.0f}s)")
+
+    if failed > 0:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

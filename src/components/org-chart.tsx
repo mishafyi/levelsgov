@@ -16,6 +16,7 @@ import {
   Scale,
   ScrollText,
 } from "lucide-react";
+import { formatNumber as fmt } from "@/lib/format";
 
 /* ───── Types ───── */
 
@@ -52,8 +53,6 @@ export interface OrgChartData {
 }
 
 /* ───── Constants ───── */
-
-const fmt = (n: number) => new Intl.NumberFormat("en-US").format(n);
 
 const BRANCH_META: Record<
   string,
@@ -110,7 +109,16 @@ function AgencyCard({
       className={`border rounded-lg bg-card transition-shadow ${
         hasExpandable ? "cursor-pointer hover:shadow-md" : ""
       }`}
+      role={hasExpandable ? "button" : undefined}
+      tabIndex={hasExpandable ? 0 : undefined}
+      aria-expanded={hasExpandable ? expanded : undefined}
       onClick={() => hasExpandable && setExpanded(!expanded)}
+      onKeyDown={(e) => {
+        if (hasExpandable && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          setExpanded(!expanded);
+        }
+      }}
     >
       <div className="flex items-center gap-2 p-2.5">
         <div
@@ -232,7 +240,7 @@ function SubCategorySection({
   branchColor: string;
   isLast: boolean;
 }) {
-  const [collapsed, setCollapsed] = useState(subcat.agencies.length > 8);
+  const [collapsed, setCollapsed] = useState(subcat.agencies.length > 5);
   const meta = SUBCAT_COLORS[subcat.key];
   const color = meta?.color ?? branchColor;
   const Icon = meta?.icon ?? Landmark;

@@ -12,7 +12,7 @@ const pool =
     connectionTimeoutMillis: 2000,
   });
 
-if (process.env.NODE_ENV !== "production") globalForPg.pgPool = pool;
+globalForPg.pgPool = pool;
 
 export async function query<T extends Record<string, unknown>>(
   text: string,

@@ -40,4 +40,8 @@ yarn-error.log*
 next-env.d.ts
 
 # data files
+data/
 *.txt
+
+# deployment docs with sensitive info
+DEPLOY-NEW-PROJECT-COOLIFY.md

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { formatNumber as fmtNum, formatPay as fmtPay } from "@/lib/format";
 
 const GEO_URL = "/states-10m.json";
 
@@ -58,15 +59,6 @@ function impactColor(t: number): string {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-const fmtPay = (n: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(n);
-
-const fmtNum = (n: number) => new Intl.NumberFormat("en-US").format(n);
-
 export function USPayMap({ data }: { data: StateData[] }) {
   const isMobile = useIsMobile();
   const [tooltip, setTooltip] = useState<{
@@ -77,13 +69,18 @@ export function USPayMap({ data }: { data: StateData[] }) {
     headcount?: number;
   } | null>(null);
 
-  const lookup = new Map<string, StateData>();
-  for (const d of data) lookup.set(d.abbreviation, d);
+  const lookup = useMemo(() => {
+    const map = new Map<string, StateData>();
+    for (const d of data) map.set(d.abbreviation, d);
+    return map;
+  }, [data]);
 
-  const pays = data.map((d) => d.avgPay);
-  const minPay = Math.min(...pays);
-  const maxPay = Math.max(...pays);
-  const range = maxPay - minPay || 1;
+  const { minPay, maxPay, range } = useMemo(() => {
+    const pays = data.map((d) => d.avgPay);
+    const min = Math.min(...pays);
+    const max = Math.max(...pays);
+    return { minPay: min, maxPay: max, range: max - min || 1 };
+  }, [data]);
 
   const getColor = (abbr: string | undefined) => {
     if (!abbr) return "hsl(var(--muted))";

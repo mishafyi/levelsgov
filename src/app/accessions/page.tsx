@@ -1,23 +1,23 @@
 export const dynamic = "force-dynamic";
 
-import { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Federal New Hires",
+  description:
+    "Browse new hires and accessions into federal service, filterable by agency, occupation, state, and more.",
+  alternates: { canonical: "/accessions" },
+};
 import { query } from "@/lib/db";
 import { buildQuery, type FilterParams } from "@/lib/queries";
 import { getFilterOptions } from "@/lib/filters";
 import { FilterSidebar, MobileFilterButton } from "@/components/filter-sidebar";
 import { DataTable } from "@/components/data-table";
+import { getParam } from "@/lib/params";
+import { formatNumber } from "@/lib/format";
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-function getParam(
-  params: Record<string, string | string[] | undefined>,
-  key: string
-): string | undefined {
-  const v = params[key];
-  if (Array.isArray(v)) return v[0];
-  return v || undefined;
 }
 
 async function AccessionsContent({
@@ -73,7 +73,7 @@ async function AccessionsContent({
     getFilterOptions("accessions"),
   ]);
 
-  const total = Number(countResult[0].count);
+  const total = Number(countResult[0]?.count ?? "0");
 
   const activeFilters: Record<string, string> = {};
   for (const [key, value] of Object.entries(searchParams)) {
@@ -94,6 +94,9 @@ async function AccessionsContent({
             <p className="text-sm text-muted-foreground">
               Browse new hires and transfers into federal service
             </p>
+            <p className="mt-1 text-sm font-medium text-foreground">
+              {formatNumber(total)} records
+            </p>
           </div>
           <MobileFilterButton dataset="accessions" options={options} />
         </div>
@@ -111,15 +114,5 @@ async function AccessionsContent({
 export default async function AccessionsPage({ searchParams }: Props) {
   const params = await searchParams;
 
-  return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center">
-          <div className="text-muted-foreground">Loading...</div>
-        </div>
-      }
-    >
-      <AccessionsContent searchParams={params} />
-    </Suspense>
-  );
+  return <AccessionsContent searchParams={params} />;
 }

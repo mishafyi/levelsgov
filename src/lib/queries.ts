@@ -54,6 +54,9 @@ const SORT_ALLOWLIST = new Set([
 
 const MAX_PAGE_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 50;
+// Upper bound on `page` so a pathological ?page= value can't produce an
+// OFFSET large enough to overflow Postgres' bigint and 500 the query.
+const MAX_PAGE = 1_000_000;
 
 type Dataset = "employment" | "accessions" | "separations";
 
@@ -72,10 +75,15 @@ const FILTER_COLUMN_MAP: Record<string, string> = {
   separation_category_code: "separation_category_code",
 };
 
+const ALLOWED_TABLES = new Set<Dataset>(["employment", "accessions", "separations"]);
+
 export function buildQuery(
   dataset: Dataset,
   filters: FilterParams
 ): BuildQueryResult {
+  if (!ALLOWED_TABLES.has(dataset)) {
+    throw new Error(`Invalid dataset: ${dataset}`);
+  }
   const table = dataset;
   const conditions: string[] = [];
   const params: (string | number | null)[] = [];
@@ -137,7 +145,9 @@ export function buildQuery(
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  // Count query
+  // Count query — count rows, since the list query paginates individual rows
+  // (LIMIT/OFFSET). Using SUM(employee_count) here would count employees, not
+  // rows, and inflate the page count / "records" total.
   const countSql = `SELECT COUNT(*) as count FROM ${table} ${whereClause}`;
   const countParams = [...params];
 
@@ -152,11 +162,14 @@ export function buildQuery(
   }
 
   // Pagination
-  const pageSize = Math.min(
-    Math.max(1, filters.pageSize ?? DEFAULT_PAGE_SIZE),
-    MAX_PAGE_SIZE
-  );
-  const page = Math.max(1, filters.page ?? 1);
+  const rawPageSize = filters.pageSize ?? DEFAULT_PAGE_SIZE;
+  const pageSize = Number.isFinite(rawPageSize)
+    ? Math.min(Math.max(1, rawPageSize), MAX_PAGE_SIZE)
+    : DEFAULT_PAGE_SIZE;
+  const rawPage = filters.page ?? 1;
+  const page = Number.isFinite(rawPage)
+    ? Math.min(Math.max(1, Math.floor(rawPage)), MAX_PAGE)
+    : 1;
 
   let orderClause: string;
   let limitClause: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 
 export interface OccupationData {
   title: string;
@@ -9,7 +9,6 @@ export interface OccupationData {
   category_code: string;
   employees: number;
   avg_pay: number | null;
-  median_pay: number | null;
   top_education: string | null;
   stem: boolean;
   exposure: number | null;
@@ -286,7 +285,7 @@ function titleCase(s: string): string {
 
 // ── Sidebar stats ──────────────────────────────────────────────────────
 
-function Stats({ data, ageExposure, eduExposure }: { data: OccupationData[]; ageExposure: AgeExposure[]; eduExposure: EduExposure[] }) {
+const Stats = React.memo(function Stats({ data, ageExposure, eduExposure }: { data: OccupationData[]; ageExposure: AgeExposure[]; eduExposure: EduExposure[] }) {
   const totalEmployees = data.reduce((s, d) => s + d.employees, 0);
 
   // Weighted avg exposure
@@ -381,7 +380,7 @@ function Stats({ data, ageExposure, eduExposure }: { data: OccupationData[]; age
   }, []);
 
   return (
-    <div className="flex w-[220px] shrink-0 flex-col gap-5 overflow-y-auto border-r border-white/[0.06] bg-[#12121a] p-5 text-[#e0e0e8]">
+    <div className="flex w-full shrink-0 flex-col gap-5 overflow-y-auto border-b border-white/[0.06] bg-[#12121a] p-5 text-[#e0e0e8] md:w-[220px] md:border-b-0 md:border-r">
       <div>
         <h1 className="text-base font-semibold leading-tight tracking-tight">
           AI Exposure of the Federal Workforce
@@ -602,7 +601,7 @@ function Stats({ data, ageExposure, eduExposure }: { data: OccupationData[]; age
       </div>
     </div>
   );
-}
+});
 
 // ── Main component ─────────────────────────────────────────────────────
 
@@ -614,7 +613,7 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
   const containerRef = useRef<HTMLDivElement>(null);
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
   const rectsRef = useRef<Rect[]>([]);
-  const catRectsRef = useRef<{ name: string; rx: number; ry: number; rw: number; rh: number }[]>([]);
+  const catRectsRef = useRef<{ name: string; employees: number; rx: number; ry: number; rw: number; rh: number }[]>([]);
   const hoveredRef = useRef<Rect | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number; y: number } | null>(null);
@@ -675,10 +674,11 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
     const catRects = squarify(categories, tx, ty, tw, th);
 
     const rects: Rect[] = [];
-    const catRectsList: { name: string; rx: number; ry: number; rw: number; rh: number }[] = [];
+    const catRectsList: { name: string; employees: number; rx: number; ry: number; rw: number; rh: number }[] = [];
     for (const cr of catRects) {
       catRectsList.push({
         name: cr.cat,
+        employees: cr.value,
         rx: cr.rx,
         ry: cr.ry,
         rw: cr.rw,
@@ -766,19 +766,41 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
         if (cr.rw < 60 || cr.rh < 30) continue;
 
         const fontSize = Math.min(11, Math.max(8, cr.rw / 18));
-        ctx.font = `600 ${fontSize}px -apple-system, system-ui, sans-serif`;
+        const countFontSize = Math.max(7, fontSize - 1);
 
         const maxLabelWidth = cr.rw - 12;
-        let label = cr.name;
-        let textWidth = ctx.measureText(label).width;
 
-        // Truncate with ellipsis if too wide
+        // Build label: "Name · 123K"
+        ctx.font = `600 ${fontSize}px -apple-system, system-ui, sans-serif`;
+        const countStr = formatNumber(cr.employees);
+        let label = cr.name;
+        const separator = " \u00b7 ";
+        let fullLabel = label + separator + countStr;
+        let textWidth = ctx.measureText(fullLabel).width;
+
+        // Truncate name if full label is too wide
         if (textWidth > maxLabelWidth) {
-          while (label.length > 1 && ctx.measureText(label + "\u2026").width > maxLabelWidth) {
-            label = label.slice(0, -1);
+          // Try with just the count suffix
+          const suffixWidth = ctx.measureText(separator + countStr).width;
+          const availableForName = maxLabelWidth - suffixWidth;
+          if (availableForName > 20) {
+            while (label.length > 1 && ctx.measureText(label + "\u2026").width > availableForName) {
+              label = label.slice(0, -1);
+            }
+            label += "\u2026";
+            fullLabel = label + separator + countStr;
+          } else {
+            // Not enough room for the count; show the name alone, adding an
+            // ellipsis only if the name itself must be truncated to fit.
+            if (ctx.measureText(label).width > maxLabelWidth) {
+              while (label.length > 1 && ctx.measureText(label + "\u2026").width > maxLabelWidth) {
+                label = label.slice(0, -1);
+              }
+              label += "\u2026";
+            }
+            fullLabel = label;
           }
-          label += "\u2026";
-          textWidth = ctx.measureText(label).width;
+          textWidth = ctx.measureText(fullLabel).width;
         }
 
         // Position at bottom-left of group
@@ -806,9 +828,22 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
         ctx.quadraticCurveTo(bx, by, bx + br, by);
         ctx.fill();
 
+        // Draw name part
+        ctx.font = `600 ${fontSize}px -apple-system, system-ui, sans-serif`;
         ctx.fillStyle = "rgba(255,255,255,0.7)";
         ctx.textBaseline = "bottom";
+
+        // Measure name part to position count differently
+        const namePartWidth = ctx.measureText(label).width;
         ctx.fillText(label, px, py);
+
+        // Draw count part in slightly dimmer style
+        if (fullLabel.includes(separator)) {
+          const sepAndCount = separator + countStr;
+          ctx.font = `500 ${countFontSize}px -apple-system, system-ui, sans-serif`;
+          ctx.fillStyle = "rgba(255,255,255,0.45)";
+          ctx.fillText(sepAndCount, px + namePartWidth, py);
+        }
       }
     },
     []
@@ -940,12 +975,19 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
     doLayout();
     draw();
 
+    let resizeTimer: ReturnType<typeof setTimeout>;
     const onResize = () => {
-      doLayout();
-      draw();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        doLayout();
+        draw();
+      }, 120);
     };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", onResize);
+    };
   }, [data, doLayout, draw]);
 
   const handleMouseMove = useCallback(
@@ -972,16 +1014,11 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
         }
       }
 
-      if (hit !== hoveredRef.current) {
-        hoveredRef.current = hit;
-      }
+      const prevHovered = hoveredRef.current;
+      hoveredRef.current = hit;
 
-      // Always redraw when magnifier is on (lens follows cursor)
-      if (magnifierRef.current) {
-        draw();
-      } else if (hit !== hoveredRef.current) {
-        draw();
-      } else {
+      // Redraw when hover changes or magnifier is tracking cursor
+      if (magnifierRef.current || hit !== prevHovered) {
         draw();
       }
 
@@ -996,6 +1033,28 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
     [draw, showTooltip, hideTooltip]
   );
 
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+
+      for (let i = rectsRef.current.length - 1; i >= 0; i--) {
+        const r = rectsRef.current[i];
+        if (cx >= r.rx && cx < r.rx + r.rw && cy >= r.ry && cy < r.ry + r.rh) {
+          window.open(
+            `/employment?occupational_series_code=${encodeURIComponent(r.series_code)}`,
+            "_blank"
+          );
+          break;
+        }
+      }
+    },
+    []
+  );
+
   const handleMouseLeave = useCallback(() => {
     hoveredRef.current = null;
     mouseRef.current = null;
@@ -1004,13 +1063,16 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
   }, [draw, hideTooltip]);
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden bg-[#0a0a0f]">
+    <div className="flex h-[calc(100vh-3.5rem)] flex-col overflow-hidden bg-[#0a0a0f] md:flex-row">
       <Stats data={data} ageExposure={ageExposure} eduExposure={eduExposure} />
       <div ref={containerRef} className="relative flex-1 overflow-hidden">
         <canvas
           ref={canvasRef}
+          role="img"
+          aria-label={`AI exposure treemap showing ${data.length} federal occupation series sized by headcount and colored by AI exposure score`}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onClick={handleClick}
           className="block"
         />
         {/* Magnifier toggle */}

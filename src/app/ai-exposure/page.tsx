@@ -10,9 +10,10 @@ import {
 import aiScores from "../../data/ai-exposure-scores.json";
 
 export const metadata: Metadata = {
-  title: "AI Exposure — Federal Workforce | LevelsGov",
+  title: "AI Exposure — Federal Workforce",
   description:
     "How susceptible is each federal occupation to AI? Interactive treemap of 500+ occupation series, sized by headcount and colored by AI exposure score.",
+  alternates: { canonical: "/ai-exposure" },
 };
 
 interface OccRow extends Record<string, unknown> {
@@ -22,7 +23,6 @@ interface OccRow extends Record<string, unknown> {
   occupational_group_code: string;
   total_employees: string;
   avg_pay: string | null;
-  median_pay: string | null;
   top_education: string | null;
   is_stem: boolean;
 }
@@ -80,8 +80,7 @@ export default async function AIExposurePage() {
       )
       SELECT
         occ.*,
-        edu.education_level AS top_education,
-        occ.avg_pay AS median_pay
+        edu.education_level AS top_education
       FROM occ
       LEFT JOIN edu ON edu.occupational_series_code = occ.occupational_series_code
       ORDER BY occ.total_employees DESC
@@ -152,7 +151,6 @@ export default async function AIExposurePage() {
       category_code: r.occupational_group_code,
       employees: Number(r.total_employees),
       avg_pay: r.avg_pay ? Number(r.avg_pay) : null,
-      median_pay: r.median_pay ? Number(r.median_pay) : null,
       top_education: r.top_education,
       stem: r.is_stem,
       exposure: scoreData?.score ?? null,

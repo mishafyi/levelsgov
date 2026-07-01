@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -31,13 +31,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-
-const payFormatter = (v: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(v);
+import { formatPay as payFormatter } from "@/lib/format";
 
 const compactFormatter = (v: number) =>
   v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v);
@@ -221,7 +215,7 @@ export function NetChangeBarChart({
           tickLine={false}
           axisLine={false}
           tickFormatter={(v: number) =>
-            v >= 0 ? `+${compactFormatter(v)}` : `-${compactFormatter(Math.abs(v))}`
+            v === 0 ? "0" : v > 0 ? `+${compactFormatter(v)}` : `-${compactFormatter(Math.abs(v))}`
           }
           tick={{ fontSize: isMobile ? 10 : 12 }}
         />
@@ -363,9 +357,10 @@ export function AreaLineChart({
   config: ChartConfig;
   className?: string;
 }) {
+  const gradientId = useId();
   // Compute a Y-axis min so the curve isn't flattened against $0
-  const values = data.map((d) => d[dataKey] as number).filter(Boolean);
-  const minVal = Math.min(...values);
+  const values = data.map((d) => d[dataKey] as number).filter((v): v is number => typeof v === "number" && isFinite(v));
+  const minVal = values.length > 0 ? Math.min(...values) : 0;
   const yMin = Math.floor(minVal / 10000) * 10000; // round down to nearest $10K
 
   return (
@@ -375,7 +370,7 @@ export function AreaLineChart({
         margin={{ left: -10, right: 10, top: 10, bottom: 0 }}
       >
         <defs>
-          <linearGradient id={`fill-${dataKey}`} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={`var(--color-${dataKey})`} stopOpacity={0.35} />
             <stop offset="100%" stopColor={`var(--color-${dataKey})`} stopOpacity={0.05} />
           </linearGradient>
@@ -408,7 +403,7 @@ export function AreaLineChart({
           dataKey={dataKey}
           stroke={`var(--color-${dataKey})`}
           strokeWidth={2.5}
-          fill={`url(#fill-${dataKey})`}
+          fill={`url(#${gradientId})`}
           dot={{ r: 4, fill: `var(--color-${dataKey})`, strokeWidth: 0 }}
           activeDot={{ r: 6 }}
         />

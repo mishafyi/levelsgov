@@ -277,6 +277,7 @@ export function DataTable({
   const [data, setData] = useState<Row[]>(initialData);
   const [total, setTotal] = useState(initialTotal);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
     if (typeof window !== "undefined" && window.innerWidth < 640) {
       return DEFAULT_VISIBLE_MOBILE;
@@ -306,16 +307,22 @@ export function DataTable({
 
     const controller = new AbortController();
     setLoading(true);
+    setError(null);
 
     fetch(`/api/${dataset}?${currentStr}`, { signal: controller.signal })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((json) => {
         setData(json.data);
         setTotal(json.total);
+        setError(null);
       })
       .catch((err) => {
         if (err.name !== "AbortError") {
           console.error("Failed to fetch data:", err);
+          setError("Failed to load data. Please try again.");
         }
       })
       .finally(() => setLoading(false));
@@ -387,28 +394,39 @@ export function DataTable({
   }, [dataset]);
 
   return (
-    <AnimatedTable<Row>
-      data={data}
-      columns={columns}
-      sortColumn={sortColumn}
-      sortDirection={sortDir}
-      onSort={handleSort}
-      loading={loading}
-      striped
-      expandable
-      renderExpandedRow={(row) => <ExpandedRowContent row={row} />}
-      columnVisibility
-      visibleColumns={visibleColumns}
-      onVisibleColumnsChange={setVisibleColumns}
-      emptyMessage="No records match the current filters."
-      pagination={{
-        page,
-        pageSize,
-        totalItems: total,
-        pageSizeOptions: [25, 50, 100],
-        onPageChange: handlePageChange,
-        onPageSizeChange: handlePageSizeChange,
-      }}
-    />
+    <>
+      {error && (
+        <div className="mb-3 rounded-md border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+      <AnimatedTable<Row>
+        data={data}
+        columns={columns}
+        sortColumn={sortColumn}
+        sortDirection={sortDir}
+        onSort={handleSort}
+        loading={loading}
+        striped
+        expandable
+        renderExpandedRow={(row) => <ExpandedRowContent row={row} />}
+        columnVisibility
+        visibleColumns={visibleColumns}
+        onVisibleColumnsChange={setVisibleColumns}
+        emptyMessage={
+          Object.keys(filters).length > 0
+            ? "No records match the current filters. Try removing some filters."
+            : "No records found."
+        }
+        pagination={{
+          page,
+          pageSize,
+          totalItems: total,
+          pageSizeOptions: [25, 50, 100],
+          onPageChange: handlePageChange,
+          onPageSizeChange: handlePageSizeChange,
+        }}
+      />
+    </>
   );
 }
