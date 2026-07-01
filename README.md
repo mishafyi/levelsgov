@@ -4,6 +4,17 @@
 
 **[levelsgov.com](https://levelsgov.com)**
 
+<table>
+  <tr>
+    <td width="50%"><img src=".github/assets/dashboard.png" alt="LevelsGov dashboard — key workforce stats and federal pay-by-state map"></td>
+    <td width="50%"><img src=".github/assets/ai-exposure.png" alt="Treemap of 543 federal occupations sized by headcount and colored by AI exposure"></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src=".github/assets/org-chart.png" alt="Hierarchical org chart of the federal government by headcount"></td>
+    <td width="50%"><img src=".github/assets/employment.png" alt="Searchable, filterable table of federal employment records"></td>
+  </tr>
+</table>
+
 ---
 
 ## What is this?
@@ -49,47 +60,66 @@ Think of it as [levels.fyi](https://levels.fyi) but for the federal government.
 - **Charts:** Recharts, react-simple-maps
 - **Deployment:** Docker, Coolify (self-hosted)
 
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 20+
+- **PostgreSQL** 14+
+- **Python** 3.10+ (for the data pipeline)
+
+### 1. Install dependencies
+
+```bash
+git clone https://github.com/mishafyi/levelsgov.git
+cd levelsgov
+npm install
+```
+
+### 2. Set up the database
+
+The app connects to PostgreSQL via `DATABASE_URL` (default: `postgresql://localhost:5433/fedwork`). Create the database and load the schema:
+
+```bash
+createdb fedwork
+psql postgresql://localhost:5433/fedwork -f scripts/schema.sql
+```
+
+### 3. Configure environment
+
+Create a `.env.local` in the project root:
+
+```bash
+# Postgres connection (omit to use the default above)
+DATABASE_URL=postgresql://localhost:5433/fedwork
+
+# Optional: token guarding the on-demand cache-revalidation route (/api/revalidate)
+# REVALIDATE_TOKEN=your-secret
+```
+
+### 4. Load OPM data
+
+The Python pipeline downloads OPM FedScope files and bulk-loads them into Postgres:
+
+```bash
+pip install psycopg2-binary requests
+python3 scripts/download.py --months 18   # download + import ~18 months
+```
+
+Useful flags: `--dataset employment` (single dataset), `--dry-run` (preview only), `--no-import` (download without importing). To load one file directly, use `python3 scripts/import.py <dataset> <file>`.
+
+### 5. Run the dev server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). A `Dockerfile` is included for containerized/self-hosted deployment.
+
 ## Data Source
 
 All workforce data comes from the [OPM FedScope](https://www.opm.gov/data/datasets/#checks=employment-full) public dataset. AI exposure scores are generated using a custom methodology documented in the repository.
 
-## Getting Started
-
-### Prerequisites
-- Node.js 22+
-- PostgreSQL with FedScope data loaded
-
-### Development
-
-```bash
-npm install
-npm run dev
-```
-
-The app runs at `http://localhost:3000`.
-
-### Environment Variables
-
-Create a `.env.local` file:
-
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/fedwork
-```
-
-### Production Build
-
-```bash
-npm run build
-npm start
-```
-
-### Docker
-
-```bash
-docker build -t levelsgov .
-docker run -p 3000:3000 --env-file .env.local levelsgov
-```
-
 ## License
 
-MIT
+[MIT](LICENSE)
