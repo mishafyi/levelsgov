@@ -247,6 +247,27 @@ def run_import(dataset_type: str, filepath: str) -> None:
 
     try:
         cur.copy_expert(copy_sql, buffered)
+
+        # Employment is a snapshot dataset: the app expects only the latest
+        # month in the table (stats queries have no month filter). After a
+        # successful load, prune rows from any older snapshot months — in the
+        # same transaction, so a failure rolls everything back together.
+        if table == "employment":
+            cur.execute(
+                "DELETE FROM employment WHERE snapshot_yyyymm < "
+                "(SELECT MAX(snapshot_yyyymm) FROM employment)"
+            )
+            pruned = cur.rowcount
+            if pruned:
+                print(f"  Pruned {pruned:,} row(s) from older employment snapshots.")
+            cur.execute(
+                """UPDATE data_imports SET status = 'superseded'
+                     WHERE dataset_type = 'employment' AND status = 'complete'
+                       AND snapshot_month < (SELECT MAX(snapshot_yyyymm) FROM employment)
+                       AND id <> %s""",
+                (import_id,),
+            )
+
         conn.commit()
     except Exception as exc:
         conn.rollback()

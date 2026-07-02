@@ -310,6 +310,22 @@ def main():
         available = sorted(best.values(), key=lambda x: (x["dataset"], x["month"]), reverse=True)
         log(f"Latest version per month: {len(available)} file(s).")
 
+    # Employment is a point-in-time snapshot dataset: the app assumes the
+    # employment table holds exactly one (the latest) month, so only the
+    # newest available employment month is processed. Accessions and
+    # separations are flow datasets and accumulate months.
+    emp_months = [i["month"] for i in available if i["dataset"] == "employment"]
+    if emp_months:
+        newest_emp = max(emp_months)
+        before = len(available)
+        available = [
+            i for i in available
+            if i["dataset"] != "employment" or i["month"] == newest_emp
+        ]
+        dropped = before - len(available)
+        if dropped:
+            log(f"Employment: newest month {newest_emp} only ({dropped} older file(s) skipped).")
+
     # Determine what needs downloading/importing
     to_process: list[dict] = []
     skipped = 0
