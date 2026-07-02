@@ -106,26 +106,30 @@ def build_url(dataset: str, month: str, version: int) -> str:
 # ---------------------------------------------------------------------------
 
 def probe_one(dataset: str, month: str, version: int) -> dict | None:
-    """Check if a file exists on OPM. Returns file info dict or None."""
+    """Check if a file exists on OPM. Returns file info dict or None.
+
+    Raises requests.RequestException on network/timeout errors so the caller
+    can surface them rather than silently treating the month as missing.
+    """
     url = build_url(dataset, month, version)
-    try:
-        resp = requests.get(
-            url,
-            headers={"Range": "bytes=0-0"},
-            stream=True,
-            timeout=PROBE_TIMEOUT,
-        )
-        resp.close()
-        if resp.status_code in (200, 206):
-            return {
-                "dataset": dataset,
-                "month": month,
-                "version": version,
-                "filename": f"{dataset}_{month}_{version}.txt",
-                "url": url,
-            }
-    except requests.RequestException:
-        pass
+    resp = requests.get(
+        url,
+        headers={"Range": "bytes=0-0"},
+        stream=True,
+        timeout=PROBE_TIMEOUT,
+    )
+    resp.close()
+    if resp.status_code in (200, 206):
+        # Reject soft-404 error pages served as HTML with a 200/206.
+        if "html" in resp.headers.get("Content-Type", "").lower():
+            return None
+        return {
+            "dataset": dataset,
+            "month": month,
+            "version": version,
+            "filename": f"{dataset}_{month}_{version}.txt",
+            "url": url,
+        }
     return None
 
 
@@ -144,11 +148,16 @@ def discover_files(datasets: list[str], months: list[str]) -> list[dict]:
         v1_futures = {pool.submit(probe_one, d, m, v): (d, m) for d, m, v in v1_tasks}
         has_v1: set[tuple[str, str]] = set()
 
+        probe_errors = 0
         done = 0
         total = len(v1_futures)
         for fut in as_completed(v1_futures):
             done += 1
-            result = fut.result()
+            try:
+                result = fut.result()
+            except requests.RequestException:
+                probe_errors += 1
+                result = None
             if result:
                 found.append(result)
                 has_v1.add(v1_futures[fut])
@@ -168,11 +177,18 @@ def discover_files(datasets: list[str], months: list[str]) -> list[dict]:
             total = len(h_futures)
             for fut in as_completed(h_futures):
                 done += 1
-                result = fut.result()
+                try:
+                    result = fut.result()
+                except requests.RequestException:
+                    probe_errors += 1
+                    result = None
                 if result:
                     found.append(result)
                 print(f"\r  Phase 2: {done}/{total} probed, {len(found)} total", end="", flush=True)
             print()
+
+    if probe_errors:
+        print(f"  Warning: {probe_errors} probe(s) failed (network/timeout); some months may be missed.")
 
     print(f"  Found {len(found)} files across {len(has_v1)} active months.")
 
@@ -246,7 +262,12 @@ def main():
     )
     parser.add_argument(
         "--latest-only", action="store_true",
-        help="Only keep the highest version per dataset-month.",
+        help="Deprecated: keeping only the latest version is now the default.",
+    )
+    parser.add_argument(
+        "--all-versions", action="store_true",
+        help="Import every available version of each month "
+             "(default: latest version only, to avoid double-counting).",
     )
     args = parser.parse_args()
 
@@ -278,15 +299,16 @@ def main():
         log("No files found on OPM. Data may not be published yet.")
         return
 
-    # Optionally filter to latest version per dataset-month
-    if args.latest_only:
+    # Keep only the highest version per dataset-month unless --all-versions.
+    # Importing multiple versions of the same month would double-count it.
+    if not args.all_versions:
         best: dict[tuple[str, str], dict] = {}
         for item in available:
             key = (item["dataset"], item["month"])
             if key not in best or item["version"] > best[key]["version"]:
                 best[key] = item
         available = sorted(best.values(), key=lambda x: (x["dataset"], x["month"]), reverse=True)
-        log(f"Latest-only: {len(available)} files after filtering.")
+        log(f"Latest version per month: {len(available)} file(s).")
 
     # Determine what needs downloading/importing
     to_process: list[dict] = []

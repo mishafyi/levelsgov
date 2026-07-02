@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { useIsMobile } from "@/lib/use-is-mobile";
 import { formatNumber as fmtNum, formatPay as fmtPay } from "@/lib/format";
 
 const GEO_URL = "/states-10m.json";
@@ -28,18 +29,6 @@ const STATE_ABBR: Record<string, string> = {
   Vermont: "VT", Virginia: "VA", Washington: "WA", "West Virginia": "WV",
   Wisconsin: "WI", Wyoming: "WY", "District of Columbia": "DC",
 };
-
-function useIsMobile(breakpoint = 640) {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, [breakpoint]);
-  return isMobile;
-}
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -189,13 +178,18 @@ export function USStateImpactMap({ data }: { data: StateImpactData[] }) {
     hires?: number;
   } | null>(null);
 
-  const lookup = new Map<string, StateImpactData>();
-  for (const d of data) lookup.set(d.abbreviation, d);
+  const lookup = useMemo(() => {
+    const map = new Map<string, StateImpactData>();
+    for (const d of data) map.set(d.abbreviation, d);
+    return map;
+  }, [data]);
 
-  const pcts = data.map((d) => d.replacementPct);
-  const minPct = Math.min(...pcts);
-  const maxPct = Math.max(...pcts);
-  const range = maxPct - minPct || 1;
+  const { minPct, maxPct, range } = useMemo(() => {
+    const pcts = data.map((d) => d.replacementPct);
+    const min = Math.min(...pcts);
+    const max = Math.max(...pcts);
+    return { minPct: min, maxPct: max, range: max - min || 1 };
+  }, [data]);
 
   const getColor = (abbr: string | undefined) => {
     if (!abbr) return "hsl(var(--muted))";

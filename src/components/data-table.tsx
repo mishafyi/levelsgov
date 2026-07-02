@@ -278,6 +278,7 @@ export function DataTable({
   const [total, setTotal] = useState(initialTotal);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [prevInitialData, setPrevInitialData] = useState(initialData);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
     if (typeof window !== "undefined" && window.innerWidth < 640) {
       return DEFAULT_VISIBLE_MOBILE;
@@ -306,6 +307,10 @@ export function DataTable({
     prevParamsStr.current = currentStr;
 
     const controller = new AbortController();
+    // Show loading + clear any stale error when a new fetch starts. This effect
+    // synchronizes with an external system (the API), so this state update is
+    // intended, not a cascading-render bug.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(null);
 
@@ -330,11 +335,14 @@ export function DataTable({
     return () => controller.abort();
   }, [searchParams, dataset]);
 
-  // Sync initial data from SSR when props change (e.g. full page navigation)
-  useEffect(() => {
+  // Reset to SSR data when new props arrive (e.g. full-page navigation).
+  // Done during render per React's "adjust state on prop change" guidance,
+  // which avoids a setState-in-effect cascade.
+  if (initialData !== prevInitialData) {
+    setPrevInitialData(initialData);
     setData(initialData);
     setTotal(initialTotal);
-  }, [initialData, initialTotal]);
+  }
 
   const handlePageChange = useCallback(
     (newPage: number) => {

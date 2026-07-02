@@ -620,8 +620,12 @@ export function OccupationTreemap({ data, ageExposure, eduExposure }: { data: Oc
   const [magnifierOn, setMagnifierOn] = useState(false);
   const magnifierRef = useRef(false);
 
-  // Keep ref in sync so callbacks don't go stale
-  magnifierRef.current = magnifierOn;
+  // Keep the ref in sync so stable (empty-dep) callbacks read the latest value.
+  // Done in an effect rather than during render to satisfy the refs-purity rule;
+  // the callbacks that read it are mouse/draw handlers that fire after commit.
+  useEffect(() => {
+    magnifierRef.current = magnifierOn;
+  }, [magnifierOn]);
 
   const GAP = 1.5;
   const MARGIN = 12;

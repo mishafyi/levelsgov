@@ -329,8 +329,8 @@ const TablePagination = ({
 // Animated Table Root
 const AnimatedTableRoot = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { stickyHeader?: boolean }
->(({ className, stickyHeader, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
@@ -645,14 +645,14 @@ const SkeletonRow = ({
         <div className="flex-1 space-y-2">
           <div
             className="h-4 animate-pulse rounded bg-muted"
-            style={{ width: `${60 + Math.random() * 30}%` }}
+            style={{ width: `${65 + ((index * 17) % 30)}%` }}
           />
         </div>
         {Array.from({ length: columns - 2 }).map((_, i) => (
           <div
             key={i}
             className="h-4 animate-pulse rounded bg-muted"
-            style={{ width: `${40 + Math.random() * 40}px` }}
+            style={{ width: `${45 + (((index + i) * 23) % 40)}px` }}
           />
         ))}
       </div>

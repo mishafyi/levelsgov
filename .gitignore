@@ -43,5 +43,9 @@ next-env.d.ts
 data/
 *.txt
 
+# python
+__pycache__/
+*.pyc
+
 # deployment docs with sensitive info
 DEPLOY-NEW-PROJECT-COOLIFY.md

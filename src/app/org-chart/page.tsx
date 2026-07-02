@@ -139,10 +139,11 @@ async function getData(): Promise<OrgChartData> {
 }
 
 export default async function OrgChartPage() {
+  let data: Awaited<ReturnType<typeof getData>>;
   try {
-    const data = await getData();
-    return <OrgChart data={data} />;
-  } catch {
+    data = await getData();
+  } catch (err) {
+    console.error("Failed to load org chart data:", err);
     return (
       <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
         <h1 className="text-2xl font-bold tracking-tight mb-2">Org Chart</h1>
@@ -152,4 +153,5 @@ export default async function OrgChartPage() {
       </div>
     );
   }
+  return <OrgChart data={data} />;
 }

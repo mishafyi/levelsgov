@@ -1,8 +1,17 @@
+import { timingSafeEqual } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
+function tokenMatches(provided: string | undefined, expected: string): boolean {
+  if (typeof provided !== "string") return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
 export async function POST(request: NextRequest) {
-  if (!process.env.REVALIDATE_TOKEN) {
+  const expectedToken = process.env.REVALIDATE_TOKEN;
+  if (!expectedToken) {
     return NextResponse.json(
       { error: "REVALIDATE_TOKEN is not configured" },
       { status: 500 }
@@ -19,11 +28,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (
-    !body ||
-    typeof body !== "object" ||
-    body.token !== process.env.REVALIDATE_TOKEN
-  ) {
+  if (!body || typeof body !== "object" || !tokenMatches(body.token, expectedToken)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

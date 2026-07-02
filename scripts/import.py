@@ -69,9 +69,10 @@ class _PreprocessedStream(io.RawIOBase):
     NULL_SENTINEL = "REDACTED"
     DELIMITER = "|"
 
-    def __init__(self, filepath: str, numeric_indices: set[int]):
+    def __init__(self, filepath: str, numeric_indices: set[int], import_id: int):
         self._file = open(filepath, "r", encoding="utf-8")
         self._numeric_indices = numeric_indices
+        self._import_id = import_id
         self._buffer = b""
         self._exhausted = False
         self._is_first_line = True
@@ -89,18 +90,18 @@ class _PreprocessedStream(io.RawIOBase):
                 self._exhausted = True
                 break
             if self._is_first_line:
-                # Pass header through as-is (already correct after caller
-                # renamed 'count' -> 'employee_count' in the COPY column
-                # list; the header still says 'count' but HEADER TRUE will
-                # skip it).
+                # Header is skipped by COPY (HEADER TRUE); append the synthetic
+                # import_id column name so its field count matches the data rows.
                 self._is_first_line = False
-                self._buffer += line.encode("utf-8")
+                header = line.rstrip("\n") + self.DELIMITER + "import_id\n"
+                self._buffer += header.encode("utf-8")
                 continue
-            # Data line: fix empty numeric fields.
+            # Data line: fix empty numeric fields, then tag the row with import_id.
             parts = line.rstrip("\n").split(self.DELIMITER)
             for idx in self._numeric_indices:
                 if idx < len(parts) and parts[idx] == "":
                     parts[idx] = self.NULL_SENTINEL
+            parts.append(str(self._import_id))
             self._buffer += (self.DELIMITER.join(parts) + "\n").encode("utf-8")
 
         n = min(len(b), len(self._buffer))
@@ -176,6 +177,9 @@ def run_import(dataset_type: str, filepath: str) -> None:
     db_columns = [
         "employee_count" if col == "count" else col for col in file_columns
     ]
+    # Every inserted row is tagged with this import's id (appended by the
+    # preprocessing stream) so a re-import of the same month can replace it.
+    db_columns.append("import_id")
 
     # Identify indices of numeric columns that need empty-string fixing.
     numeric_indices: set[int] = set()
@@ -204,6 +208,31 @@ def run_import(dataset_type: str, filepath: str) -> None:
     import_id = cur.fetchone()[0]
     conn.commit()
 
+    # ---- supersede any prior import of this dataset + month --------------
+    # Rows carry import_id, so deleting the rows of earlier *complete* imports
+    # for the same (dataset, snapshot_month) makes a re-published file replace
+    # the old one instead of double-counting it. This runs inside the COPY
+    # transaction below, so a failed COPY rolls the deletion back.
+    if snapshot_month:
+        cur.execute(
+            f"""DELETE FROM {table}
+                 WHERE import_id IN (
+                     SELECT id FROM data_imports
+                     WHERE dataset_type = %s AND snapshot_month = %s
+                       AND status = 'complete' AND id <> %s
+                 )""",
+            (dataset_type, snapshot_month, import_id),
+        )
+        superseded = cur.rowcount
+        cur.execute(
+            """UPDATE data_imports SET status = 'superseded'
+                 WHERE dataset_type = %s AND snapshot_month = %s
+                   AND status = 'complete' AND id <> %s""",
+            (dataset_type, snapshot_month, import_id),
+        )
+        if superseded:
+            print(f"  Superseding {superseded:,} row(s) from a prior {dataset_type} {snapshot_month} import.")
+
     # ---- COPY data -------------------------------------------------------
     copy_sql = (
         f"COPY {table} ({', '.join(db_columns)}) "
@@ -213,7 +242,7 @@ def run_import(dataset_type: str, filepath: str) -> None:
     print(f"Importing into {table} via COPY ...")
     t0 = time.time()
 
-    stream = _PreprocessedStream(filepath, numeric_indices)
+    stream = _PreprocessedStream(filepath, numeric_indices, import_id)
     buffered = io.BufferedReader(stream, buffer_size=1 << 20)
 
     try:

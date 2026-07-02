@@ -18,6 +18,7 @@ CREATE TABLE data_imports (
 
 CREATE TABLE employment (
     id SERIAL PRIMARY KEY,
+    import_id INTEGER,
     age_bracket VARCHAR(20),
     agency VARCHAR(200),
     agency_code VARCHAR(10),
@@ -53,6 +54,7 @@ CREATE TABLE employment (
 
 CREATE TABLE accessions (
     id SERIAL PRIMARY KEY,
+    import_id INTEGER,
     accession_category VARCHAR(200),
     accession_category_code VARCHAR(10),
     age_bracket VARCHAR(20),
@@ -90,6 +92,7 @@ CREATE TABLE accessions (
 
 CREATE TABLE separations (
     id SERIAL PRIMARY KEY,
+    import_id INTEGER,
     age_bracket VARCHAR(20),
     agency VARCHAR(200),
     agency_code VARCHAR(10),
@@ -156,3 +159,8 @@ CREATE INDEX idx_sep_occ ON separations(occupational_series_code);
 CREATE INDEX idx_sep_date ON separations(personnel_action_effective_date_yyyymm);
 CREATE INDEX idx_sep_date_agency ON separations(personnel_action_effective_date_yyyymm, agency_code);
 CREATE INDEX idx_sep_category ON separations(separation_category_code);
+
+-- Import tracking (enables month-level idempotent re-imports)
+CREATE INDEX idx_emp_import ON employment(import_id);
+CREATE INDEX idx_acc_import ON accessions(import_id);
+CREATE INDEX idx_sep_import ON separations(import_id);

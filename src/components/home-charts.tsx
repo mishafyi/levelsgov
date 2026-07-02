@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId } from "react";
+import { useIsMobile } from "@/lib/use-is-mobile";
 import {
   Area,
   AreaChart,
@@ -35,18 +36,6 @@ import { formatPay as payFormatter } from "@/lib/format";
 
 const compactFormatter = (v: number) =>
   v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v);
-
-function useIsMobile(breakpoint = 640) {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, [breakpoint]);
-  return isMobile;
-}
 
 // Horizontal bar chart for ranked data (states, agencies, occupations, etc.)
 export function HorizontalBarChart({
