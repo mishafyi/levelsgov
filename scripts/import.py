@@ -27,6 +27,19 @@ VALID_DATASETS = {"employment", "accessions", "separations"}
 # them with the NULL sentinel ('REDACTED') before COPY ingests the row.
 NUMERIC_COLUMNS = {"annualized_adjusted_basic_pay", "length_of_service_years"}
 
+# Columns a file must contain for the import to make sense — without these,
+# stats aggregation or month-level supersede/prune logic would silently break.
+REQUIRED_COLUMNS: dict[str, set[str]] = {
+    "employment": {"count", "snapshot_yyyymm"},
+    "accessions": {"count", "personnel_action_effective_date_yyyymm"},
+    "separations": {"count", "personnel_action_effective_date_yyyymm"},
+}
+
+
+def db_column_for(col: str) -> str:
+    """Map a source-file column name to its DB column name."""
+    return "employee_count" if col == "count" else col
+
 
 def get_connection():
     """Return a psycopg2 connection using DATABASE_URL or local defaults."""
@@ -56,21 +69,28 @@ def extract_snapshot_month(filepath: str) -> str | None:
 
 
 class _PreprocessedStream(io.RawIOBase):
-    """A read-only binary stream that fixes empty NUMERIC fields on the fly.
+    """A read-only binary stream that projects and fixes rows on the fly.
 
-    For every data line (not the header), fields at *numeric_indices* that
-    are empty strings are replaced with the NULL sentinel so that
-    PostgreSQL COPY ... NULL 'REDACTED' can turn them into real NULLs.
-
-    The header line is rewritten to use db_columns (with 'count' already
-    renamed to 'employee_count').
+    Every line is projected down to *keep_indices* (the file columns that
+    exist in the target table — OPM adds new columns over time and those are
+    skipped). On data lines, fields at *numeric_indices* (positions within
+    the projected row) that are empty strings are replaced with the NULL
+    sentinel so PostgreSQL COPY ... NULL 'REDACTED' turns them into real
+    NULLs, and every row is tagged with import_id.
     """
 
     NULL_SENTINEL = "REDACTED"
     DELIMITER = "|"
 
-    def __init__(self, filepath: str, numeric_indices: set[int], import_id: int):
+    def __init__(
+        self,
+        filepath: str,
+        keep_indices: list[int],
+        numeric_indices: set[int],
+        import_id: int,
+    ):
         self._file = open(filepath, "r", encoding="utf-8")
+        self._keep_indices = keep_indices
         self._numeric_indices = numeric_indices
         self._import_id = import_id
         self._buffer = b""
@@ -89,17 +109,20 @@ class _PreprocessedStream(io.RawIOBase):
             if not line:
                 self._exhausted = True
                 break
+            raw = line.rstrip("\n").split(self.DELIMITER)
+            # Project to the columns that exist in the DB table. A malformed
+            # short line raises IndexError, aborting the COPY loudly.
+            parts = [raw[i] for i in self._keep_indices]
             if self._is_first_line:
-                # Header is skipped by COPY (HEADER TRUE); append the synthetic
-                # import_id column name so its field count matches the data rows.
+                # Header is skipped by COPY (HEADER TRUE); keep its field
+                # count aligned with the data rows (+ synthetic import_id).
                 self._is_first_line = False
-                header = line.rstrip("\n") + self.DELIMITER + "import_id\n"
-                self._buffer += header.encode("utf-8")
+                parts.append("import_id")
+                self._buffer += (self.DELIMITER.join(parts) + "\n").encode("utf-8")
                 continue
-            # Data line: fix empty numeric fields, then tag the row with import_id.
-            parts = line.rstrip("\n").split(self.DELIMITER)
+            # Data line: fix empty numeric fields, then tag with import_id.
             for idx in self._numeric_indices:
-                if idx < len(parts) and parts[idx] == "":
+                if parts[idx] == "":
                     parts[idx] = self.NULL_SENTINEL
             parts.append(str(self._import_id))
             self._buffer += (self.DELIMITER.join(parts) + "\n").encode("utf-8")
@@ -173,19 +196,44 @@ def run_import(dataset_type: str, filepath: str) -> None:
         header_line = f.readline().strip()
     file_columns = header_line.split("|")
 
-    # Map file column 'count' -> DB column 'employee_count'
-    db_columns = [
-        "employee_count" if col == "count" else col for col in file_columns
+    # OPM adds columns to the published files over time (e.g. bargaining_unit
+    # appeared in the 2026-04 files). Import only the intersection with the
+    # actual table columns so schema evolution is a deliberate migration, not
+    # a nightly import failure. Skipped columns are logged loudly.
+    cur.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name = %s",
+        (table,),
+    )
+    table_columns = {row[0] for row in cur.fetchall()}
+
+    keep_indices = [
+        i for i, col in enumerate(file_columns) if db_column_for(col) in table_columns
     ]
+    kept_names = {file_columns[i] for i in keep_indices}
+    skipped = [col for col in file_columns if col not in kept_names]
+    if skipped:
+        print(
+            f"  Skipping {len(skipped)} file column(s) not in {table}: "
+            f"{', '.join(skipped)}"
+        )
+
+    missing = REQUIRED_COLUMNS[dataset_type] - kept_names
+    if missing:
+        conn.close()
+        sys.exit(f"Error: required column(s) missing from {filename}: {sorted(missing)}")
+
+    db_columns = [db_column_for(file_columns[i]) for i in keep_indices]
     # Every inserted row is tagged with this import's id (appended by the
     # preprocessing stream) so a re-import of the same month can replace it.
     db_columns.append("import_id")
 
-    # Identify indices of numeric columns that need empty-string fixing.
-    numeric_indices: set[int] = set()
-    for i, col in enumerate(file_columns):
-        if col in NUMERIC_COLUMNS:
-            numeric_indices.add(i)
+    # Positions of numeric columns within the PROJECTED row that need
+    # empty-string fixing.
+    numeric_indices: set[int] = {
+        new_i
+        for new_i, old_i in enumerate(keep_indices)
+        if file_columns[old_i] in NUMERIC_COLUMNS
+    }
 
     # ---- count lines for progress ----------------------------------------
     print(f"Counting lines in {filename} ...")
@@ -242,7 +290,7 @@ def run_import(dataset_type: str, filepath: str) -> None:
     print(f"Importing into {table} via COPY ...")
     t0 = time.time()
 
-    stream = _PreprocessedStream(filepath, numeric_indices, import_id)
+    stream = _PreprocessedStream(filepath, keep_indices, numeric_indices, import_id)
     buffered = io.BufferedReader(stream, buffer_size=1 << 20)
 
     try:
