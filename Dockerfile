@@ -17,12 +17,19 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# Python runtime for the OPM data-sync pipeline, executed inside this
+# container by a Coolify scheduled task: python3 scripts/download.py
+RUN apk add --no-cache python3 py3-psycopg2 py3-requests
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --chown=nextjs:nodejs scripts ./scripts
+# Download target for OPM data files (mount a volume here to persist
+# downloads across deploys; imports are hash-deduped either way)
+RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 
 USER nextjs
 EXPOSE 3000
