@@ -35,5 +35,6 @@ export async function POST(request: NextRequest) {
   revalidateTag("filter-options", { expire: 0 });
   revalidateTag("stats", { expire: 0 });
   revalidateTag("homepage-insights", { expire: 0 });
+  revalidateTag("insights", { expire: 0 });
   return NextResponse.json({ revalidated: true });
 }
