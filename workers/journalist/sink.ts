@@ -9,7 +9,10 @@
  * call posts `{token}` in the BODY (contract-verified) and never throws — the
  * post is already saved, so a revalidate blip is logged, not fatal.
  *
- * `--dry` never reaches here: the worker short-circuits to a printed preview.
+ * `--dry` normally short-circuits to a printed preview before the engine calls
+ * the sink, but `publish` ALSO self-guards on `dryRun` so a dry/preview run can
+ * never insert even if the engine's dry handling changes — the write path owns
+ * its own safety rather than delegating it.
  */
 import type { Sink, GeneratedPost, PublishResult } from "ai-journalist/ports";
 import { insertPost, type InsertPostInput } from "./db.ts";
@@ -51,9 +54,19 @@ async function revalidate(): Promise<void> {
   }
 }
 
-export function createSink(): Sink {
+export function createSink(opts: { dryRun: boolean }): Sink {
   return {
     async publish(post: GeneratedPost): Promise<PublishResult> {
+      // Self-defense: a dry/preview run must NEVER write. The worker also short-
+      // circuits before this and passes dryRun to runPipeline, but the write path
+      // refuses the insert itself rather than trusting the engine's dry handling.
+      if (opts.dryRun) {
+        log(`dry: skipping insert for slug=${post.slug}`);
+        return {
+          url: `${PUBLIC_URL}/insights/${post.slug}`,
+          status: "DRAFT",
+        };
+      }
       const live = PUBLISH_MODE === "live";
       const telemetry =
         post.telemetry && typeof post.telemetry === "object"

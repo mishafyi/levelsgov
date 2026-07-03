@@ -114,7 +114,10 @@ const brand: BrandProfile = {
 async function runCycle(dry: boolean): Promise<void> {
   resetRunState();
   const source = createSource();
-  const sink = createSink();
+  // Pass `dry` so the sink self-defends against a write even if the engine were
+  // to call publish() under dryRun — the write path guards itself rather than
+  // trusting the engine's dry handling.
+  const sink = createSink({ dryRun: dry });
   const enrichment = createEnrichment();
   const embedder = createEmbedder();
   const search = buildSearch();
@@ -219,30 +222,19 @@ async function runCycle(dry: boolean): Promise<void> {
 }
 
 // ── run state (health) ──
-// Per-cycle hard timeout. The OpenRouter SDK can HANG on a free-model empty-body
-// glitch (the unhandledRejection guard defuses the crash, but the awaited call
-// may never resolve — observed at the [6/6] SEO gate on the first supervised
-// run). Without a bound, one hang wedges `running=true` forever and every future
-// cron cycle logs "skip: a run is already active" — the worker silently stops
-// producing. On timeout we surface it, reset the flag in `finally`, and let the
-// next cron fire. Generous default (40 min) so a slow-but-progressing run isn't
-// killed; env-tunable. The leaked in-flight promise resolves/errors harmlessly
-// (its result is discarded); a --once process exits regardless.
+// Per-cycle WATCHDOG. `guardedRun` holds `running=true` for the cycle's REAL
+// lifetime — the overlap guard (line "skip: a run is already active") is only
+// sound if it can't be cleared while a cycle is still executing. A promise can't
+// be cancelled in Node, so a cycle that exceeds this bound is recovered the only
+// safe way: exit the process and let Coolify restart with a clean slate. That
+// both bounds a genuinely-stuck cycle AND makes cron overlap impossible — no
+// leaked in-flight pipeline survives to mutate the shared runState (which would
+// mislabel `posts.entities` and double-spend the LLM). ai-journalist 0.4.1
+// bounds every LLM call (native per-call timeoutMs → the per-model retry
+// advances), so a normal cycle settles well under this; the watchdog is the
+// backstop for a non-LLM stall. Must exceed a normal cycle (~30 min); env-tunable.
+// Default 40 min.
 const RUN_TIMEOUT_MS = Number(process.env.JOURNALIST_RUN_TIMEOUT_MS ?? "2400000");
-
-/** Race a promise against a timeout; the timer is unref'd so it never keeps the
- *  process alive, and cleared once the race settles. */
-function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(
-      () => reject(new Error(`${label} timed out after ${ms}ms`)),
-      ms,
-    );
-    timer.unref();
-  });
-  return Promise.race([p, timeout]).finally(() => clearTimeout(timer));
-}
 
 let running = false;
 let lastRun: string | null = null;
@@ -256,14 +248,22 @@ async function guardedRun(dry: boolean): Promise<void> {
   running = true;
   lastStatus = "running";
   const started = new Date().toISOString();
+  // A cycle exceeding RUN_TIMEOUT_MS is stuck, or slow enough to risk overlapping
+  // the next cron fire. A promise can't be cancelled, so exit and let Coolify
+  // restart — this leaves no in-flight pipeline mutating the shared runState.
+  const watchdog = setTimeout(() => {
+    log(`run cycle exceeded ${RUN_TIMEOUT_MS}ms — exiting for a clean restart`);
+    process.exit(1);
+  }, RUN_TIMEOUT_MS);
+  watchdog.unref();
   try {
-    // Bound each cycle so an SDK hang can't wedge the worker (see RUN_TIMEOUT_MS).
-    await withTimeout(runCycle(dry), RUN_TIMEOUT_MS, "run cycle");
+    await runCycle(dry);
     lastStatus = "ok";
   } catch (err) {
     lastStatus = "error";
     log(`run failed: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}`);
   } finally {
+    clearTimeout(watchdog);
     running = false;
     lastRun = started;
   }

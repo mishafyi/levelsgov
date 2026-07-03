@@ -167,8 +167,16 @@ async function agencySpending(agencies: string[]): Promise<AgencySpend[]> {
         fy: String(fy),
         quarter: String(quarter),
       });
-    } catch {
-      continue; // unclosed / upstream error → try the prior quarter
+    } catch (err) {
+      // The newest quarters are often not yet closed (a 400) — expected — but a
+      // real failure (timeout, 5xx, auth) must not vanish silently. Log the skip
+      // and try the prior quarter.
+      process.stdout.write(
+        `        datagod usaspending FY${fy} Q${quarter} skipped: ${
+          err instanceof Error ? err.message : String(err)
+        }\n`,
+      );
+      continue;
     }
     const rows = data.results ?? [];
     if (rows.length === 0) continue;

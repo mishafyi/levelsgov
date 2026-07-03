@@ -40,6 +40,16 @@ async function q<T>(
 /** Flow tables the flow-month helper accepts (typed, not free string). */
 export type FlowTable = "accessions" | "separations";
 
+/** Runtime allowlist for the two sites where `FlowTable` is inlined into SQL
+ *  (a table name can't be a bound parameter). TypeScript's union is erased at
+ *  runtime, so this guards against a future caller smuggling an unvalidated
+ *  string into the interpolated table name. */
+function assertFlowTable(table: FlowTable): void {
+  if (table !== "accessions" && table !== "separations") {
+    throw new Error(`invalid flow table: ${JSON.stringify(table)}`);
+  }
+}
+
 /** The latest employment snapshot month (YYYYMM). */
 export async function latestSnapshot(): Promise<string> {
   const rows = await q<{ m: string | null }>(
@@ -53,7 +63,9 @@ export async function latestSnapshot(): Promise<string> {
 
 /** The latest flow month (YYYYMM) present in the given flow table. */
 export async function latestFlowMonth(table: FlowTable): Promise<string> {
-  // `table` is a validated union literal, never user input — safe to inline.
+  // `table` is inlined below (a table name can't be a bound param) — guard the
+  // union at runtime since types are erased.
+  assertFlowTable(table);
   const rows = await q<{ m: string | null }>(
     `SELECT MAX(personnel_action_effective_date_yyyymm) AS m FROM ${table}`,
     [],
@@ -112,6 +124,7 @@ async function flowByAgency(
   cur: string,
   prev: string,
 ): Promise<FlowAggRow[]> {
+  assertFlowTable(table);
   return q<FlowAggRow>(
     `SELECT agency,
             agency_code,
