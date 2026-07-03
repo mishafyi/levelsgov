@@ -149,6 +149,29 @@ async function runCycle(dry: boolean): Promise<void> {
   const llm = createOpenRouterLlm({ defaultModel: MODEL });
   log(`model: ${MODEL ?? "(dynamic top-weekly-free)"}`);
 
+  // Domain-tuned system prompt (throughput/reliability lever, per the Task-4
+  // review). Federal-workforce material is AGGREGATE data — agency/occupation
+  // hiring & separation counts, pay, federal statistics — so steer the writer
+  // onto those numbers + the cited research and away from named-individual/
+  // company speculation the OPM data can't support: the engine's fact-guard
+  // strips the latter, which was shrinking finished articles below its ~800-word
+  // article-shape floor (dry-run attempts 3 & 4 came out at 544 / 532 words;
+  // ~40% of dynamic free-model runs fail-closed). Also pushes substantive,
+  // fully-developed sections. This is the fedwork adapter's own prompt (not
+  // engine code), so domain specifics belong here; it composes with the
+  // JOURNALIST_MODEL pin rather than replacing it.
+  const systemPrompt = (): string =>
+    `You are a senior data journalist for ${brand.publication}, covering ${brand.beat}. ` +
+    `Your evidence is federal-workforce DATA: agency-level hiring and separation counts, ` +
+    `occupation and pay shifts month over month, and the federal statistics in the provided ` +
+    `research. Build the article on those aggregate numbers and the cited research — analyze ` +
+    `what the data shows (which agencies, which occupations, how large the change, versus the ` +
+    `prior month, and why it matters to federal workers). Do NOT anchor claims on the actions ` +
+    `or motives of named individuals or private companies unless the provided research directly ` +
+    `supports them. Write thorough, fully-developed sections: explore each point with concrete ` +
+    `figures, comparisons, and context drawn only from the research — no padding. Ground every ` +
+    `figure, name, and quote in the provided research; never invent them.`;
+
   const internals = createDefaultInternals({
     llm,
     search,
@@ -159,7 +182,8 @@ async function runCycle(dry: boolean): Promise<void> {
     onEvent,
     onError,
     model: MODEL,
-    knobs: { maxSections: 6 },
+    systemPrompt,
+    knobs: { maxSections: 6, sectionSnippets: 6 },
   });
 
   log(`starting ${dry ? "DRY " : ""}run (publish=${process.env.JOURNALIST_PUBLISH ?? "draft"})`);

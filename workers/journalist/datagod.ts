@@ -14,7 +14,10 @@
  *    `?fy&quarter` → {total,end_date,results:[{name,amount,code,…}]}. The latest
  *    CLOSED quarter is used (newest-first walk; an unclosed quarter upstream-400s
  *    — FY2026 Q3 did on probe). Results are matched to the topic's agencies by
- *    `name`. `/usaspending/search` (recipient-keyed) is the secondary path.
+ *    `name`; best-effort "" if every closed quarter errors. (A recipient-keyed
+ *    `/usaspending/search` alternative exists but is intentionally NOT wired —
+ *    by-agency obligated totals are the on-beat number; add it only if the
+ *    by-agency endpoint ever regresses.)
  *  - BLS — labor series. REQUIRES both `start_year` AND `end_year` (a missing
  *    end_year returns HTTP 200 with a FastAPI validation error hidden in
  *    `data.detail`, NOT a series — the ZeroG client's single-year call would
