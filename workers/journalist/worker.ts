@@ -219,6 +219,31 @@ async function runCycle(dry: boolean): Promise<void> {
 }
 
 // ── run state (health) ──
+// Per-cycle hard timeout. The OpenRouter SDK can HANG on a free-model empty-body
+// glitch (the unhandledRejection guard defuses the crash, but the awaited call
+// may never resolve — observed at the [6/6] SEO gate on the first supervised
+// run). Without a bound, one hang wedges `running=true` forever and every future
+// cron cycle logs "skip: a run is already active" — the worker silently stops
+// producing. On timeout we surface it, reset the flag in `finally`, and let the
+// next cron fire. Generous default (40 min) so a slow-but-progressing run isn't
+// killed; env-tunable. The leaked in-flight promise resolves/errors harmlessly
+// (its result is discarded); a --once process exits regardless.
+const RUN_TIMEOUT_MS = Number(process.env.JOURNALIST_RUN_TIMEOUT_MS ?? "2400000");
+
+/** Race a promise against a timeout; the timer is unref'd so it never keeps the
+ *  process alive, and cleared once the race settles. */
+function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`${label} timed out after ${ms}ms`)),
+      ms,
+    );
+    timer.unref();
+  });
+  return Promise.race([p, timeout]).finally(() => clearTimeout(timer));
+}
+
 let running = false;
 let lastRun: string | null = null;
 let lastStatus: "ok" | "error" | "running" | null = null;
@@ -232,7 +257,8 @@ async function guardedRun(dry: boolean): Promise<void> {
   lastStatus = "running";
   const started = new Date().toISOString();
   try {
-    await runCycle(dry);
+    // Bound each cycle so an SDK hang can't wedge the worker (see RUN_TIMEOUT_MS).
+    await withTimeout(runCycle(dry), RUN_TIMEOUT_MS, "run cycle");
     lastStatus = "ok";
   } catch (err) {
     lastStatus = "error";
