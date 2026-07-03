@@ -1,0 +1,18 @@
+{
+  "name": "fedwork-journalist",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --env-file-if-exists=.env worker.ts",
+    "once": "tsx --env-file-if-exists=.env worker.ts --once",
+    "dry": "tsx --env-file-if-exists=.env worker.ts --once --dry"
+  },
+  "dependencies": {
+    "ai-journalist": "github:mishafyi/ai-journalist#025329b548a75549ee46678f9d91ac24380aa03d",
+    "cron": "^4.4.0",
+    "pg": "^8.18.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "zod": "^4.4.3"
+  }
+}
