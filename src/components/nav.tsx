@@ -18,7 +18,7 @@ const links = [
   { href: "/separations", label: "Departures" },
   { href: "/org-chart", label: "Org Chart" },
   { href: "/ai-exposure", label: "AI Exposure" },
-  { href: "/insights", label: "Insights" },
+  { href: "/insights", label: "Research" },
 ];
 
 export function Nav() {

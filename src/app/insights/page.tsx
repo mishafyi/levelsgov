@@ -5,7 +5,7 @@ import { query } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata: Metadata = {
-  title: "Federal Workforce Insights — LevelsGov",
+  title: "Federal Workforce Research — LevelsGov",
   description:
     "Data-driven reporting on the federal workforce — pay, hiring, attrition, and STEM trends across U.S. government agencies.",
   alternates: { canonical: "/insights" },
@@ -48,7 +48,7 @@ export default async function InsightsPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
       <div className="mb-8 sm:mb-10">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Federal Workforce Insights
+          Federal Workforce Research
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
           Data-driven reporting on federal pay, hiring, attrition, and STEM
@@ -57,7 +57,7 @@ export default async function InsightsPage() {
       </div>
 
       {posts.length === 0 ? (
-        <p className="text-muted-foreground">No insights published yet.</p>
+        <p className="text-muted-foreground">No research published yet.</p>
       ) : (
         <ul className="flex flex-col gap-4">
           {posts.map((post) => {

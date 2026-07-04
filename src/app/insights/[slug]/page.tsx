@@ -47,7 +47,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPublishedPost(slug);
   if (!post) {
-    return { title: "Insight not found" };
+    return { title: "Article not found" };
   }
   return {
     title: post.title,
