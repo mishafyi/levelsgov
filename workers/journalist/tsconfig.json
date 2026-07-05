@@ -6,7 +6,10 @@
     "lib": ["ES2023"],
     "types": ["node"],
     "strict": true,
-    "noUncheckedIndexedAccess": true,
+    // OFF to match the ai-journalist engine's own tsconfig: the dep ships raw
+    // .ts (no build step), so our typecheck compiles its sources too — and the
+    // engine is written without noUncheckedIndexedAccess.
+    "noUncheckedIndexedAccess": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
