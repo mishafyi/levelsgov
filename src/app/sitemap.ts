@@ -1,20 +1,10 @@
 import type { MetadataRoute } from "next";
-import { query } from "@/lib/db";
-
-interface PostSitemapRow extends Record<string, unknown> {
-  slug: string;
-  published_at: string | null;
-}
+import { getPublishedPosts } from "@/lib/pb";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://levelsgov.com";
 
-  const posts = await query<PostSitemapRow>(
-    `SELECT slug, published_at
-     FROM posts
-     WHERE status = 'published'
-     ORDER BY published_at DESC`
-  );
+  const posts = await getPublishedPosts();
 
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/insights/${post.slug}`,

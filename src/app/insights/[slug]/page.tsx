@@ -1,34 +1,9 @@
 import type { Metadata } from "next";
 import type { ComponentPropsWithoutRef, JSX } from "react";
 import { notFound } from "next/navigation";
-import { unstable_cache } from "next/cache";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { query } from "@/lib/db";
-
-interface PostRow extends Record<string, unknown> {
-  slug: string;
-  title: string;
-  description: string | null;
-  markdown: string;
-  byline: string | null;
-  published_at: string | null;
-}
-
-const getPublishedPost = unstable_cache(
-  async (slug: string): Promise<PostRow | null> => {
-    const rows = await query<PostRow>(
-      `SELECT slug, title, description, markdown, byline, published_at
-       FROM posts
-       WHERE slug = $1 AND status = 'published'
-       LIMIT 1`,
-      [slug]
-    );
-    return rows[0] ?? null;
-  },
-  ["insights"],
-  { revalidate: 86400, tags: ["insights"] }
-);
+import { getPublishedPost } from "@/lib/pb";
 
 function formatPublishedDate(iso: string | null): string | null {
   if (!iso) return null;

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { unstable_cache } from "next/cache";
-import { query } from "@/lib/db";
+import { getPublishedPosts } from "@/lib/pb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata: Metadata = {
@@ -10,27 +9,6 @@ export const metadata: Metadata = {
     "Data-driven reporting on the federal workforce — pay, hiring, attrition, and STEM trends across U.S. government agencies.",
   alternates: { canonical: "/insights" },
 };
-
-interface PostListRow extends Record<string, unknown> {
-  slug: string;
-  title: string;
-  description: string | null;
-  byline: string | null;
-  published_at: string | null;
-}
-
-const getPublishedPosts = unstable_cache(
-  async () =>
-    query<PostListRow>(
-      `SELECT slug, title, description, byline, published_at
-       FROM posts
-       WHERE status = 'published'
-       ORDER BY published_at DESC
-       LIMIT 50`
-    ),
-  ["insights"],
-  { revalidate: 86400, tags: ["insights"] }
-);
 
 function formatPublishedDate(iso: string | null): string | null {
   if (!iso) return null;

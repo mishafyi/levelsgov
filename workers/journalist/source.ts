@@ -11,7 +11,8 @@ import type {
   SignalItem,
   CoveredTopic,
 } from "ai-journalist/ports";
-import { agencySpikes, coveredPosts, latestFlowMonth, type SpikeRow } from "./db.ts";
+import { agencySpikes, latestFlowMonth, type SpikeRow } from "./db.ts";
+import { coveredPosts } from "./pbPosts.ts";
 import { titleCase } from "./util.ts";
 import { recordSignalEntities } from "./runState.ts";
 

@@ -70,11 +70,15 @@ process.on("unhandledRejection", (reason) => {
 });
 
 // ── env fail-fast ───────────────────────────────────────────────────────────
-// DATABASE_URL + OPENROUTER_API_KEY are always required. Exactly one search
-// backend must be configured (Firecrawl wins if both are).
+// DATABASE_URL (OPM signal) + POCKETBASE_* (posts store) + OPENROUTER_API_KEY
+// are always required. Exactly one search backend must be configured
+// (Firecrawl wins if both are).
 function checkEnv(): string[] {
   const missing: string[] = [];
   if (!process.env.DATABASE_URL) missing.push("DATABASE_URL");
+  if (!process.env.POCKETBASE_URL) missing.push("POCKETBASE_URL");
+  if (!process.env.POCKETBASE_ADMIN_EMAIL) missing.push("POCKETBASE_ADMIN_EMAIL");
+  if (!process.env.POCKETBASE_ADMIN_PASSWORD) missing.push("POCKETBASE_ADMIN_PASSWORD");
   if (!process.env.OPENROUTER_API_KEY) missing.push("OPENROUTER_API_KEY");
   const hasFirecrawl = Boolean(process.env.FIRECRAWL_API_URL);
   const hasSearxng = Boolean(process.env.SEARXNG_URL);

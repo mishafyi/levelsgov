@@ -1,6 +1,6 @@
 /**
- * The journalist `Sink` — persists the finished post to the `posts` table and
- * best-effort revalidates the app's `/insights` cache.
+ * The journalist `Sink` — persists the finished post to the PocketBase
+ * `posts` collection and best-effort revalidates the app's `/insights` cache.
  *
  * Publish safety: JOURNALIST_PUBLISH (default "draft") decides status; a "live"
  * value publishes immediately (status "published", published_at now). The
@@ -15,7 +15,7 @@
  * its own safety rather than delegating it.
  */
 import type { Sink, GeneratedPost, PublishResult } from "ai-journalist/ports";
-import { insertPost, type InsertPostInput } from "./db.ts";
+import { insertPost, type InsertPostInput } from "./pbPosts.ts";
 import { getSignalEntities } from "./runState.ts";
 
 const PUBLISH_MODE = process.env.JOURNALIST_PUBLISH ?? "draft";

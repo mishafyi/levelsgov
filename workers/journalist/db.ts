@@ -1,7 +1,8 @@
 /**
  * fedwork DB access for the journalist worker — a slim `pg.Pool` + typed,
  * fully-parameterized query helpers. Reads the OPM flow tables (`accessions`/
- * `separations`), the snapshot table (`employment`), and the `posts` table.
+ * `separations`) and the snapshot table (`employment`) — the SIGNAL side only;
+ * posts persistence lives in pbPosts.ts (PocketBase).
  * Imports NOTHING from fedwork `src/**` — the worker is standalone.
  *
  * The tables (schema per scripts/schema.sql):
@@ -19,15 +20,6 @@ const pool = new Pool({
   idleTimeoutMillis: 30_000,
   connectionTimeoutMillis: 10_000,
 });
-
-/** Thrown when an insert hits the unique(slug) — the engine's anti-repetition
- *  should have prevented it, so a collision is a real signal, not a no-op. */
-export class SlugCollisionError extends Error {
-  constructor(slug: string) {
-    super(`post slug already exists: ${slug}`);
-    this.name = "SlugCollisionError";
-  }
-}
 
 async function q<T>(
   text: string,
@@ -380,84 +372,6 @@ export async function siteTotals(): Promise<SiteTotals> {
     occupations: Number(rows[0]?.occupations ?? 0),
     snapshot,
   };
-}
-
-/** A previously-published post, for the engine's anti-repetition. */
-export interface CoveredPostRow {
-  title: string;
-  slug: string;
-  entities: string[];
-  date: string;
-}
-
-/** The last 200 posts, any status — feeds coveredTopics(). */
-export async function coveredPosts(): Promise<CoveredPostRow[]> {
-  const rows = await q<{
-    title: string;
-    slug: string;
-    entities: string[] | null;
-    created_at: Date;
-  }>(
-    `SELECT title, slug, entities, created_at
-       FROM posts
-      ORDER BY created_at DESC
-      LIMIT 200`,
-    [],
-  );
-  return rows.map((r) => ({
-    title: r.title,
-    slug: r.slug,
-    entities: r.entities ?? [],
-    date:
-      r.created_at instanceof Date
-        ? r.created_at.toISOString().slice(0, 10)
-        : String(r.created_at).slice(0, 10),
-  }));
-}
-
-/** The finished post to persist. */
-export interface InsertPostInput {
-  slug: string;
-  title: string;
-  description: string | null;
-  markdown: string;
-  byline: string | null;
-  targetKeyword: string | null;
-  entities: string[];
-  telemetry: Record<string, unknown> | null;
-  status: "draft" | "published";
-  publishedAt: string | null;
-}
-
-/**
- * Insert a finished post. `ON CONFLICT (slug) DO NOTHING` → a conflict returns
- * no row, which we surface as `SlugCollisionError` (a real signal, not a
- * silent no-op).
- */
-export async function insertPost(post: InsertPostInput): Promise<{ id: number }> {
-  const rows = await q<{ id: string }>(
-    `INSERT INTO posts
-       (slug, title, description, markdown, byline, target_keyword,
-        entities, telemetry, status, published_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, $10)
-     ON CONFLICT (slug) DO NOTHING
-     RETURNING id`,
-    [
-      post.slug,
-      post.title,
-      post.description,
-      post.markdown,
-      post.byline,
-      post.targetKeyword,
-      post.entities,
-      post.telemetry === null ? null : JSON.stringify(post.telemetry),
-      post.status,
-      post.publishedAt,
-    ],
-  );
-  const id = rows[0]?.id;
-  if (id === undefined) throw new SlugCollisionError(post.slug);
-  return { id: Number(id) };
 }
 
 /** Close the pool (graceful shutdown). */
