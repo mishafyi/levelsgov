@@ -8,7 +8,7 @@
     "dry": "tsx --env-file-if-exists=.env worker.ts --once --dry"
   },
   "dependencies": {
-    "ai-journalist": "github:mishafyi/ai-journalist#0dd352f13152a55f8308aea7a2da02fe4fd43967",
+    "ai-journalist": "^0.5.1",
     "cron": "^4.4.0",
     "pg": "^8.18.0",
     "tsx": "^4.20.0",

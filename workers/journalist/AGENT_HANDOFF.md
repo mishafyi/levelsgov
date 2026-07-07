@@ -14,7 +14,7 @@ Autonomous content worker that turns the latest OPM federal-workforce signal int
 
 ## 2. Architecture — the engine + the ports
 
-The worker is a thin **adapter**. All the generation logic lives in the OSS engine **`ai-journalist`** (github dep, see §6). The worker implements the engine's **ports** and calls `runPipeline()`.
+The worker is a thin **adapter**. All the generation logic lives in the OSS engine **`ai-journalist`** (npm dep, see §6). The worker implements the engine's **ports** and calls `runPipeline()`.
 
 ```
 worker.ts  ──build internals──>  createDefaultInternals({ llm, search, brand, source, sink, enrichment, embedder, systemPrompt, knobs })
@@ -39,7 +39,7 @@ Ports the worker implements (all in `workers/journalist/`):
 
 - **Coolify app:** `levelsgov-journalist`, uuid **`i9zvd6a3267ar6e094duxy0s`**, repo `mishafyi/levelsgov`.
 - **Deploy branch:** currently **`feat/journalist`** ⚠️ (see §9 — should be repointed to `master`).
-- **Build:** `workers/journalist/Dockerfile` — `node:22-alpine`, `apk add git` (the ai-journalist dep is a `github:` git dep), `npm ci`, `npm start`. Healthcheck is **disabled** in Coolify (alpine has no curl; the worker serves `GET /health` on `:8090` but Coolify's check was failing the deploy).
+- **Build:** `workers/journalist/Dockerfile` — `node:22-alpine`, `npm ci`, `npm start` (no git in the image; ai-journalist installs from the npm registry). Healthcheck is **disabled** in Coolify (alpine has no curl; the worker serves `GET /health` on `:8090` but Coolify's check was failing the deploy).
 - **Redeploy:** `coolify deploy uuid i9zvd6a3267ar6e094duxy0s --force`, then verify the swapped container carries the new `SOURCE_COMMIT` and logs `cron armed` + `listening on :8090`.
 - **Env changes** apply on the next container **recreate** (a `--force` deploy), not `app restart`. Add a new var with `coolify app env create <uuid> --key K --value V`; change an existing one with `coolify app env update <uuid> K --value V`.
 
@@ -58,11 +58,11 @@ Optional / tuning: `EMBEDDING_URL`, `DATAGOD_URL` (+`DATAGOD_API_KEY`), `APP_URL
 
 ## 6. The ai-journalist dependency
 
-- Pinned in `workers/journalist/package.json` as `github:mishafyi/ai-journalist#<sha>` (currently **0.4.1**, `a0ac97f`).
-- **To bump:** change the sha, then **regenerate `package-lock.json` inside `node:22-alpine`** (the deploy image), NOT on macOS and NOT in `node:slim`. A glibc/host-regenerated lock fails `npm ci` in the alpine build (musl mismatch). Recipe:
+- Declared in `workers/journalist/package.json` as a registry dep, `"ai-journalist": "^0.5.1"` ([npm](https://www.npmjs.com/package/ai-journalist)).
+- **To bump:** change the range (or let `^` pick up patches), then **regenerate `package-lock.json` inside `node:22-alpine`** (the deploy image), NOT on macOS and NOT in `node:slim`. A glibc/host-regenerated lock fails `npm ci` in the alpine build (musl mismatch). Recipe:
   ```
   docker run --rm -v "$PWD/workers/journalist":/w -w /w node:22-alpine sh -c \
-    'apk add --no-cache git && rm -f package-lock.json && npm install --package-lock-only'
+    'rm -f package-lock.json && npm install --package-lock-only'
   ```
   Validate with a clean `npm ci` in a fresh `node:22-alpine` (copy only `package.json`+`package-lock.json` into an empty dir first — a stale bind-mounted `node_modules` throws `ENOTEMPTY`).
 - **You cannot `tsc --noEmit` the worker standalone cleanly**: ai-journalist ships raw `.ts` source (not compiled `.d.ts`), so the worker's stricter `noUncheckedIndexedAccess` re-checks the library's source and reports errors *in ai-journalist's files*. `skipLibCheck` only skips `.d.ts`. The worker runs via **tsx** (transpile-only), so this doesn't affect runtime. Type-check your own files by reading the tsc output and ignoring `node_modules/ai-journalist/*` errors.
