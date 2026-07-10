@@ -4,6 +4,11 @@ import { notFound } from "next/navigation";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getPublishedPost } from "@/lib/pb";
+import { getApprovedComments } from "@/lib/comments";
+import { ShareLinks } from "@/components/share-links";
+import { Comments } from "@/components/comments";
+
+const SITE_URL = "https://levelsgov.com";
 
 function formatPublishedDate(iso: string | null): string | null {
   if (!iso) return null;
@@ -114,10 +119,33 @@ export default async function InsightArticlePage({
     notFound();
   }
 
+  const comments = await getApprovedComments(slug, 100);
   const dateLabel = formatPublishedDate(post.published_at);
+  const articleUrl = `${SITE_URL}/insights/${post.slug}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: post.title,
+    description: post.description ?? undefined,
+    datePublished: post.published_at ?? undefined,
+    author: post.byline
+      ? { "@type": "Organization", name: post.byline }
+      : { "@type": "Organization", name: "LevelsGov" },
+    publisher: {
+      "@type": "Organization",
+      name: "LevelsGov",
+      url: SITE_URL,
+    },
+    mainEntityOfPage: articleUrl,
+  };
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <header className="mb-8 border-b border-border pb-6">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           {post.title}
@@ -129,6 +157,9 @@ export default async function InsightArticlePage({
             {dateLabel}
           </p>
         )}
+        <div className="mt-4">
+          <ShareLinks url={articleUrl} title={post.title} />
+        </div>
       </header>
 
       <div className="text-base">
@@ -136,6 +167,12 @@ export default async function InsightArticlePage({
           {post.markdown}
         </ReactMarkdown>
       </div>
+
+      <footer className="mt-10 border-t border-border pt-6">
+        <ShareLinks url={articleUrl} title={post.title} />
+      </footer>
+
+      <Comments slug={post.slug} initial={comments} />
     </article>
   );
 }

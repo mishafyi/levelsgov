@@ -52,10 +52,15 @@ Think of it as [levels.fyi](https://levels.fyi) but for the federal government.
 - Cabinet departments, military branches, independent agencies, legislative and judicial branches
 - Agency subelements with headcount data
 
+### Research
+- Data-driven articles on federal workforce trends, generated from OPM signals and grounded in primary sources
+- Moderated comments and social sharing on every article
+- [RSS feed](https://levelsgov.com/rss.xml) for syndication
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (React 19, TypeScript)
-- **Database:** PostgreSQL
+- **Databases:** PostgreSQL (OPM data), PocketBase (research posts & comments)
 - **Styling:** Tailwind CSS v4, shadcn/ui
 - **Charts:** Recharts, react-simple-maps
 - **Deployment:** Docker, Coolify (self-hosted)

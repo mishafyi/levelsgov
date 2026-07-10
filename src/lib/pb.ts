@@ -36,7 +36,7 @@ interface PbListResponse {
 
 const REVALIDATE_SECONDS = 86400;
 
-function pbBase(): string {
+export function pbBase(): string {
   const url = process.env.POCKETBASE_URL;
   if (!url) {
     throw new Error("POCKETBASE_URL is not set");
@@ -75,12 +75,12 @@ function toListItem(r: PbPostRecord): PostListItem {
   };
 }
 
-/** Published posts, newest first (list page + sitemap). */
-export async function getPublishedPosts(): Promise<PostListItem[]> {
+/** Published posts, newest first (list page, sitemap, RSS). */
+export async function getPublishedPosts(limit: number): Promise<PostListItem[]> {
   const filter = encodeURIComponent('status = "published"');
   const fields = "slug,title,description,byline,published_at";
   const data = await pbFetch(
-    `/api/collections/posts/records?perPage=50&sort=-published_at&filter=${filter}&fields=${fields}`
+    `/api/collections/posts/records?perPage=${limit}&sort=-published_at&filter=${filter}&fields=${fields}`
   );
   return data.items.map(toListItem);
 }

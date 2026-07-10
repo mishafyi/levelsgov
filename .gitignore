@@ -49,3 +49,6 @@ __pycache__/
 
 # deployment docs with sensitive info
 DEPLOY-NEW-PROJECT-COOLIFY.md
+
+# local agent instructions (deliberately untracked)
+CLAUDE.md

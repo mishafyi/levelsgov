@@ -4,7 +4,9 @@ import { getPublishedPosts } from "@/lib/pb";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://levelsgov.com";
 
-  const posts = await getPublishedPosts();
+  // 200 covers ~1 month of publishing at the current cadence; the silent
+  // truncation point is far away, and PB's perPage caps at 500 anyway.
+  const posts = await getPublishedPosts(200);
 
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/insights/${post.slug}`,
